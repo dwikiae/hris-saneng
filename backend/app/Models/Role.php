@@ -2,19 +2,24 @@
 
 namespace App\Models;
 
+use App\Contracts\Archivable;
 use App\Models\Concerns\HasArchive;
 use App\Models\Concerns\HasCompany;
+use App\Models\Concerns\InteractsWithLog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\Traits\LogsActivity;
 
-class Role extends Model
+class Role extends Model implements Archivable
 {
-    use HasFactory;
     use HasArchive;
     use HasCompany;
+    use HasFactory;
+    use InteractsWithLog;
+    use LogsActivity;
 
     protected $fillable = [
         'company_id',

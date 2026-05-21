@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Archive\ArchiveController;
+use App\Http\Controllers\Api\V1\Audit\AuditController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\UserController;
 use App\Http\Controllers\Api\V1\MasterData\BankController;
@@ -13,6 +15,7 @@ use App\Http\Controllers\Api\V1\MasterData\PositionController;
 use App\Http\Controllers\Api\V1\MasterData\ReligionController;
 use App\Http\Controllers\Api\V1\Rbac\PermissionController;
 use App\Http\Controllers\Api\V1\Rbac\RoleController;
+use App\Http\Controllers\Api\V1\Settings\SettingsController;
 use App\Http\Middleware\ForcePasswordReset;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +46,11 @@ Route::prefix('v1')->middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::get('permissions', [PermissionController::class, 'index']);
+    Route::get('settings', [SettingsController::class, 'index']);
+    Route::put('settings', [SettingsController::class, 'update']);
+    Route::get('audit', [AuditController::class, 'index']);
+    Route::get('archive', [ArchiveController::class, 'index']);
+    Route::post('archive/{model}/{id}/restore', [ArchiveController::class, 'restore']);
 
     Route::prefix('master-data')->group(function () {
 

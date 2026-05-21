@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Contracts\Archivable;
 use App\Models\Concerns\HasArchive;
 use App\Models\Concerns\HasCompany;
+use App\Models\Concerns\InteractsWithLog;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +15,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @property int $id
@@ -31,7 +34,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property int|null $created_by
  * @property int|null $updated_by
  */
-class User extends Authenticatable
+class User extends Authenticatable implements Archivable
 {
     use HasApiTokens;
     use HasArchive;
@@ -40,6 +43,8 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory;
 
+    use InteractsWithLog;
+    use LogsActivity;
     use Notifiable;
 
     /**

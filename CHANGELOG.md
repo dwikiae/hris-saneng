@@ -12,3 +12,6 @@ Semua perubahan penting project dicatat di file ini.
 - Menambahkan endpoint `GET /health` untuk health check service dependencies.
 - Menambahkan GitHub Actions CI untuk backend dan kedua frontend.
 - Menambahkan baseline test suite Sprint 0 untuk models, migrations, seeders, archive scope, dan health check.
+- Menambahkan Settings API dengan repository, permission guard, bulk update, dan masking password SMTP.
+- Menambahkan translation key backend untuk modul audit, archive, dan settings.
+- Menambahkan coverage feature test untuk filter audit, filter archive, restore archive, dan settings.
