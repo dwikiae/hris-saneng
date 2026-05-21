@@ -1,0 +1,20 @@
+services:
+  postgres:
+    environment:
+      TZ: ${TZ:-Asia/Jakarta}
+
+  redis:
+    environment:
+      TZ: ${TZ:-Asia/Jakarta}
+
+  minio:
+    environment:
+      TZ: ${TZ:-Asia/Jakarta}
+
+  soketi:
+    environment:
+      TZ: ${TZ:-Asia/Jakarta}
+
+  mailpit:
+    environment:
+      TZ: ${TZ:-Asia/Jakarta}
