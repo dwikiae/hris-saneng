@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\Auth\UserController;
 use App\Http\Controllers\Api\V1\MasterData\BankController;
 use App\Http\Controllers\Api\V1\MasterData\BloodTypeController;
 use App\Http\Controllers\Api\V1\MasterData\DepartmentController;
@@ -9,9 +11,38 @@ use App\Http\Controllers\Api\V1\MasterData\EmploymentTypeController;
 use App\Http\Controllers\Api\V1\MasterData\MaritalStatusController;
 use App\Http\Controllers\Api\V1\MasterData\PositionController;
 use App\Http\Controllers\Api\V1\MasterData\ReligionController;
+use App\Http\Controllers\Api\V1\Rbac\PermissionController;
+use App\Http\Controllers\Api\V1\Rbac\RoleController;
+use App\Http\Middleware\ForcePasswordReset;
 use Illuminate\Support\Facades\Route;
 
+Route::prefix('v1/auth')->group(function () {
+    Route::post('login', [LoginController::class, 'login'])->middleware('throttle:5,1');
+    Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
+    Route::post('change-password', [LoginController::class, 'changePassword'])->middleware('auth:sanctum');
+    Route::get('me', [LoginController::class, 'me'])->middleware(['auth:sanctum', ForcePasswordReset::class]);
+});
+
 Route::prefix('v1')->middleware(['auth:sanctum'])->group(function () {
+
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index']);
+        Route::post('/', [UserController::class, 'store']);
+        Route::get('{id}', [UserController::class, 'show']);
+        Route::put('{id}', [UserController::class, 'update']);
+        Route::post('{id}/archive', [UserController::class, 'archive']);
+        Route::post('{id}/restore', [UserController::class, 'restore']);
+    });
+
+    Route::prefix('roles')->group(function () {
+        Route::get('/', [RoleController::class, 'index']);
+        Route::post('/', [RoleController::class, 'store']);
+        Route::get('{id}', [RoleController::class, 'show']);
+        Route::put('{id}', [RoleController::class, 'update']);
+        Route::post('{id}/sync-permissions', [RoleController::class, 'syncPermissions']);
+    });
+
+    Route::get('permissions', [PermissionController::class, 'index']);
 
     Route::prefix('master-data')->group(function () {
 

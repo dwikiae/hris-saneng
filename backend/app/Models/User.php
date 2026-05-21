@@ -5,17 +5,35 @@ namespace App\Models;
 use App\Models\Concerns\HasArchive;
 use App\Models\Concerns\HasCompany;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
+ * @property int $id
+ * @property int $company_id
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property int|null $employee_id
+ * @property string $language_preference
+ * @property bool $force_password_reset
+ * @property Carbon|null $last_login_at
+ * @property int $login_attempts
  * @property Carbon|null $locked_until
+ * @property Carbon|null $archived_at
+ * @property int|null $archived_by
+ * @property int|null $created_by
+ * @property int|null $updated_by
  */
 class User extends Authenticatable
 {
+    use HasApiTokens;
     use HasArchive;
     use HasCompany;
 
@@ -59,6 +77,30 @@ class User extends Authenticatable
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'user_roles')
+            ->withTimestamps();
+    }
+
+    /**
+     * @return Collection<int, Permission>
+     */
+    public function permissions(): Collection
+    {
+        $roleIds = $this->roles()->pluck('roles.id');
+
+        return Permission::query()
+            ->whereHas('roles', fn ($query) => $query->whereIn('roles.id', $roleIds))
+            ->get();
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        return $this->permissions()
+            ->contains(fn (Permission $userPermission) => $userPermission->code === $permission);
     }
 
     public function isLocked(): bool
