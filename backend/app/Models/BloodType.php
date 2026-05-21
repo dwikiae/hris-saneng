@@ -20,6 +20,8 @@ class BloodType extends Model
         'is_active',
         'created_by',
         'updated_by',
+        'archived_at',
+        'archived_by',
     ];
 
     protected $casts = [
