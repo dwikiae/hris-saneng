@@ -1,0 +1,41 @@
+{
+  "button": {
+    "save": "Simpan",
+    "cancel": "Batal",
+    "edit": "Ubah",
+    "back": "Kembali",
+    "search": "Cari",
+    "filter": "Filter",
+    "export": "Ekspor",
+    "close": "Tutup",
+    "confirm": "Konfirmasi"
+  },
+  "status": {
+    "active": "Aktif",
+    "inactive": "Tidak Aktif",
+    "archived": "Diarsipkan",
+    "pending": "Menunggu",
+    "approved": "Disetujui",
+    "rejected": "Ditolak",
+    "draft": "Draf"
+  },
+  "label": {
+    "yes": "Ya",
+    "no": "Tidak",
+    "none": "Kosong",
+    "loading": "Memuat...",
+    "actions": "Aksi"
+  },
+  "nav": {
+    "dashboard": "Dasbor",
+    "employees": "Karyawan",
+    "recruitment": "Rekrutmen",
+    "assets": "Aset",
+    "settings": "Pengaturan"
+  },
+  "language": {
+    "switch": "Ganti Bahasa",
+    "id": "Indonesia",
+    "en": "English"
+  }
+}

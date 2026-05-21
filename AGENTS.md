@@ -182,6 +182,12 @@ RULE-G2: Format key: {namespace}.{context}.{label}
 
 RULE-G3: Jika membuat UI component baru → WAJIB buat translation key di kedua bahasa (id + en).
          Jangan pernah buat key hanya di satu bahasa.
+
+RULE-G4: Di frontend-hris (Pages Router), import useTranslation SELALU dari
+         'next-i18next/pages' — bukan dari 'next-i18next'.
+         Contoh benar:   import { useTranslation } from 'next-i18next/pages'
+         Contoh salah:   import { useTranslation } from 'next-i18next'
+         Ini berlaku untuk semua komponen dan pages tanpa pengecualian.
 ```
 
 ### H. Audit Log & Compliance UU PDP

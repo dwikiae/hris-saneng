@@ -1,0 +1,41 @@
+{
+  "button": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "back": "Back",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "close": "Close",
+    "confirm": "Confirm"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "archived": "Archived",
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "draft": "Draft"
+  },
+  "label": {
+    "yes": "Yes",
+    "no": "No",
+    "none": "None",
+    "loading": "Loading...",
+    "actions": "Actions"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "employees": "Employees",
+    "recruitment": "Recruitment",
+    "assets": "Assets",
+    "settings": "Settings"
+  },
+  "language": {
+    "switch": "Switch Language",
+    "id": "Indonesia",
+    "en": "English"
+  }
+}
