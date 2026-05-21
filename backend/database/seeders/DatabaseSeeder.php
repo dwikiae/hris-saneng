@@ -15,6 +15,15 @@ class DatabaseSeeder extends Seeder
             CompanySeeder::class,
             CompanySettingsSeeder::class,
             AdminUserSeeder::class,
+            DepartmentSeeder::class,
+            PositionSeeder::class,
+            EmploymentTypeSeeder::class,
+            EducationLevelSeeder::class,
+            ReligionSeeder::class,
+            MaritalStatusSeeder::class,
+            BloodTypeSeeder::class,
+            BankSeeder::class,
+            DocumentTypeSeeder::class,
         ]);
     }
 }
