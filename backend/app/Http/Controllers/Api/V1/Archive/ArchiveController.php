@@ -9,6 +9,7 @@ use App\Models\BloodType;
 use App\Models\Department;
 use App\Models\DocumentType;
 use App\Models\EducationLevel;
+use App\Models\Employee;
 use App\Models\EmploymentType;
 use App\Models\MaritalStatus;
 use App\Models\Permission;
@@ -34,6 +35,7 @@ class ArchiveController extends Controller
         'users' => User::class,
         'roles' => Role::class,
         'permissions' => Permission::class,
+        'employees' => Employee::class,
         'departments' => Department::class,
         'positions' => Position::class,
         'employment-types' => EmploymentType::class,

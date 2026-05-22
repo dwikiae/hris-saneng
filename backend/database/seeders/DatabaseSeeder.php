@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             BloodTypeSeeder::class,
             BankSeeder::class,
             DocumentTypeSeeder::class,
+            EmployeeSeeder::class,
         ]);
     }
 }

@@ -4,6 +4,9 @@ use App\Http\Controllers\Api\V1\Archive\ArchiveController;
 use App\Http\Controllers\Api\V1\Audit\AuditController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\UserController;
+use App\Http\Controllers\Api\V1\Employee\EmployeeController;
+use App\Http\Controllers\Api\V1\Employee\EmployeeDocumentController;
+use App\Http\Controllers\Api\V1\Employee\EmployeePhotoController;
 use App\Http\Controllers\Api\V1\MasterData\BankController;
 use App\Http\Controllers\Api\V1\MasterData\BloodTypeController;
 use App\Http\Controllers\Api\V1\MasterData\DepartmentController;
@@ -35,6 +38,21 @@ Route::prefix('v1')->middleware(['auth:sanctum'])->group(function () {
         Route::put('{id}', [UserController::class, 'update']);
         Route::post('{id}/archive', [UserController::class, 'archive']);
         Route::post('{id}/restore', [UserController::class, 'restore']);
+    });
+
+    Route::prefix('employees')->group(function () {
+        Route::get('/', [EmployeeController::class, 'index']);
+        Route::post('/', [EmployeeController::class, 'store']);
+        Route::get('{id}', [EmployeeController::class, 'show']);
+        Route::put('{id}', [EmployeeController::class, 'update']);
+        Route::get('{id}/documents', [EmployeeDocumentController::class, 'index']);
+        Route::post('{id}/documents', [EmployeeDocumentController::class, 'store']);
+        Route::delete('{id}/documents/{docId}', [EmployeeDocumentController::class, 'archive']);
+        Route::get('{id}/photo', [EmployeePhotoController::class, 'show']);
+        Route::post('{id}/photo', [EmployeePhotoController::class, 'store']);
+        Route::post('{id}/approve', [EmployeeController::class, 'approve']);
+        Route::post('{id}/reject', [EmployeeController::class, 'reject']);
+        Route::post('{id}/archive', [EmployeeController::class, 'archive']);
     });
 
     Route::prefix('roles')->group(function () {

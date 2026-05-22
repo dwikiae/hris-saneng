@@ -435,6 +435,12 @@ Contoh permissions:
 Field-level permission (tabel field_permissions):
   Mengontrol field mana yang dikembalikan di API response
   Contoh: user tanpa `employee.view_salary` tidak dapat field salary di response
+
+Employee API response enforcement:
+  salary, allowances, deductions → hanya muncul jika user punya `employee.view_salary`
+  nik, npwp, bank_account_number → hanya muncul jika user punya `employee.view`
+    dan user karyawan tidak sedang melihat record karyawan lain
+  Field yang tidak boleh diakses di-exclude dari response, bukan null/masked
 ```
 
 ### 6.3 Gate Check Pattern
