@@ -1,0 +1,47 @@
+{
+  "meta": {
+    "title": "PT Saneng — Solusi Coating Industri Terpercaya"
+  },
+  "hero": {
+    "headline": "Proteksi Permukaan, Kualitas Tanpa Kompromi",
+    "sub": "Jasa painting dan industrial coating untuk aset industri Anda",
+    "cta": "Lihat Lowongan",
+    "imageAlt": "Pekerja industri di area konstruksi pabrik"
+  },
+  "stats": {
+    "experience": {
+      "value": "20+",
+      "label": "Tahun Pengalaman"
+    },
+    "projects": {
+      "value": "500+",
+      "label": "Proyek Selesai"
+    },
+    "clients": {
+      "value": "50+",
+      "label": "Klien Industri"
+    }
+  },
+  "about": {
+    "title": "Mitra coating industri untuk proteksi jangka panjang"
+  },
+  "services": {
+    "painting": {
+      "title": "Industrial Painting",
+      "body": "Pengecatan struktur baja, tangki, dan peralatan industri"
+    },
+    "corrosion": {
+      "title": "Anti-Corrosion Coating",
+      "body": "Lapisan pelindung korosi untuk aset logam"
+    },
+    "floor": {
+      "title": "Floor Coating",
+      "body": "Pelapisan lantai pabrik dan gudang berstandar industri"
+    }
+  },
+  "cta": {
+    "title": "Bergabunglah Bersama Tim Kami",
+    "body": "Kami selalu mencari talenta terbaik untuk berkembang bersama",
+    "button": "Lihat Lowongan"
+  }
+}

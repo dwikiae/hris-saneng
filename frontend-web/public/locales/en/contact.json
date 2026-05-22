@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "title": "Contact — PT Saneng"
+  },
+  "hero": {
+    "title": "Contact PT Saneng Team",
+    "body": "Discuss your painting and industrial coating needs for your project or facility.",
+    "imageAlt": "Clean professional office space"
+  },
+  "info": {
+    "address": {
+      "label": "Address"
+    },
+    "email": {
+      "label": "Email"
+    },
+    "phone": {
+      "label": "Phone"
+    },
+    "whatsapp": {
+      "label": "WhatsApp"
+    }
+  },
+  "map": {
+    "title": "Location Map — Pulogadung Industrial Estate, East Jakarta",
+    "body": "Use the following link to open the approximate Pulogadung Industrial Estate location on Google Maps.",
+    "link": "Open Google Maps"
+  }
+}

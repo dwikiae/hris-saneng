@@ -1,115 +1,112 @@
+import Head from "next/head";
 import Image from "next/image";
-import localFont from "next/font/local";
+import Link from "next/link";
+import type { GetStaticProps } from "next";
+import { serverSideTranslations } from "next-i18next/pages/serverSideTranslations";
+import { useTranslation } from "react-i18next";
+import Layout from "@/components/layout/Layout";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const statKeys = ["experience", "projects", "clients"];
+const serviceKeys = ["painting", "corrosion", "floor"];
 
-export default function Home() {
+export default function HomePage() {
+  const { t } = useTranslation(["common", "home"]);
+
   return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/pages/index.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <Layout>
+      <Head>
+        <title>{t("home:meta.title")}</title>
+      </Head>
+      <main>
+        <section className="relative min-h-[620px] overflow-hidden bg-slate-950 text-white">
+          <Image
+            src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&q=80"
+            alt={t("home:hero.imageAlt")}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-45"
+          />
+          <div className="relative mx-auto flex min-h-[620px] w-full max-w-6xl flex-col justify-center px-4 py-20 sm:px-6 lg:px-8">
+            <p className="text-sm font-semibold uppercase tracking-wide text-sky-200">
+              {t("common:company.tagline")}
+            </p>
+            <h1 className="mt-4 max-w-4xl text-4xl font-bold leading-tight sm:text-6xl">
+              {t("home:hero.headline")}
+            </h1>
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-100">
+              {t("home:hero.sub")}
+            </p>
+            <Link
+              href="/karir"
+              className="mt-8 inline-flex w-fit rounded-md bg-sky-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-500"
+            >
+              {t("home:hero.cta")}
+            </Link>
+          </div>
+        </section>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+        <section className="bg-white py-12">
+          <div className="mx-auto grid w-full max-w-6xl gap-4 px-4 sm:px-6 md:grid-cols-3 lg:px-8">
+            {statKeys.map((key) => (
+              <div key={key} className="border-l-4 border-sky-600 bg-slate-50 p-5">
+                <p className="text-3xl font-bold text-slate-950">
+                  {t(`home:stats.${key}.value`)}
+                </p>
+                <p className="mt-2 text-sm font-medium text-slate-600">
+                  {t(`home:stats.${key}.label`)}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="py-14">
+          <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl">
+              <h2 className="text-3xl font-bold text-slate-950">
+                {t("home:about.title")}
+              </h2>
+              <p className="mt-4 text-base leading-8 text-slate-600">
+                {t("common:company.shortDescription")}
+              </p>
+            </div>
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
+              {serviceKeys.map((key) => (
+                <article key={key} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+                  <h3 className="text-lg font-semibold text-slate-950">
+                    {t(`home:services.${key}.title`)}
+                  </h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-600">
+                    {t(`home:services.${key}.body`)}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-slate-900 py-12 text-white">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+            <div>
+              <h2 className="text-3xl font-bold">{t("home:cta.title")}</h2>
+              <p className="mt-2 text-sm text-slate-300">{t("home:cta.body")}</p>
+            </div>
+            <Link
+              href="/karir"
+              className="inline-flex w-fit rounded-md bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-200"
+            >
+              {t("home:cta.button")}
+            </Link>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    </Layout>
   );
 }
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? "id", ["common", "home"])),
+  },
+});

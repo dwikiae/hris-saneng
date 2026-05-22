@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "title": "Recruitment Quiz Portal"
+  },
+  "header": {
+    "eyebrow": "PT Saneng Recruitment",
+    "title": "Candidate Written Test"
+  },
+  "loading": {
+    "title": "Loading quiz",
+    "body": "Please wait while the questions are prepared."
+  },
+  "error": {
+    "title": "Quiz link cannot be used",
+    "body": "The quiz token is invalid, expired, or the test has already been submitted. Please contact HR for assistance."
+  },
+  "submitted": {
+    "title": "Answers submitted",
+    "body": "Thank you. The HR team will continue the process based on system validation."
+  },
+  "timeout": {
+    "title": "Time is up",
+    "body": "Answers already filled in have been submitted automatically."
+  },
+  "timer": {
+    "label": "Time left"
+  },
+  "question": {
+    "progress": "Question {{current}} of {{total}}",
+    "shortAnswer": "Short answer",
+    "shortAnswerPlaceholder": "Write your answer here"
+  },
+  "navigation": {
+    "label": "Question navigation",
+    "title": "Question Navigation"
+  },
+  "status": {
+    "answered": "{{answered}} of {{total}} questions answered"
+  },
+  "actions": {
+    "previous": "Previous",
+    "next": "Next",
+    "submit": "Submit Answers",
+    "submitting": "Submitting..."
+  },
+  "confirm": {
+    "title": "Some questions are unanswered",
+    "body": "You can still submit now, but blank questions will be counted as unanswered.",
+    "cancel": "Review Again",
+    "submit": "Submit Anyway"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "title": "Kontak — PT Saneng"
+  },
+  "hero": {
+    "title": "Hubungi Tim PT Saneng",
+    "body": "Diskusikan kebutuhan painting dan industrial coating untuk proyek atau fasilitas Anda.",
+    "imageAlt": "Ruang kantor profesional yang bersih"
+  },
+  "info": {
+    "address": {
+      "label": "Alamat"
+    },
+    "email": {
+      "label": "Email"
+    },
+    "phone": {
+      "label": "Telepon"
+    },
+    "whatsapp": {
+      "label": "WhatsApp"
+    }
+  },
+  "map": {
+    "title": "Peta Lokasi — Kawasan Industri Pulogadung, Jakarta Timur",
+    "body": "Gunakan tautan berikut untuk membuka perkiraan lokasi area Kawasan Industri Pulogadung melalui Google Maps.",
+    "link": "Buka Google Maps"
+  }
+}

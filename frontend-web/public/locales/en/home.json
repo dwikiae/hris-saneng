@@ -1,0 +1,47 @@
+{
+  "meta": {
+    "title": "PT Saneng — Your Trusted Industrial Coating Solution"
+  },
+  "hero": {
+    "headline": "Surface Protection, Uncompromising Quality",
+    "sub": "Professional painting and industrial coating for your industrial assets",
+    "cta": "View Openings",
+    "imageAlt": "Industrial worker at a factory construction area"
+  },
+  "stats": {
+    "experience": {
+      "value": "20+",
+      "label": "Years of Experience"
+    },
+    "projects": {
+      "value": "500+",
+      "label": "Completed Projects"
+    },
+    "clients": {
+      "value": "50+",
+      "label": "Industrial Clients"
+    }
+  },
+  "about": {
+    "title": "Industrial coating partner for long-term protection"
+  },
+  "services": {
+    "painting": {
+      "title": "Industrial Painting",
+      "body": "Painting for steel structures, tanks, and industrial equipment"
+    },
+    "corrosion": {
+      "title": "Anti-Corrosion Coating",
+      "body": "Corrosion protection layers for metal assets"
+    },
+    "floor": {
+      "title": "Floor Coating",
+      "body": "Industrial-grade coating for factory and warehouse floors"
+    }
+  },
+  "cta": {
+    "title": "Join Our Team",
+    "body": "We are always looking for the best talent to grow with us",
+    "button": "View Openings"
+  }
+}

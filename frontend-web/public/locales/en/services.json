@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "title": "Services — PT Saneng"
+  },
+  "hero": {
+    "title": "Painting and coating services for industrial assets",
+    "body": "We help companies maintain asset durability, safety, and appearance through the right coating systems.",
+    "imageAlt": "Industrial area with equipment and metal surfaces"
+  },
+  "cards": {
+    "painting": {
+      "eyebrow": "Service 01",
+      "title": "Industrial Painting",
+      "body": "Professional painting for steel structures, storage tanks, pipes, and industrial equipment using internationally standardized coating materials."
+    },
+    "corrosion": {
+      "eyebrow": "Service 02",
+      "title": "Anti-Corrosion Coating",
+      "body": "Anti-corrosion coating systems to extend the lifespan of metal assets in harsh industrial and tropical environments."
+    },
+    "floor": {
+      "eyebrow": "Service 03",
+      "title": "Floor Coating",
+      "body": "Epoxy and polyurethane floor coating for factories, warehouses, and industrial facilities — resistant to heavy loads, chemicals, and easy to clean."
+    },
+    "sandblasting": {
+      "eyebrow": "Service 04",
+      "title": "Sandblasting",
+      "body": "Surface preparation using sandblasting techniques to ensure optimal coating adhesion on various substrate types."
+    },
+    "heat": {
+      "eyebrow": "Service 05",
+      "title": "High-Temperature Coating",
+      "body": "Special coating for surfaces exposed to high temperatures such as boilers, chimneys, and hot process equipment."
+    },
+    "maintenance": {
+      "eyebrow": "Service 06",
+      "title": "Maintenance Painting",
+      "body": "Scheduled maintenance painting programs to keep industrial assets in optimal condition and minimize long-term repair costs."
+    }
+  }
+}

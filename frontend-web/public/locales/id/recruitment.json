@@ -1,0 +1,108 @@
+{
+  "meta": {
+    "title": "Karir PT Saneng"
+  },
+  "hero": {
+    "eyebrow": "Karir",
+    "title": "Bergabung bersama PT Saneng",
+    "body": "Temukan lowongan kerja yang sedang dibuka dan mulai proses lamaran Anda melalui kanal resmi perusahaan."
+  },
+  "list": {
+    "title": "Lowongan Tersedia",
+    "count": "{{count}} lowongan dipublikasikan"
+  },
+  "job": {
+    "fallbackPosition": "Posisi belum tersedia",
+    "fallbackDepartment": "Departemen belum tersedia",
+    "fallbackDescription": "Deskripsi pekerjaan belum tersedia."
+  },
+  "actions": {
+    "apply": "Lamar Sekarang",
+    "applyFor": "Lamar untuk {{position}}"
+  },
+  "empty": {
+    "title": "Belum ada lowongan terbuka",
+    "body": "Saat ini belum ada posisi yang dipublikasikan. Silakan cek kembali halaman ini secara berkala."
+  },
+  "form": {
+    "eyebrow": "Form Lamaran",
+    "title": "Kirim Lamaran Kandidat",
+    "description": "Lengkapi data berikut sesuai dokumen resmi. Tim HRD akan meninjau lamaran yang masuk melalui sistem.",
+    "success": "Lamaran berhasil dikirim. Terima kasih, tim HRD akan memproses data Anda.",
+    "fields": {
+      "jobPosting": "Posisi yang dilamar",
+      "fullName": "Nama lengkap",
+      "birthPlace": "Tempat lahir",
+      "birthDate": "Tanggal lahir",
+      "gender": "Jenis kelamin",
+      "addressKtp": "Alamat KTP",
+      "addressDomicile": "Alamat domisili",
+      "height": "Tinggi badan (cm)",
+      "weight": "Berat badan (kg)",
+      "hasGlasses": "Menggunakan kacamata atau lensa kontak",
+      "isColorBlind": "Memiliki buta warna",
+      "maritalStatus": "Status pernikahan",
+      "citizenship": "Kewarganegaraan",
+      "email": "Email",
+      "whatsapp": "Nomor WhatsApp",
+      "hasWeldingSkill": "Memiliki kemampuan pengelasan listrik/elektroda",
+      "source": "Sumber informasi lowongan",
+      "cv": "Upload CV",
+      "certificate": "Upload sertifikat (opsional)",
+      "tingkat_pendidikan": "Tingkat pendidikan",
+      "nama_sekolah": "Nama sekolah/universitas",
+      "jurusan": "Jurusan",
+      "tahun_lulus": "Tahun lulus",
+      "nilai_akhir": "Nilai akhir",
+      "nama_perusahaan": "Nama perusahaan",
+      "posisi": "Posisi",
+      "masa_kerja_dari": "Masa kerja dari",
+      "masa_kerja_sampai": "Masa kerja sampai"
+    },
+    "sections": {
+      "education": "Pendidikan",
+      "experience": "Pengalaman Kerja"
+    },
+    "placeholders": {
+      "select": "Pilih salah satu",
+      "selectJob": "Pilih posisi"
+    },
+    "options": {
+      "gender": {
+        "male": "Laki-laki",
+        "female": "Perempuan"
+      },
+      "marital": {
+        "single": "Belum Menikah",
+        "married": "Menikah",
+        "divorced": "Cerai"
+      },
+      "source": {
+        "website": "Website Perusahaan",
+        "jobstreet": "Jobstreet",
+        "linkedin": "LinkedIn",
+        "referral": "Referral",
+        "other": "Lainnya"
+      }
+    },
+    "help": {
+      "file": "Format file PDF, JPG, atau PNG. Ukuran maksimal 2MB per file."
+    },
+    "actions": {
+      "submit": "Kirim Lamaran",
+      "submitting": "Mengirim...",
+      "addExperience": "Tambah Pengalaman"
+    },
+    "errors": {
+      "required": "Lengkapi semua field wajib sebelum mengirim lamaran.",
+      "email": "Format email tidak valid.",
+      "requiredCv": "CV wajib diunggah.",
+      "fileType": "Format file harus PDF, JPG, atau PNG.",
+      "fileSize": "Ukuran file maksimal 2MB.",
+      "education": "Minimal satu riwayat pendidikan wajib diisi lengkap.",
+      "experience": "Jika mengisi pengalaman kerja, lengkapi semua field pada baris tersebut.",
+      "submit": "Lamaran gagal dikirim. Silakan coba lagi.",
+      "apiUrl": "Konfigurasi API belum tersedia."
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "title": "Recruitment Document Portal"
+  },
+  "header": {
+    "eyebrow": "PT Saneng Recruitment",
+    "title": "Candidate Document Portal"
+  },
+  "loading": {
+    "title": "Loading documents",
+    "body": "Please wait while the document status is prepared."
+  },
+  "error": {
+    "title": "Document link cannot be used",
+    "body": "The document token is invalid or expired. Please contact HR if you need assistance."
+  },
+  "banner": {
+    "eyebrow": "Congratulations",
+    "title": "You are in the document submission stage",
+    "body": "Please upload the required documents so HR can continue the onboarding process."
+  },
+  "job": {
+    "label": "Position",
+    "unavailable": "Position is unavailable"
+  },
+  "department": {
+    "unavailable": "Department is unavailable"
+  },
+  "countdown": {
+    "label": "Link time remaining",
+    "format": "Days:Hours:Minutes",
+    "unavailable": "Unavailable"
+  },
+  "progress": {
+    "title": "Required document completion",
+    "body": "{{uploaded}} of {{total}} required documents have been uploaded.",
+    "count": "{{uploaded}} of {{total}}"
+  },
+  "documents": {
+    "required": "Required",
+    "optional": "Optional",
+    "noFile": "No file uploaded",
+    "ktp": {
+      "name": "KTP copy"
+    },
+    "kk": {
+      "name": "Family card copy"
+    },
+    "npwp": {
+      "name": "NPWP copy"
+    },
+    "rekening": {
+      "name": "Mandiri bank account copy"
+    },
+    "bpjs_kesehatan": {
+      "name": "BPJS Kesehatan copy"
+    },
+    "bpjs_ketenagakerjaan": {
+      "name": "BPJS Ketenagakerjaan copy"
+    }
+  },
+  "status": {
+    "pending": "Pending",
+    "uploading": "Uploading",
+    "done": "Done"
+  },
+  "actions": {
+    "upload": "Upload",
+    "uploading": "Uploading...",
+    "uploadDocument": "Upload {{document}}",
+    "cancel": "Cancel",
+    "close": "Close"
+  },
+  "upload": {
+    "title": "Upload {{document}}",
+    "description": "The file must be PDF, JPG, or PNG with a maximum size of 10MB.",
+    "dropzone": {
+      "title": "Choose a file or drop it here",
+      "body": "PDF, JPG, PNG up to 10MB"
+    },
+    "errors": {
+      "type": "Unsupported file format. Use PDF, JPG, or PNG.",
+      "size": "File size exceeds 10MB.",
+      "failed": "Upload failed. Check your connection or try again."
+    }
+  },
+  "complete": {
+    "title": "Required documents are complete",
+    "body": "Thank you. HR will review your documents and continue the next process."
+  },
+  "help": {
+    "title": "Need help?",
+    "bodyWithNumber": "Contact HR on WhatsApp {{number}} if you have trouble uploading documents.",
+    "bodyWithoutNumber": "Contact HR if you have trouble uploading documents."
+  }
+}

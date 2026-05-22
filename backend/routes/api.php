@@ -16,7 +16,16 @@ use App\Http\Controllers\Api\V1\MasterData\EmploymentTypeController;
 use App\Http\Controllers\Api\V1\MasterData\MaritalStatusController;
 use App\Http\Controllers\Api\V1\MasterData\PositionController;
 use App\Http\Controllers\Api\V1\MasterData\ReligionController;
+use App\Http\Controllers\Api\V1\Public\PublicApplicationController;
+use App\Http\Controllers\Api\V1\Public\PublicInterviewController;
+use App\Http\Controllers\Api\V1\Public\PublicJobController;
+use App\Http\Controllers\Api\V1\Public\PublicPemberkasanController;
+use App\Http\Controllers\Api\V1\Public\PublicQuizController;
 use App\Http\Controllers\Api\V1\Rbac\PermissionController;
+use App\Http\Controllers\Api\V1\Recruitment\ApplicantController;
+use App\Http\Controllers\Api\V1\Recruitment\BlacklistController;
+use App\Http\Controllers\Api\V1\Recruitment\JobPostingController;
+use App\Http\Controllers\Api\V1\Recruitment\TestController;
 use App\Http\Controllers\Api\V1\Rbac\RoleController;
 use App\Http\Controllers\Api\V1\Settings\SettingsController;
 use App\Http\Middleware\ForcePasswordReset;
@@ -29,7 +38,60 @@ Route::prefix('v1/auth')->group(function () {
     Route::get('me', [LoginController::class, 'me'])->middleware(['auth:sanctum', ForcePasswordReset::class]);
 });
 
-Route::prefix('v1')->middleware(['auth:sanctum'])->group(function () {
+Route::prefix('v1/public')->group(function () {
+    Route::get('jobs', [PublicJobController::class, 'index']);
+    Route::post('applications', [PublicApplicationController::class, 'submit'])->middleware('throttle:5,10');
+    Route::get('quiz/{token}', [PublicQuizController::class, 'show']);
+    Route::post('quiz/{token}/submit', [PublicQuizController::class, 'submit']);
+    Route::get('interview/{token}', [PublicInterviewController::class, 'show']);
+    Route::post('interview/{token}/confirm', [PublicInterviewController::class, 'confirm']);
+    Route::get('pemberkasan/{token}', [PublicPemberkasanController::class, 'show']);
+    Route::post('pemberkasan/{token}/upload', [PublicPemberkasanController::class, 'upload']);
+});
+
+Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(function () {
+
+    Route::prefix('job-postings')->group(function () {
+        Route::get('/', [JobPostingController::class, 'index']);
+        Route::post('/', [JobPostingController::class, 'store']);
+        Route::get('{id}', [JobPostingController::class, 'show']);
+        Route::put('{id}', [JobPostingController::class, 'update']);
+        Route::post('{id}/publish', [JobPostingController::class, 'publish']);
+        Route::post('{id}/unpublish', [JobPostingController::class, 'unpublish']);
+        Route::post('{id}/archive', [JobPostingController::class, 'archive']);
+    });
+
+    Route::prefix('applicants')->group(function () {
+        Route::get('/', [ApplicantController::class, 'index']);
+        Route::get('{id}', [ApplicantController::class, 'show']);
+        Route::post('{id}/advance-tes-tulis', [ApplicantController::class, 'advanceToTesTulis']);
+        Route::post('{id}/resend-quiz', [ApplicantController::class, 'resendQuizLink']);
+        Route::post('{id}/schedule-interview', [ApplicantController::class, 'scheduleInterview']);
+        Route::post('{id}/advance-stage', [ApplicantController::class, 'advanceStage']);
+        Route::post('{id}/reject', [ApplicantController::class, 'reject']);
+        Route::post('{id}/restore', [ApplicantController::class, 'restore']);
+        Route::post('{id}/hire', [ApplicantController::class, 'hire']);
+        Route::post('{id}/resend-pemberkasan', [ApplicantController::class, 'resendPemberkasanLink']);
+        Route::post('{id}/blacklist', [ApplicantController::class, 'blacklist']);
+        Route::post('{id}/unblacklist', [ApplicantController::class, 'unblacklist']);
+        Route::post('{id}/notes', [ApplicantController::class, 'addNote']);
+        Route::get('{id}/notes', [ApplicantController::class, 'getNotes']);
+        Route::post('{id}/stages/{stage}/attachments', [ApplicantController::class, 'uploadAttachment']);
+    });
+
+    Route::prefix('recruitment')->group(function () {
+        Route::get('blacklist', [BlacklistController::class, 'index']);
+        Route::prefix('tests')->group(function () {
+            Route::get('/', [TestController::class, 'index']);
+            Route::post('/', [TestController::class, 'store']);
+            Route::get('{id}', [TestController::class, 'show']);
+            Route::put('{id}', [TestController::class, 'update']);
+            Route::post('{id}/questions', [TestController::class, 'addQuestion']);
+            Route::put('{id}/questions/{qid}', [TestController::class, 'updateQuestion']);
+            Route::delete('{id}/questions/{qid}', [TestController::class, 'deleteQuestion']);
+            Route::post('{id}/archive', [TestController::class, 'archive']);
+        });
+    });
 
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index']);

@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "title": "About Us — PT Saneng"
+  },
+  "hero": {
+    "title": "Two decades of experience in painting and industrial coating",
+    "imageAlt": "Clean industrial facility with production equipment"
+  },
+  "story": {
+    "title": "Company Story",
+    "body": "PT Saneng was established in 2004 in East Jakarta with a focus on high-quality industrial painting services. Starting from a dedicated small team, we have grown into one of Indonesia's trusted industrial coating partners.\nFor two decades, we have completed hundreds of projects for clients in petrochemical, manufacturing, power generation, and infrastructure sectors — with safety and quality standards we never compromise."
+  },
+  "vision": {
+    "title": "Vision",
+    "body": "To become Indonesia's leading industrial coating service company, known for quality, safety, and integrity."
+  },
+  "mission": {
+    "title": "Mission",
+    "items": {
+      "one": "Deliver precise and durable coating solutions for every industrial need",
+      "two": "Prioritize work safety in every process and project location",
+      "three": "Build long-term client relationships through honesty and excellent workmanship"
+    }
+  },
+  "values": {
+    "title": "Our Values",
+    "items": {
+      "safety": {
+        "title": "Safety First",
+        "body": "Safety guides every work decision, from surface preparation to final inspection."
+      },
+      "quality": {
+        "title": "Uncompromising Quality",
+        "body": "We maintain standards for materials, application methods, and finishing results to match industrial needs."
+      },
+      "integrity": {
+        "title": "Integrity in Every Project",
+        "body": "Every commitment is delivered transparently, measurably, and accountably."
+      }
+    }
+  }
+}

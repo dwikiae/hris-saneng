@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'company_network_only' => 'errors.company_network_only',
+    'unauthenticated' => 'error.unauthenticated',
+    'forbidden' => 'error.forbidden',
     'http.403' => 'Akses ditolak.',
     'http.404' => 'Data tidak ditemukan.',
     'http.500' => 'Terjadi kesalahan pada server.',

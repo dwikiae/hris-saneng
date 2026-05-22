@@ -1,0 +1,108 @@
+{
+  "meta": {
+    "title": "PT Saneng Careers"
+  },
+  "hero": {
+    "eyebrow": "Careers",
+    "title": "Join PT Saneng",
+    "body": "Find currently open roles and start your application through the company official channel."
+  },
+  "list": {
+    "title": "Available Jobs",
+    "count": "{{count}} published openings"
+  },
+  "job": {
+    "fallbackPosition": "Position is unavailable",
+    "fallbackDepartment": "Department is unavailable",
+    "fallbackDescription": "Job description is unavailable."
+  },
+  "actions": {
+    "apply": "Apply Now",
+    "applyFor": "Apply for {{position}}"
+  },
+  "empty": {
+    "title": "No open positions yet",
+    "body": "There are no published positions at the moment. Please check this page again later."
+  },
+  "form": {
+    "eyebrow": "Application Form",
+    "title": "Submit Candidate Application",
+    "description": "Complete the following data based on your official documents. The HR team will review applications submitted through the system.",
+    "success": "Application submitted successfully. Thank you, the HR team will process your data.",
+    "fields": {
+      "jobPosting": "Applied position",
+      "fullName": "Full name",
+      "birthPlace": "Birth place",
+      "birthDate": "Birth date",
+      "gender": "Gender",
+      "addressKtp": "KTP address",
+      "addressDomicile": "Domicile address",
+      "height": "Height (cm)",
+      "weight": "Weight (kg)",
+      "hasGlasses": "Uses glasses or contact lenses",
+      "isColorBlind": "Has color blindness",
+      "maritalStatus": "Marital status",
+      "citizenship": "Citizenship",
+      "email": "Email",
+      "whatsapp": "WhatsApp number",
+      "hasWeldingSkill": "Has electric welding/electrode skill",
+      "source": "Job information source",
+      "cv": "Upload CV",
+      "certificate": "Upload certificate (optional)",
+      "tingkat_pendidikan": "Education level",
+      "nama_sekolah": "School/university name",
+      "jurusan": "Major",
+      "tahun_lulus": "Graduation year",
+      "nilai_akhir": "Final grade",
+      "nama_perusahaan": "Company name",
+      "posisi": "Position",
+      "masa_kerja_dari": "Work period from",
+      "masa_kerja_sampai": "Work period until"
+    },
+    "sections": {
+      "education": "Education",
+      "experience": "Work Experience"
+    },
+    "placeholders": {
+      "select": "Select one",
+      "selectJob": "Select position"
+    },
+    "options": {
+      "gender": {
+        "male": "Male",
+        "female": "Female"
+      },
+      "marital": {
+        "single": "Single",
+        "married": "Married",
+        "divorced": "Divorced"
+      },
+      "source": {
+        "website": "Company Website",
+        "jobstreet": "Jobstreet",
+        "linkedin": "LinkedIn",
+        "referral": "Referral",
+        "other": "Other"
+      }
+    },
+    "help": {
+      "file": "Files must be PDF, JPG, or PNG. Maximum size is 2MB per file."
+    },
+    "actions": {
+      "submit": "Submit Application",
+      "submitting": "Submitting...",
+      "addExperience": "Add Experience"
+    },
+    "errors": {
+      "required": "Complete all required fields before submitting the application.",
+      "email": "Email format is invalid.",
+      "requiredCv": "CV upload is required.",
+      "fileType": "File format must be PDF, JPG, or PNG.",
+      "fileSize": "Maximum file size is 2MB.",
+      "education": "At least one education history must be completed.",
+      "experience": "If you add work experience, complete every field in that row.",
+      "submit": "Application failed to submit. Please try again.",
+      "apiUrl": "API configuration is unavailable."
+    }
+  }
+}

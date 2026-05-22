@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "title": "Portal Quiz Rekrutmen"
+  },
+  "header": {
+    "eyebrow": "Rekrutmen PT Saneng",
+    "title": "Tes Tulis Kandidat"
+  },
+  "loading": {
+    "title": "Memuat quiz",
+    "body": "Mohon tunggu sebentar sementara soal disiapkan."
+  },
+  "error": {
+    "title": "Link quiz tidak dapat digunakan",
+    "body": "Token quiz tidak valid, sudah kedaluwarsa, atau tes sudah pernah dikirim. Silakan hubungi HRD jika membutuhkan bantuan."
+  },
+  "submitted": {
+    "title": "Jawaban sudah dikirim",
+    "body": "Terima kasih. Tim HRD akan melanjutkan proses sesuai hasil validasi sistem."
+  },
+  "timeout": {
+    "title": "Waktu habis",
+    "body": "Jawaban yang sudah terisi telah dikirim otomatis."
+  },
+  "timer": {
+    "label": "Sisa waktu"
+  },
+  "question": {
+    "progress": "Soal {{current}} dari {{total}}",
+    "shortAnswer": "Jawaban singkat",
+    "shortAnswerPlaceholder": "Tulis jawaban di sini"
+  },
+  "navigation": {
+    "label": "Navigasi soal",
+    "title": "Navigasi Soal"
+  },
+  "status": {
+    "answered": "{{answered}} dari {{total}} soal terjawab"
+  },
+  "actions": {
+    "previous": "Sebelumnya",
+    "next": "Berikutnya",
+    "submit": "Kirim Jawaban",
+    "submitting": "Mengirim..."
+  },
+  "confirm": {
+    "title": "Masih ada soal yang belum dijawab",
+    "body": "Anda tetap dapat mengirim jawaban sekarang, tetapi soal kosong akan dihitung sebagai tidak dijawab.",
+    "cancel": "Periksa Lagi",
+    "submit": "Tetap Kirim"
+  }
+}

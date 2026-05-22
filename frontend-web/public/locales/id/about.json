@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "title": "Tentang Kami — PT Saneng"
+  },
+  "hero": {
+    "title": "Dua dekade pengalaman dalam painting dan industrial coating",
+    "imageAlt": "Fasilitas industri bersih dengan peralatan produksi"
+  },
+  "story": {
+    "title": "Cerita Perusahaan",
+    "body": "PT Saneng berdiri pada tahun 2004 di Jakarta Timur dengan fokus pada jasa pengecatan industri berkualitas tinggi. Berawal dari tim kecil yang berdedikasi, kami telah berkembang menjadi salah satu mitra coating industri terpercaya di Indonesia.\nSelama dua dekade, kami telah menyelesaikan ratusan proyek untuk klien di sektor petrokimia, manufaktur, pembangkit listrik, dan infrastruktur — dengan standar keselamatan dan kualitas yang tidak pernah kami kompromikan."
+  },
+  "vision": {
+    "title": "Visi",
+    "body": "Menjadi perusahaan jasa industrial coating terdepan di Indonesia yang dikenal atas kualitas, keselamatan, dan integritas."
+  },
+  "mission": {
+    "title": "Misi",
+    "items": {
+      "one": "Memberikan solusi coating yang tepat dan tahan lama untuk setiap kebutuhan industri",
+      "two": "Mengutamakan keselamatan kerja di setiap proses dan lokasi proyek",
+      "three": "Membangun hubungan jangka panjang dengan klien melalui kejujuran dan hasil kerja terbaik"
+    }
+  },
+  "values": {
+    "title": "Nilai Kami",
+    "items": {
+      "safety": {
+        "title": "Safety First",
+        "body": "Keselamatan menjadi dasar setiap keputusan kerja, dari persiapan permukaan hingga inspeksi akhir."
+      },
+      "quality": {
+        "title": "Kualitas Tanpa Kompromi",
+        "body": "Kami menjaga standar material, metode aplikasi, dan hasil akhir agar sesuai kebutuhan industri."
+      },
+      "integrity": {
+        "title": "Integritas dalam Setiap Proyek",
+        "body": "Setiap komitmen dijalankan secara transparan, terukur, dan dapat dipertanggungjawabkan."
+      }
+    }
+  }
+}

@@ -27,11 +27,15 @@ class CompanySettingsSeeder extends Seeder
         'retention_audit_log_years' => '2',
         'retention_app_log_days' => '90',
         'ip_whitelist' => '127.0.0.1',
+        'recruitment_link_expires_hours' => '72',
+        'hr_whatsapp_number' => '',
+        'applicant_data_retention_days' => '365',
+        'allow_duplicate_applicant' => 'false',
     ];
 
     public function run(): void
     {
-        $company = Company::query()->where('name', 'PT Saneng')->firstOrFail();
+        $company = Company::query()->findOrFail((int) config('app.company_id'));
 
         foreach (self::DEFAULT_SETTINGS as $key => $value) {
             CompanySetting::withoutCompanyScope()->updateOrCreate(

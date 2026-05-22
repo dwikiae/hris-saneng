@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "title": "Layanan — PT Saneng"
+  },
+  "hero": {
+    "title": "Layanan painting dan coating untuk aset industri",
+    "body": "Kami membantu perusahaan menjaga ketahanan, keselamatan, dan tampilan aset melalui sistem coating yang tepat.",
+    "imageAlt": "Area industri dengan peralatan dan permukaan logam"
+  },
+  "cards": {
+    "painting": {
+      "eyebrow": "Layanan 01",
+      "title": "Industrial Painting",
+      "body": "Pengecatan profesional untuk struktur baja, tangki penyimpanan, pipa, dan peralatan industri dengan material coating berstandar internasional."
+    },
+    "corrosion": {
+      "eyebrow": "Layanan 02",
+      "title": "Anti-Corrosion Coating",
+      "body": "Sistem pelapisan anti-korosi untuk memperpanjang umur aset logam di lingkungan industri yang keras dan beriklim tropis."
+    },
+    "floor": {
+      "eyebrow": "Layanan 03",
+      "title": "Floor Coating",
+      "body": "Pelapisan lantai epoxy dan polyurethane untuk pabrik, gudang, dan fasilitas industri — tahan beban berat, bahan kimia, dan mudah dibersihkan."
+    },
+    "sandblasting": {
+      "eyebrow": "Layanan 04",
+      "title": "Sandblasting",
+      "body": "Persiapan permukaan dengan teknik sandblasting untuk memastikan adhesi coating yang optimal pada berbagai jenis substrat."
+    },
+    "heat": {
+      "eyebrow": "Layanan 05",
+      "title": "High-Temperature Coating",
+      "body": "Coating khusus untuk permukaan yang terpapar suhu tinggi seperti boiler, cerobong asap, dan peralatan proses panas."
+    },
+    "maintenance": {
+      "eyebrow": "Layanan 06",
+      "title": "Maintenance Painting",
+      "body": "Program perawatan pengecatan berkala untuk menjaga kondisi aset industri tetap optimal dan meminimalkan biaya perbaikan jangka panjang."
+    }
+  }
+}

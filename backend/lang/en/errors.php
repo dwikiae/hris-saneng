@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'company_network_only' => 'errors.company_network_only',
+    'unauthenticated' => 'error.unauthenticated',
+    'forbidden' => 'error.forbidden',
     'http.403' => 'Access denied.',
     'http.404' => 'The requested resource was not found.',
     'http.500' => 'A server error occurred.',

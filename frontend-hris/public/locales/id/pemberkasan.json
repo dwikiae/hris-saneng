@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "title": "Portal Pemberkasan Rekrutmen"
+  },
+  "header": {
+    "eyebrow": "Rekrutmen PT Saneng",
+    "title": "Portal Pemberkasan Kandidat"
+  },
+  "loading": {
+    "title": "Memuat pemberkasan",
+    "body": "Mohon tunggu sebentar sementara status dokumen disiapkan."
+  },
+  "error": {
+    "title": "Link pemberkasan tidak dapat digunakan",
+    "body": "Token pemberkasan tidak valid atau sudah kedaluwarsa. Silakan hubungi HRD jika membutuhkan bantuan."
+  },
+  "banner": {
+    "eyebrow": "Selamat",
+    "title": "Anda masuk tahap pemberkasan",
+    "body": "Silakan unggah dokumen yang diperlukan agar HRD dapat melanjutkan proses onboarding."
+  },
+  "job": {
+    "label": "Posisi",
+    "unavailable": "Posisi belum tersedia"
+  },
+  "department": {
+    "unavailable": "Departemen belum tersedia"
+  },
+  "countdown": {
+    "label": "Sisa masa berlaku link",
+    "format": "Hari:Jam:Menit",
+    "unavailable": "Tidak tersedia"
+  },
+  "progress": {
+    "title": "Kelengkapan dokumen wajib",
+    "body": "{{uploaded}} dari {{total}} dokumen wajib sudah terunggah.",
+    "count": "{{uploaded}} dari {{total}}"
+  },
+  "documents": {
+    "required": "Wajib",
+    "optional": "Opsional",
+    "noFile": "Belum ada file",
+    "ktp": {
+      "name": "Fotokopi KTP"
+    },
+    "kk": {
+      "name": "Fotokopi KK"
+    },
+    "npwp": {
+      "name": "Fotokopi NPWP"
+    },
+    "rekening": {
+      "name": "Fotokopi Rekening Mandiri"
+    },
+    "bpjs_kesehatan": {
+      "name": "Fotokopi BPJS Kesehatan"
+    },
+    "bpjs_ketenagakerjaan": {
+      "name": "Fotokopi BPJS Ketenagakerjaan"
+    }
+  },
+  "status": {
+    "pending": "Belum unggah",
+    "uploading": "Mengunggah",
+    "done": "Selesai"
+  },
+  "actions": {
+    "upload": "Unggah",
+    "uploading": "Mengunggah...",
+    "uploadDocument": "Unggah {{document}}",
+    "cancel": "Batal",
+    "close": "Tutup"
+  },
+  "upload": {
+    "title": "Unggah {{document}}",
+    "description": "File harus berformat PDF, JPG, atau PNG dengan ukuran maksimal 10MB.",
+    "dropzone": {
+      "title": "Pilih file atau tarik ke sini",
+      "body": "PDF, JPG, PNG maksimal 10MB"
+    },
+    "errors": {
+      "type": "Format file tidak didukung. Gunakan PDF, JPG, atau PNG.",
+      "size": "Ukuran file melebihi 10MB.",
+      "failed": "Upload gagal. Periksa koneksi atau coba lagi."
+    }
+  },
+  "complete": {
+    "title": "Dokumen wajib sudah lengkap",
+    "body": "Terima kasih. HRD akan memeriksa dokumen Anda dan melanjutkan proses berikutnya."
+  },
+  "help": {
+    "title": "Butuh bantuan?",
+    "bodyWithNumber": "Hubungi HRD melalui WhatsApp {{number}} jika ada kendala saat mengunggah dokumen.",
+    "bodyWithoutNumber": "Hubungi HRD jika ada kendala saat mengunggah dokumen."
+  }
+}

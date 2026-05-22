@@ -1,0 +1,23 @@
+{
+  "company": {
+    "name": "PT Saneng",
+    "tagline": "Your Trusted Industrial Coating Solution",
+    "shortDescription": "PT Saneng is an industrial painting and coating company with over 20 years of experience, delivering surface protection and finishing solutions for industrial, manufacturing, and infrastructure sectors."
+  },
+  "contact": {
+    "address": "Jl. Industri Raya No. 47, Kawasan Industri Pulogadung, East Jakarta 13920",
+    "email": "info@saneng.co.id",
+    "phone": "(021) 4603-7890",
+    "whatsapp": "+62 812-3456-7890"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "contact": "Contact",
+    "career": "Careers"
+  },
+  "footer": {
+    "copyright": "© 2024 PT Saneng. All rights reserved."
+  }
+}
