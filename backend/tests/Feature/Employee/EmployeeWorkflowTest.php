@@ -52,7 +52,7 @@ beforeEach(function () {
         'employee.update',
         'employee.archive',
         'employee.approve',
-        'employee.view_salary',
+        'employee.view_sensitive',
     ])->mapWithKeys(fn (string $code): array => [$code => employeeWorkflowPermission($this->company, $code)]);
 });
 
@@ -69,7 +69,7 @@ it('runs employee approval workflow end to end', function () {
     $employeeId = $createResponse->json('data.id');
 
     $this->putJson("/api/v1/employees/{$employeeId}", [
-        'salary' => '11000000',
+        'department_id' => $this->otherDepartment->id,
     ])->assertOk()
         ->assertJsonPath('message', 'employee.updated')
         ->assertJsonPath('data.status', Employee::PENDING);
@@ -228,9 +228,6 @@ function employeeWorkflowPayload(object $test, array $overrides = []): array
         'npwp' => '09.123.456.7-891.000',
         'bank_name' => 'BCA',
         'bank_account_number' => '1234567890',
-        'salary' => '10000000',
-        'allowances' => '1500000',
-        'deductions' => '250000',
         'consent_at' => now()->toDateTimeString(),
     ], $overrides);
 }
@@ -251,9 +248,6 @@ function employeeWorkflowEmployee(object $test, array $overrides = []): Employee
         'nik' => '3374010101019999',
         'npwp' => '09.999.999.9-999.000',
         'bank_account_number' => '9999999999',
-        'salary' => '9000000',
-        'allowances' => '1000000',
-        'deductions' => '100000',
         'consent_at' => now(),
         'consent_by' => employeeWorkflowUser($test->company, 'consent_'.strtolower(str_replace('-', '_', uniqid())), [])->id,
         'status' => Employee::DRAFT,

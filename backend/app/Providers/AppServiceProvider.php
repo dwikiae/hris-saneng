@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Repositories\Contracts\ContractRepositoryInterface;
+use App\Repositories\Contracts\EmployeeChatterRepositoryInterface;
+use App\Repositories\Contracts\EmployeeOffboardingRepositoryInterface;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
 use App\Repositories\Contracts\Recruitment\ApplicantBlacklistRepositoryInterface;
 use App\Repositories\Contracts\Recruitment\ApplicantDocumentRepositoryInterface;
@@ -13,7 +16,10 @@ use App\Repositories\Contracts\Recruitment\JobPostingRepositoryInterface;
 use App\Repositories\Contracts\Recruitment\QuizSessionRepositoryInterface;
 use App\Repositories\Contracts\Recruitment\TestRepositoryInterface;
 use App\Repositories\Contracts\SettingsRepositoryInterface;
-use App\Repositories\Eloquent\EmployeeRepository;
+use App\Repositories\Eloquent\EloquentContractRepository;
+use App\Repositories\Eloquent\EloquentEmployeeChatterRepository;
+use App\Repositories\Eloquent\EloquentEmployeeRepository;
+use App\Repositories\Eloquent\EloquentEmployeeOffboardingRepository;
 use App\Repositories\Eloquent\Recruitment\ApplicantBlacklistRepository;
 use App\Repositories\Eloquent\Recruitment\ApplicantDocumentRepository;
 use App\Repositories\Eloquent\Recruitment\ApplicantNoteRepository;
@@ -33,7 +39,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(EmployeeRepositoryInterface::class, EmployeeRepository::class);
+        $this->app->bind(EmployeeRepositoryInterface::class, EloquentEmployeeRepository::class);
+        $this->app->bind(ContractRepositoryInterface::class, EloquentContractRepository::class);
+        $this->app->bind(EmployeeOffboardingRepositoryInterface::class, EloquentEmployeeOffboardingRepository::class);
+        $this->app->bind(EmployeeChatterRepositoryInterface::class, EloquentEmployeeChatterRepository::class);
         $this->app->bind(SettingsRepositoryInterface::class, SettingsRepository::class);
         $this->app->bind(JobPostingRepositoryInterface::class, JobPostingRepository::class);
         $this->app->bind(ApplicantRepositoryInterface::class, ApplicantRepository::class);

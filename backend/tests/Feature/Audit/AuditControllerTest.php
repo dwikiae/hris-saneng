@@ -38,15 +38,15 @@ function grantAuditPermission(User $user, bool $withSensitive = false): void
     $role->permissions()->attach($audit->id);
 
     if ($withSensitive) {
-        $salary = Permission::create([
+        $sensitive = Permission::create([
             'company_id' => $user->company_id,
-            'code' => 'employee.view_salary',
+            'code' => 'employee.view_sensitive',
             'module' => 'employee',
-            'action' => 'view_salary',
-            'name' => 'View Salary',
+            'action' => 'view_sensitive',
+            'name' => 'View Employee Sensitive Fields',
         ]);
 
-        $role->permissions()->attach($salary->id);
+        $role->permissions()->attach($sensitive->id);
     }
 
     $user->roles()->attach($role->id);
@@ -65,12 +65,12 @@ function createAuditActivity(User $causer): Activity
         'properties' => [
             'attributes' => [
                 'name' => 'Updated User',
-                'salary' => 10000000,
+                'bank_account_number' => '1234567890',
                 'nik' => '1234567890',
             ],
             'old' => [
                 'name' => 'Old User',
-                'salary' => 9000000,
+                'bank_account_number' => '0987654321',
                 'nik' => '0987654321',
             ],
             'ip_address' => '10.0.0.1',
@@ -108,19 +108,19 @@ it('returns paginated audit logs with redacted sensitive fields', function () {
         ->assertJsonPath('data.data.0.who.id', $this->user->id)
         ->assertJsonPath('data.data.0.subject.type', User::class)
         ->assertJsonPath('data.data.0.changes.attributes.name', 'Updated User')
-        ->assertJsonPath('data.data.0.changes.attributes.salary', '[REDACTED]')
+        ->assertJsonPath('data.data.0.changes.attributes.bank_account_number', '[REDACTED]')
         ->assertJsonPath('data.data.0.changes.old.nik', '[REDACTED]')
         ->assertJsonPath('data.data.0.ip_address', '10.0.0.1');
 });
 
-it('does not redact sensitive fields for users with salary permission', function () {
+it('does not redact sensitive fields for users with sensitive permission', function () {
     grantAuditPermission($this->user, withSensitive: true);
     createAuditActivity($this->user);
 
     $this->actingAs($this->user)
         ->getJson('/api/v1/audit?subject_type='.urlencode(User::class))
         ->assertOk()
-        ->assertJsonPath('data.data.0.changes.attributes.salary', 10000000)
+        ->assertJsonPath('data.data.0.changes.attributes.bank_account_number', '1234567890')
         ->assertJsonPath('data.data.0.changes.old.nik', '0987654321');
 });
 

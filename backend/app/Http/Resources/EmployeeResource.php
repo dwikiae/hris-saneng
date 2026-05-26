@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
@@ -49,50 +48,12 @@ class EmployeeResource extends JsonResource
             'user' => $this->whenLoaded('user'),
         ];
 
-        if ($this->canViewIdentityFields($request)) {
+        if (Gate::allows('employee.view_sensitive')) {
             $data['nik'] = $this->resource->getAttribute('nik');
             $data['npwp'] = $this->resource->getAttribute('npwp');
             $data['bank_account_number'] = $this->resource->getAttribute('bank_account_number');
         }
 
-        if (Gate::check('employee.view_salary')) {
-            $data['salary'] = $this->resource->getAttribute('salary');
-            $data['allowances'] = $this->resource->getAttribute('allowances');
-            $data['deductions'] = $this->resource->getAttribute('deductions');
-        }
-
         return $data;
-    }
-
-    private function canViewIdentityFields(Request $request): bool
-    {
-        if (! Gate::check('employee.view')) {
-            return false;
-        }
-
-        $user = $request->user();
-
-        if (! $user instanceof User) {
-            return false;
-        }
-
-        if ($this->isSystemAdmin($user)) {
-            return true;
-        }
-
-        $userEmployeeId = $user->getAttribute('employee_id');
-
-        if ($userEmployeeId === null) {
-            return true;
-        }
-
-        return (int) $userEmployeeId === (int) $this->resource->getKey();
-    }
-
-    private function isSystemAdmin(User $user): bool
-    {
-        return $user->roles()
-            ->where('code', 'system_admin')
-            ->exists();
     }
 }

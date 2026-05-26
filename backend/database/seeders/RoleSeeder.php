@@ -21,7 +21,7 @@ class RoleSeeder extends Seeder
         'hr_manager' => [
             'name' => 'HR Manager',
             'description' => 'Full HR and recruitment access',
-            'permissions' => ['employee.*', 'recruitment.*'],
+            'permissions' => ['employee.*', 'contract.*', 'offboarding.*', 'chatter.*', 'recruitment.*'],
         ],
         'hr_staff' => [
             'name' => 'HR Staff',

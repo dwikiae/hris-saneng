@@ -29,11 +29,18 @@ class EmployeeDocument extends Model implements Archivable
         'company_id',
         'employee_id',
         'document_type',
+        'file_path',
+        'file_name',
         'original_filename',
         'storage_disk',
         'path',
         'mime_type',
         'size_bytes',
+        'file_size',
+        'notes',
+        'is_verified',
+        'verified_by',
+        'verified_at',
         'uploaded_by',
         'uploaded_at',
         'archived_at',
@@ -81,6 +88,8 @@ class EmployeeDocument extends Model implements Archivable
     {
         return [
             'uploaded_at' => 'datetime',
+            'verified_at' => 'datetime',
+            'is_verified' => 'boolean',
             'archived_at' => 'datetime',
         ];
     }

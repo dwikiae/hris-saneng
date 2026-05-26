@@ -3,14 +3,17 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Employee;
+use App\Models\EmployeeChatterMessage;
 use App\Models\EmployeeDocument;
 use App\Models\EmployeePhoto;
+use App\Models\User;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
 use App\Services\ArchiveService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeRepository implements EmployeeRepositoryInterface
 {
@@ -21,6 +24,11 @@ class EmployeeRepository implements EmployeeRepositoryInterface
         'user.roles',
         'department',
         'position',
+        'employmentType',
+        'division',
+        'unit',
+        'jobLevel',
+        'workLocation',
     ];
 
     public function __construct(
@@ -33,16 +41,29 @@ class EmployeeRepository implements EmployeeRepositoryInterface
      */
     public function index(array $filters, int $perPage): LengthAwarePaginator
     {
+        return $this->findAll($filters, $perPage);
+    }
+
+    /**
+     * @param  array<string, mixed>  $filters
+     */
+    public function findAll(array $filters, int $perPage): LengthAwarePaginator
+    {
         $query = Employee::query()
             ->with($this->relations)
-            ->orderBy('name');
+            ->orderBy($this->sortColumn($filters), $this->sortDirection($filters));
 
         $this->applyFilters($query, $filters);
 
-        return $query->paginate($perPage);
+        return $query->paginate(min(max($perPage, 1), 100));
     }
 
     public function show(int $id): Employee
+    {
+        return $this->findById($id);
+    }
+
+    public function findById(int $id): Employee
     {
         /** @var Employee $employee */
         $employee = $this->model->newQuery()
@@ -77,6 +98,55 @@ class EmployeeRepository implements EmployeeRepositoryInterface
     public function archive(Employee $employee): void
     {
         $this->archiveService->archive($employee);
+    }
+
+    public function generateEmployeeNumber(int $companyId): string
+    {
+        return DB::transaction(function () use ($companyId): string {
+            $year = date('Y');
+            $last = $this->model->newQuery()
+                ->withoutGlobalScope('company')
+                ->where('company_id', $companyId)
+                ->where('employee_number', 'like', "EMP-{$year}-%")
+                ->lockForUpdate()
+                ->max('employee_number');
+
+            $next = is_string($last) ? ((int) substr($last, -4)) + 1 : 1;
+
+            return 'EMP-'.$year.'-'.str_pad((string) $next, 4, '0', STR_PAD_LEFT);
+        });
+    }
+
+    public function createSystemLog(Employee $employee, string $message): EmployeeChatterMessage
+    {
+        /** @var EmployeeChatterMessage $chatterMessage */
+        $chatterMessage = $employee->chatterMessages()->create([
+            'company_id' => $employee->getAttribute('company_id'),
+            'user_id' => null,
+            'type' => EmployeeChatterMessage::SYSTEM_LOG,
+            'message' => $message,
+        ]);
+
+        return $chatterMessage;
+    }
+
+    public function forceUpdate(Employee $employee, array $data): Employee
+    {
+        $employee->forceFill($data)->save();
+
+        return $employee->refresh()->load($this->relations);
+    }
+
+    public function deactivateLinkedUser(Employee $employee): void
+    {
+        $userId = $employee->getAttribute('user_id');
+
+        /** @var User|null $user */
+        $user = $userId === null
+            ? User::query()->where('employee_id', $employee->getKey())->first()
+            : User::query()->find($userId);
+
+        $user?->forceFill(['active' => false])->save();
     }
 
     /**
@@ -138,6 +208,10 @@ class EmployeeRepository implements EmployeeRepositoryInterface
      */
     private function applyFilters(Builder|QueryBuilder $query, array $filters): void
     {
+        if (($filters['include_archived'] ?? false) === true || ($filters['include_archived'] ?? null) === 'true') {
+            $query->withoutGlobalScope('not_archived');
+        }
+
         if (array_key_exists('status', $filters)) {
             $query->where('status', (string) $filters['status']);
         }
@@ -150,6 +224,14 @@ class EmployeeRepository implements EmployeeRepositoryInterface
             $query->where('position_id', (int) $filters['position_id']);
         }
 
+        if (array_key_exists('employee_type_id', $filters)) {
+            $query->where('employment_type_id', (int) $filters['employee_type_id']);
+        }
+
+        if (array_key_exists('employment_type_id', $filters)) {
+            $query->where('employment_type_id', (int) $filters['employment_type_id']);
+        }
+
         if (! array_key_exists('search', $filters) || $filters['search'] === null || $filters['search'] === '') {
             return;
         }
@@ -157,8 +239,29 @@ class EmployeeRepository implements EmployeeRepositoryInterface
         $search = (string) $filters['search'];
 
         $query->where(function ($query) use ($search): void {
-            $query->where('name', 'like', '%'.$search.'%')
+            $query->where('full_name', 'like', '%'.$search.'%')
+                ->orWhere('name', 'like', '%'.$search.'%')
                 ->orWhere('employee_number', 'like', '%'.$search.'%');
         });
+    }
+
+    /**
+     * @param  array<string, mixed>  $filters
+     */
+    private function sortColumn(array $filters): string
+    {
+        return match ($filters['sort'] ?? 'name') {
+            'join_date' => 'join_date',
+            'employee_number' => 'employee_number',
+            default => 'name',
+        };
+    }
+
+    /**
+     * @param  array<string, mixed>  $filters
+     */
+    private function sortDirection(array $filters): string
+    {
+        return ($filters['order'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
     }
 }

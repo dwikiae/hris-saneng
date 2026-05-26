@@ -3,6 +3,7 @@
 namespace App\Repositories\Contracts;
 
 use App\Models\Employee;
+use App\Models\EmployeeChatterMessage;
 use App\Models\EmployeeDocument;
 use App\Models\EmployeePhoto;
 use Illuminate\Database\Eloquent\Collection;
@@ -15,7 +16,14 @@ interface EmployeeRepositoryInterface
      */
     public function index(array $filters, int $perPage): LengthAwarePaginator;
 
+    /**
+     * @param  array<string, mixed>  $filters
+     */
+    public function findAll(array $filters, int $perPage): LengthAwarePaginator;
+
     public function show(int $id): Employee;
+
+    public function findById(int $id): Employee;
 
     /**
      * @param  array<string, mixed>  $data
@@ -28,6 +36,17 @@ interface EmployeeRepositoryInterface
     public function update(Employee $employee, array $data): Employee;
 
     public function archive(Employee $employee): void;
+
+    public function generateEmployeeNumber(int $companyId): string;
+
+    public function createSystemLog(Employee $employee, string $message): EmployeeChatterMessage;
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public function forceUpdate(Employee $employee, array $data): Employee;
+
+    public function deactivateLinkedUser(Employee $employee): void;
 
     /**
      * @return Collection<int, EmployeeDocument>

@@ -38,9 +38,6 @@ class EmployeeSeeder extends Seeder
                 'npwp' => '09.111.222.3-444.000',
                 'bank_name' => 'BCA',
                 'bank_account_number' => '0011223344',
-                'salary' => '18000000',
-                'allowances' => '2500000',
-                'deductions' => '500000',
             ],
             [
                 'role' => 'hr_staff',
@@ -60,9 +57,6 @@ class EmployeeSeeder extends Seeder
                 'npwp' => '09.222.333.4-555.000',
                 'bank_name' => 'Mandiri',
                 'bank_account_number' => '1122334455',
-                'salary' => '8500000',
-                'allowances' => '1000000',
-                'deductions' => '250000',
             ],
             [
                 'role' => 'employee',
@@ -82,9 +76,6 @@ class EmployeeSeeder extends Seeder
                 'npwp' => '09.333.444.5-666.000',
                 'bank_name' => 'BRI',
                 'bank_account_number' => '2233445566',
-                'salary' => '5500000',
-                'allowances' => '750000',
-                'deductions' => '150000',
             ],
         ];
     }
@@ -122,9 +113,6 @@ class EmployeeSeeder extends Seeder
                     'npwp' => $row['npwp'],
                     'bank_name' => $row['bank_name'],
                     'bank_account_number' => $row['bank_account_number'],
-                    'salary' => $row['salary'],
-                    'allowances' => $row['allowances'],
-                    'deductions' => $row['deductions'],
                     'consent_at' => now(),
                     'consent_by' => $consentUser->getKey(),
                     'status' => Employee::ACTIVE,

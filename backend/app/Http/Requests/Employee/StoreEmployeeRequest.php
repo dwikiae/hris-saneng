@@ -34,9 +34,6 @@ class StoreEmployeeRequest extends FormRequest
             'npwp' => ['nullable', 'string', 'max:50'],
             'bank_name' => ['nullable', 'string', 'max:255'],
             'bank_account_number' => ['nullable', 'string', 'max:100'],
-            'salary' => ['nullable', 'numeric', 'min:0'],
-            'allowances' => ['nullable', 'numeric', 'min:0'],
-            'deductions' => ['nullable', 'numeric', 'min:0'],
             'consent_at' => ['required', 'date'],
             'approver_id' => ['nullable', 'integer', 'exists:users,id'],
         ];

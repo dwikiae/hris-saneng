@@ -28,9 +28,6 @@ return new class extends Migration
             $table->text('npwp')->nullable();
             $table->string('bank_name')->nullable();
             $table->text('bank_account_number')->nullable();
-            $table->text('salary')->nullable();
-            $table->text('allowances')->nullable();
-            $table->text('deductions')->nullable();
             $table->timestamp('consent_at');
             $table->foreignId('consent_by')->constrained('users')->restrictOnDelete();
             $table->string('status', 20)->default('draft');

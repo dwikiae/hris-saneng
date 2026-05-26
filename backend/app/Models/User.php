@@ -26,6 +26,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property int|null $employee_id
  * @property string $language_preference
  * @property bool $force_password_reset
+ * @property bool $active
  * @property Carbon|null $last_login_at
  * @property int $login_attempts
  * @property Carbon|null $locked_until
@@ -60,6 +61,7 @@ class User extends Authenticatable implements Archivable
         'employee_id',
         'language_preference',
         'force_password_reset',
+        'active',
         'last_login_at',
         'login_attempts',
         'locked_until',
@@ -123,6 +125,7 @@ class User extends Authenticatable implements Archivable
         return [
             'email_verified_at' => 'datetime',
             'force_password_reset' => 'boolean',
+            'active' => 'boolean',
             'last_login_at' => 'datetime',
             'locked_until' => 'datetime',
             'archived_at' => 'datetime',

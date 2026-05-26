@@ -38,7 +38,6 @@ trait InteractsWithLog
             'nik',
             'npwp',
             'bank_account_number',
-            'salary',
         ];
     }
 }

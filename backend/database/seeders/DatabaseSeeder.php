@@ -26,6 +26,9 @@ class DatabaseSeeder extends Seeder
             BloodTypeSeeder::class,
             BankSeeder::class,
             DocumentTypeSeeder::class,
+            ContractTypeSeeder::class,
+            TerminationReasonSeeder::class,
+            OffboardingTemplateSeeder::class,
             EmployeeSeeder::class,
         ]);
     }

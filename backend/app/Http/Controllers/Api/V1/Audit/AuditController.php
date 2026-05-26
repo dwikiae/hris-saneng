@@ -14,9 +14,6 @@ class AuditController extends Controller
      * @var array<int, string>
      */
     private array $sensitiveFields = [
-        'salary',
-        'allowances',
-        'deductions',
         'nik',
         'npwp',
         'bank_account_number',
@@ -44,7 +41,7 @@ class AuditController extends Controller
             $query->whereDate('created_at', '<=', $request->date('date_to'));
         }
 
-        $canViewSensitive = Gate::allows('employee.view_salary');
+        $canViewSensitive = Gate::allows('employee.view_sensitive');
 
         $records = $query->paginate(20)->through(
             fn (Activity $activity): array => $this->transformActivity($activity, $canViewSensitive)

@@ -20,12 +20,12 @@ beforeEach(function () {
         'name' => 'View Employee',
     ]);
 
-    $this->salaryPermission = Permission::create([
+    $this->sensitivePermission = Permission::create([
         'company_id' => $this->company->id,
-        'code' => 'employee.view_salary',
+        'code' => 'employee.view_sensitive',
         'module' => 'employee',
-        'action' => 'view_salary',
-        'name' => 'View Employee Salary',
+        'action' => 'view_sensitive',
+        'name' => 'View Employee Sensitive Fields',
     ]);
 
     $this->consentUser = User::create([
@@ -44,9 +44,6 @@ beforeEach(function () {
         'npwp' => '09.123.456.7-891.000',
         'bank_name' => 'BCA',
         'bank_account_number' => '1234567890',
-        'salary' => '10000000',
-        'allowances' => '1500000',
-        'deductions' => '250000',
         'consent_at' => now(),
         'consent_by' => $this->consentUser->id,
         'status' => Employee::DRAFT,
@@ -59,37 +56,32 @@ beforeEach(function () {
         'nik' => '3374010101010002',
         'npwp' => '09.123.456.7-891.001',
         'bank_account_number' => '0987654321',
-        'salary' => '12000000',
-        'allowances' => '2000000',
-        'deductions' => '300000',
         'consent_at' => now(),
         'consent_by' => $this->consentUser->id,
         'status' => Employee::DRAFT,
     ]);
 });
 
-it('excludes salary fields for users without salary permission', function () {
+it('excludes sensitive fields for users without sensitive permission', function () {
     $user = userWithRole($this->company, 'hr_staff', [$this->viewPermission]);
 
     $this->actingAs($user)
         ->getJson("/api/v1/employees/{$this->employee->id}")
         ->assertOk()
-        ->assertJsonPath('data.nik', '3374010101010001')
-        ->assertJsonPath('data.bank_account_number', '1234567890')
-        ->assertJsonMissingPath('data.salary')
-        ->assertJsonMissingPath('data.allowances')
-        ->assertJsonMissingPath('data.deductions');
+        ->assertJsonMissingPath('data.nik')
+        ->assertJsonMissingPath('data.npwp')
+        ->assertJsonMissingPath('data.bank_account_number');
 });
 
-it('includes salary fields for users with salary permission', function () {
-    $user = userWithRole($this->company, 'payroll', [$this->viewPermission, $this->salaryPermission]);
+it('includes sensitive fields for users with sensitive permission', function () {
+    $user = userWithRole($this->company, 'hr_sensitive', [$this->viewPermission, $this->sensitivePermission]);
 
     $this->actingAs($user)
         ->getJson("/api/v1/employees/{$this->employee->id}")
         ->assertOk()
-        ->assertJsonPath('data.salary', '10000000')
-        ->assertJsonPath('data.allowances', '1500000')
-        ->assertJsonPath('data.deductions', '250000');
+        ->assertJsonPath('data.nik', '3374010101010001')
+        ->assertJsonPath('data.npwp', '09.123.456.7-891.000')
+        ->assertJsonPath('data.bank_account_number', '1234567890');
 });
 
 it('excludes identity fields when employee user views another employee', function () {
@@ -100,23 +92,21 @@ it('excludes identity fields when employee user views another employee', functio
         ->assertOk()
         ->assertJsonMissingPath('data.nik')
         ->assertJsonMissingPath('data.npwp')
-        ->assertJsonMissingPath('data.bank_account_number')
-        ->assertJsonMissingPath('data.salary');
+        ->assertJsonMissingPath('data.bank_account_number');
 });
 
-it('includes identity fields when employee user views their own employee record', function () {
+it('excludes identity fields when employee user views their own employee record without sensitive permission', function () {
     $user = userWithRole($this->company, 'employee_self_service_own', [$this->viewPermission], $this->employee->id);
 
     $this->actingAs($user)
         ->getJson("/api/v1/employees/{$this->employee->id}")
         ->assertOk()
-        ->assertJsonPath('data.nik', '3374010101010001')
-        ->assertJsonPath('data.npwp', '09.123.456.7-891.000')
-        ->assertJsonPath('data.bank_account_number', '1234567890')
-        ->assertJsonMissingPath('data.salary');
+        ->assertJsonMissingPath('data.nik')
+        ->assertJsonMissingPath('data.npwp')
+        ->assertJsonMissingPath('data.bank_account_number');
 });
 
-it('includes all sensitive fields for system admin through gate before', function () {
+it('includes sensitive fields for system admin through gate before', function () {
     $admin = userWithRole($this->company, 'system_admin', [], $this->otherEmployee->id);
 
     $this->actingAs($admin)
@@ -124,10 +114,7 @@ it('includes all sensitive fields for system admin through gate before', functio
         ->assertOk()
         ->assertJsonPath('data.nik', '3374010101010001')
         ->assertJsonPath('data.npwp', '09.123.456.7-891.000')
-        ->assertJsonPath('data.bank_account_number', '1234567890')
-        ->assertJsonPath('data.salary', '10000000')
-        ->assertJsonPath('data.allowances', '1500000')
-        ->assertJsonPath('data.deductions', '250000');
+        ->assertJsonPath('data.bank_account_number', '1234567890');
 });
 
 it('applies field permissions to employee index items', function () {
@@ -137,8 +124,7 @@ it('applies field permissions to employee index items', function () {
         ->getJson('/api/v1/employees')
         ->assertOk()
         ->assertJsonPath('data.data.0.name', 'Budi Saneng')
-        ->assertJsonMissingPath('data.data.0.nik')
-        ->assertJsonMissingPath('data.data.0.salary');
+        ->assertJsonMissingPath('data.data.0.nik');
 });
 
 function userWithRole(Company $company, string $roleCode, array $permissions, ?int $employeeId = null): User

@@ -34,9 +34,6 @@ class UpdateEmployeeRequest extends FormRequest
             'npwp' => ['sometimes', 'nullable', 'string', 'max:50'],
             'bank_name' => ['sometimes', 'nullable', 'string', 'max:255'],
             'bank_account_number' => ['sometimes', 'nullable', 'string', 'max:100'],
-            'salary' => ['sometimes', 'nullable', 'numeric', 'min:0'],
-            'allowances' => ['sometimes', 'nullable', 'numeric', 'min:0'],
-            'deductions' => ['sometimes', 'nullable', 'numeric', 'min:0'],
             'consent_at' => ['sometimes', 'date'],
             'approver_id' => ['sometimes', 'nullable', 'integer', 'exists:users,id'],
         ];

@@ -107,10 +107,11 @@ it('creates a draft employee from a hired applicant', function () {
     $employee = Employee::query()->firstOrFail();
 
     expect($employee->name)->toBe($fixture['applicant']->name)
+        ->and($employee->employee_number)->toBeNull()
         ->and($employee->email)->toBe($fixture['applicant']->email)
         ->and($employee->phone)->toBe($fixture['applicant']->phone)
         ->and($employee->position_id)->toBe($fixture['position']->id)
-        ->and($employee->status)->toBe(Employee::DRAFT)
+        ->and($employee->status)->toBe(Employee::PENDING)
         ->and($employee->consent_at)->not->toBeNull()
         ->and($employee->consent_by)->toBe($this->user->id);
 });

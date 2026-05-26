@@ -15,7 +15,6 @@ class UpdateEmployeeService
         'nik',
         'npwp',
         'bank_account_number',
-        'salary',
         'department_id',
         'position_id',
     ];

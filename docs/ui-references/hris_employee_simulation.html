@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HRIS PT Saneng — Simulasi Modul Karyawan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#0F6E56;--green-dark:#085041;--green-light:#E1F5EE;--green-text:#0F6E56;
+  --bg:#F5F5F3;--surface:#FFFFFF;--border:#E5E5E2;--border-strong:#D0D0CC;
+  --text:#1A1A18;--text-secondary:#6B6B68;--text-tertiary:#9B9B98;
+  --blue-bg:#E6F1FB;--blue-text:#185FA5;
+  --amber-bg:#FAEEDA;--amber-text:#854F0B;
+  --red-bg:#FCEBEB;--red-text:#A32D2D;
+  --purple-bg:#EEEDFE;--purple-text:#534AB7;
+  --radius:8px;--radius-lg:12px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-size:13px;height:100vh;overflow:hidden}
+.shell{display:flex;height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.brand{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.brand-sub{font-size:10px;color:var(--text-tertiary);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+.brand-name{font-size:15px;font-weight:600;color:var(--text)}
+.nav{padding:10px 0;flex:1}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:13px;color:var(--text-secondary);cursor:pointer;border-left:3px solid transparent;transition:all .15s}
+.nav-item:hover{background:#F8F8F6;color:var(--text)}
+.nav-item.active{background:var(--green-light);color:var(--green);border-left-color:var(--green);font-weight:500}
+.nav-icon{font-size:16px;width:18px;text-align:center}
+.sidebar-footer{padding:14px 18px;border-top:1px solid var(--border)}
+.user-info{display:flex;align-items:center;gap:8px}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:var(--green-light);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}
+.user-name{font-size:12px;font-weight:500}
+.user-role{font-size:10px;color:var(--text-tertiary)}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{padding:14px 24px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0}
+.topbar-title{font-size:17px;font-weight:600;flex:1}
+.topbar-sub{font-size:11px;color:var(--text-secondary);margin-top:1px}
+.content{flex:1;overflow:auto;padding:20px 24px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;font-size:12px;font-weight:500;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:all .15s;font-family:inherit}
+.btn:hover{background:#F8F8F6;border-color:var(--border-strong)}
+.btn-primary{background:var(--green);border-color:var(--green);color:#fff}
+.btn-primary:hover{background:var(--green-dark);border-color:var(--green-dark)}
+.btn-danger{background:var(--red-bg);border-color:#F7C1C1;color:var(--red-text)}
+.btn-danger:hover{background:#F7C1C1}
+.btn-amber{background:var(--amber-bg);border-color:#FAC775;color:var(--amber-text)}
+.btn-sm{padding:5px 10px;font-size:11px}
+.btn-xs{padding:3px 8px;font-size:11px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:500}
+.badge-pending{background:var(--amber-bg);color:var(--amber-text)}
+.badge-active{background:var(--green-light);color:var(--green-text)}
+.badge-archived{background:#F1EFE8;color:#5F5E5A}
+.badge-expired{background:#F1EFE8;color:#5F5E5A}
+.badge-terminated{background:var(--red-bg);color:var(--red-text)}
+.badge-tetap{background:var(--blue-bg);color:var(--blue-text)}
+.badge-pkwt{background:var(--purple-bg);color:var(--purple-text)}
+.badge-outsourcing{background:#FBEAF0;color:#993556}
+.badge-magang{background:#EAF3DE;color:#3B6D11}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px}
+.stat-num{font-size:24px;font-weight:600;color:var(--text)}
+.stat-lbl{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.stat-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:4px}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse}
+thead th{padding:10px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--text-secondary);border-bottom:1px solid var(--border);white-space:nowrap;letter-spacing:.3px;text-transform:uppercase}
+tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+tbody tr:hover{background:#FAFAF8}
+tbody tr:last-child{border-bottom:none}
+td{padding:12px 14px;font-size:13px;vertical-align:middle}
+.emp-name{font-weight:500;font-size:13px}
+.emp-sub{font-size:11px;color:var(--text-secondary);margin-top:1px}
+
+/* AVATAR */
+.avatar{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+
+/* SEARCH */
+.search-wrap{position:relative;flex:1;max-width:280px}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-tertiary);font-size:14px;pointer-events:none}
+.search-input{width:100%;padding:7px 10px 7px 32px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--text);font-size:12px;font-family:inherit}
+.search-input:focus{outline:none;border-color:var(--green)}
+.filter-select{padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--text);font-size:12px;font-family:inherit;cursor:pointer}
+
+/* PANEL */
+.panel{display:none;flex-direction:column;height:100%;overflow:hidden}
+.panel.active{display:flex}
+
+/* BREADCRUMB */
+.breadcrumb{padding:10px 24px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0}
+.breadcrumb-back{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--text-secondary);cursor:pointer;background:none;border:none;font-family:inherit;padding:0}
+.breadcrumb-back:hover{color:var(--text)}
+.breadcrumb-sep{color:var(--border-strong);font-size:14px}
+.breadcrumb-current{font-size:12px;color:var(--text-secondary)}
+
+/* DETAIL HEADER */
+.detail-header{padding:20px 24px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+.detail-avatar-lg{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;flex-shrink:0}
+.detail-name{font-size:18px;font-weight:600}
+.detail-sub{font-size:13px;color:var(--text-secondary);margin-top:3px}
+.detail-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;font-size:11px;border:1px solid var(--border);color:var(--text-secondary);background:#FAFAF8}
+.smart-btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.smart-btn{display:inline-flex;flex-direction:column;align-items:center;padding:8px 16px;border:1px solid var(--border);border-radius:var(--radius);font-size:11px;color:var(--text-secondary);cursor:pointer;background:var(--surface);transition:all .15s;min-width:72px}
+.smart-btn:hover{background:#FAFAF8;border-color:var(--border-strong)}
+.smart-btn-num{font-size:18px;font-weight:600;color:var(--text);margin-bottom:2px}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--border);background:var(--surface);padding:0 24px;overflow-x:auto;flex-shrink:0}
+.tab{padding:11px 16px;font-size:13px;color:var(--text-secondary);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:all .15s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--green);border-bottom-color:var(--green);font-weight:500}
+.tab-content{display:none;padding:20px 24px;overflow:auto;flex:1}
+.tab-content.active{display:block}
+
+/* FIELDS */
+.section-title{font-size:11px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.6px;margin:18px 0 10px}
+.section-title:first-child{margin-top:0}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 28px}
+.field-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px 28px}
+.field-label{font-size:11px;color:var(--text-tertiary);margin-bottom:3px;display:block}
+.field-val{font-size:13px;color:var(--text)}
+.field-encrypted{display:flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-tertiary)}
+.field-encrypted .lock{font-size:12px}
+
+/* NOTICE */
+.notice{background:#F8F8F6;border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:12px;color:var(--text-secondary);display:flex;gap:8px;align-items:flex-start;margin-bottom:14px}
+.notice-warning{background:var(--amber-bg);border-color:#FAC775;color:var(--amber-text)}
+
+/* FORM */
+.form-label{font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:5px;display:block}
+.form-input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--text);font-size:13px;font-family:inherit;transition:border .15s}
+.form-input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(15,110,86,.08)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px 16px}
+.form-section{margin-bottom:24px}
+.form-section-title{font-size:13px;font-weight:600;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:14px}
+.required{color:#E24B4A}
+.consent-box{background:#F8F8F6;border:1px solid var(--border);border-radius:var(--radius);padding:12px;display:flex;gap:10px;margin-top:16px;align-items:flex-start}
+.consent-box input[type=checkbox]{margin-top:2px;accent-color:var(--green);width:14px;height:14px;flex-shrink:0;cursor:pointer}
+.consent-text{font-size:12px;color:var(--text-secondary);line-height:1.6;cursor:pointer}
+.form-actions{display:flex;gap:8px;justify-content:flex-end;padding:14px 24px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0;position:sticky;bottom:0}
+
+/* CHATTER */
+.chatter-list{display:flex;flex-direction:column;gap:0}
+.chatter-item{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--border)}
+.chatter-item:last-child{border-bottom:none}
+.chatter-system-bubble{background:#F8F8F6;border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;font-size:12px;color:var(--text-secondary);flex:1;display:flex;align-items:flex-start;gap:8px}
+.chatter-system-icon{font-size:13px;color:var(--text-tertiary);flex-shrink:0;margin-top:1px}
+.chatter-system-text{flex:1;line-height:1.5}
+.chatter-system-time{font-size:10px;color:var(--text-tertiary);white-space:nowrap;margin-top:2px}
+.chatter-msg-name{font-size:12px;font-weight:500;margin-bottom:2px}
+.chatter-msg-text{font-size:13px;line-height:1.5}
+.chatter-msg-time{font-size:10px;color:var(--text-tertiary);margin-top:3px}
+.chatter-mention{color:var(--green);font-weight:500}
+.chatter-input-area{border-top:1px solid var(--border);padding-top:14px;margin-top:4px}
+.chatter-textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;resize:none;color:var(--text);background:var(--surface);transition:border .15s}
+.chatter-textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(15,110,86,.08)}
+
+/* CONTRACT */
+.contract-card{padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;display:flex;align-items:center;gap:12px;background:var(--surface)}
+.contract-card:hover{border-color:var(--border-strong)}
+.contract-num{font-size:12px;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--text)}
+.contract-detail{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.contract-active{border-left:3px solid var(--green)}
+
+/* OFFBOARDING */
+.offboard-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:6px;background:var(--surface);transition:all .15s}
+.offboard-item.checked{background:var(--green-light);border-color:#9FE1CB}
+.offboard-item input[type=checkbox]{margin-top:2px;accent-color:var(--green);width:15px;height:15px;flex-shrink:0;cursor:pointer}
+.offboard-item-label{font-size:13px;flex:1;cursor:pointer;line-height:1.4}
+.offboard-item-dept{font-size:10px;color:var(--text-tertiary);margin-top:2px}
+.offboard-mandatory{color:var(--red-text);margin-left:2px}
+
+/* MODAL */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:1000;display:none;backdrop-filter:blur(2px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);width:500px;max-height:85vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.12)}
+.modal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface)}
+.modal-title{font-size:15px;font-weight:600}
+.modal-body{padding:20px}
+.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:var(--surface)}
+
+/* DOC */
+.doc-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:6px;background:#FAFAF8}
+.doc-icon{font-size:20px;color:var(--green);flex-shrink:0}
+.doc-name{font-size:13px;font-weight:500}
+.doc-meta{font-size:11px;color:var(--text-secondary);margin-top:1px}
+
+/* PAGINATION */
+.pagination{display:flex;align-items:center;gap:4px}
+.page-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;cursor:pointer;background:var(--surface);color:var(--text);transition:all .15s}
+.page-btn:hover{background:#F8F8F6}
+.page-btn.active{background:var(--green);color:#fff;border-color:var(--green)}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:16px 0}
+
+/* RESUME ITEM */
+.resume-item{padding:10px 0;border-bottom:1px solid var(--border)}
+.resume-item:last-child{border-bottom:none}
+.resume-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:5px}
+.resume-dot-blue{background:var(--blue-text)}
+.resume-title{font-size:13px;font-weight:500}
+.resume-sub{font-size:11px;color:var(--text-secondary);margin-top:2px}
+
+/* EMPTY */
+.empty{text-align:center;padding:28px;color:var(--text-tertiary);font-size:13px}
+
+/* TOOLBAR */
+.toolbar{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+/* CONTRACT HEADER ACTIONS */
+.contract-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.contract-header p{font-size:12px;color:var(--text-secondary)}
+</style>
+</head>
+<body>
+
+<!-- MODAL OFFBOARDING -->
+<div class="modal-overlay" id="modal-offboarding">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Mulai Offboarding</span>
+      <button class="btn btn-sm" onclick="closeOffboarding()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-section">
+        <div class="form-grid">
+          <div>
+            <label class="form-label">Alasan Berakhir <span class="required">*</span></label>
+            <select class="form-input" id="offboard-reason" onchange="loadChecklist()">
+              <option value="">Pilih alasan</option>
+              <option value="resign">Resign</option>
+              <option value="contract_ended">Kontrak Habis</option>
+              <option value="termination">PHK</option>
+              <option value="retirement">Pensiun</option>
+              <option value="deceased">Meninggal</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Tanggal Efektif Berakhir <span class="required">*</span></label>
+            <input type="date" class="form-input" id="offboard-date" value="2025-12-31">
+          </div>
+        </div>
+        <div style="margin-top:10px">
+          <label class="form-label">Catatan</label>
+          <textarea class="form-input" rows="2" style="resize:none" placeholder="Opsional"></textarea>
+        </div>
+      </div>
+      <div id="checklist-section" style="display:none">
+        <div class="section-title" style="margin-top:0">Checklist Offboarding</div>
+        <div class="notice notice-warning">⚠ Semua item wajib dicentang sebelum bisa finalisasi.</div>
+        <div id="checklist-items"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeOffboarding()">Batal</button>
+      <button class="btn btn-danger" id="finalize-btn" style="display:none" onclick="finalizeOffboarding()">✓ Finalize Offboarding</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONTRACT -->
+<div class="modal-overlay" id="modal-contract">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="contract-modal-title">Buat Kontrak Baru</span>
+      <button class="btn btn-sm" onclick="closeContract()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid" style="gap:12px 16px">
+        <div>
+          <label class="form-label">Tipe Kontrak <span class="required">*</span></label>
+          <select class="form-input" id="ct-type"><option>PKWT</option><option>Karyawan Tetap</option><option>Outsourcing</option><option>Magang</option></select>
+        </div>
+        <div>
+          <label class="form-label">Posisi <span class="required">*</span></label>
+          <input class="form-input" id="ct-pos" value="Coating Operator">
+        </div>
+        <div>
+          <label class="form-label">Departemen <span class="required">*</span></label>
+          <input class="form-input" id="ct-dept" value="Produksi">
+        </div>
+        <div>
+          <label class="form-label">Lokasi Kerja</label>
+          <input class="form-input" id="ct-loc" value="Pabrik Utama">
+        </div>
+        <div>
+          <label class="form-label">Tanggal Mulai <span class="required">*</span></label>
+          <input type="date" class="form-input" id="ct-start">
+        </div>
+        <div>
+          <label class="form-label">Tanggal Berakhir</label>
+          <input type="date" class="form-input" id="ct-end">
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <label class="form-label">Upload Dokumen Kontrak</label>
+        <input type="file" class="form-input" accept=".pdf,.jpg,.png">
+      </div>
+      <div style="margin-top:10px">
+        <label class="form-label">Nomor Kontrak</label>
+        <input class="form-input" id="ct-no" placeholder="Auto-generate jika kosong" style="font-family:'JetBrains Mono',monospace;font-size:12px">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeContract()">Batal</button>
+      <button class="btn btn-primary" onclick="saveContract()">✓ Simpan Kontrak</button>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="brand">
+      <div class="brand-sub">Internal HRIS</div>
+      <div class="brand-name">PT Saneng</div>
+    </div>
+    <nav class="nav">
+      <div class="nav-item"><span class="nav-icon">⊞</span> Dashboard</div>
+      <div class="nav-item active"><span class="nav-icon">👥</span> Data Karyawan</div>
+      <div class="nav-item"><span class="nav-icon">📋</span> Rekrutmen</div>
+      <div class="nav-item"><span class="nav-icon">📦</span> Aset</div>
+      <div class="nav-item"><span class="nav-icon">⚙</span> Pengaturan</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">RK</div>
+        <div>
+          <div class="user-name">Rina Kartika</div>
+          <div class="user-role">HR Staff</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- ============ LIST PANEL ============ -->
+    <div class="panel active" id="panel-list">
+      <div class="topbar">
+        <div style="flex:1">
+          <div class="topbar-title">Data Karyawan</div>
+          <div class="topbar-sub">Kelola seluruh data karyawan PT Saneng</div>
+        </div>
+        <button class="btn btn-primary" onclick="showForm(null)">+ Tambah Karyawan</button>
+      </div>
+      <div class="content">
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-num">247</div><div class="stat-lbl"><span class="stat-dot" style="background:#888"></span>Total Karyawan</div></div>
+          <div class="stat-card"><div class="stat-num" style="color:var(--green)">231</div><div class="stat-lbl"><span class="stat-dot" style="background:var(--green)"></span>Aktif</div></div>
+          <div class="stat-card"><div class="stat-num" style="color:var(--amber-text)">8</div><div class="stat-lbl"><span class="stat-dot" style="background:var(--amber-text)"></span>Pending Approval</div></div>
+          <div class="stat-card"><div class="stat-num" style="color:#E24B4A">5</div><div class="stat-lbl"><span class="stat-dot" style="background:#E24B4A"></span>Kontrak Akan Habis</div></div>
+        </div>
+        <div class="card">
+          <div class="toolbar">
+            <div class="search-wrap">
+              <span class="search-icon">🔍</span>
+              <input type="text" class="search-input" placeholder="Cari nama, nomor karyawan, posisi...">
+            </div>
+            <select class="filter-select">
+              <option>Semua Status</option>
+              <option>Pending</option>
+              <option>Active</option>
+              <option>Archived</option>
+            </select>
+            <select class="filter-select">
+              <option>Semua Departemen</option>
+              <option>Produksi</option>
+              <option>HRD</option>
+              <option>Finance</option>
+              <option>Warehouse</option>
+              <option>Engineering</option>
+            </select>
+            <select class="filter-select">
+              <option>Semua Tipe</option>
+              <option>Tetap</option>
+              <option>PKWT</option>
+              <option>Outsourcing</option>
+              <option>Magang</option>
+            </select>
+            <button class="btn btn-sm" style="margin-left:auto">↓ Export</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:40px"></th>
+                <th>Karyawan</th>
+                <th>No. Karyawan</th>
+                <th>Departemen</th>
+                <th>Tipe</th>
+                <th>Bergabung</th>
+                <th>Status</th>
+                <th style="width:60px"></th>
+              </tr>
+            </thead>
+            <tbody id="emp-table"></tbody>
+          </table>
+          <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:12px;color:var(--text-secondary)">Menampilkan 6 dari 247 karyawan</span>
+            <div class="pagination">
+              <div class="page-btn">‹</div>
+              <div class="page-btn active">1</div>
+              <div class="page-btn">2</div>
+              <div class="page-btn">3</div>
+              <div class="page-btn">›</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ DETAIL PANEL ============ -->
+    <div class="panel" id="panel-detail">
+      <div class="breadcrumb">
+        <button class="breadcrumb-back" onclick="showList()">← Kembali ke daftar</button>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current" id="detail-crumb"></span>
+        <div style="margin-left:auto;display:flex;gap:6px" id="detail-actions"></div>
+      </div>
+
+      <div class="detail-header">
+        <div style="display:flex;gap:14px;align-items:flex-start">
+          <div class="detail-avatar-lg" id="detail-avatar"></div>
+          <div style="flex:1">
+            <div class="detail-name" id="detail-name"></div>
+            <div class="detail-sub" id="detail-sub"></div>
+            <div class="detail-tags" id="detail-tags"></div>
+          </div>
+          <div id="detail-status-badge"></div>
+        </div>
+        <div class="smart-btns" id="smart-btns"></div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('info',this)">Info Pekerjaan</div>
+        <div class="tab" onclick="switchTab('private',this)">Data Pribadi</div>
+        <div class="tab" onclick="switchTab('resume',this)">Riwayat & Keluarga</div>
+        <div class="tab" onclick="switchTab('docs',this)">Dokumen</div>
+        <div class="tab" onclick="switchTab('contract',this)">Kontrak</div>
+        <div class="tab" onclick="switchTab('chatter',this)">Log & Pesan</div>
+      </div>
+
+      <div style="overflow:auto;flex:1">
+
+        <!-- TAB INFO -->
+        <div class="tab-content active" id="tab-info">
+          <div class="section-title">Informasi Organisasi</div>
+          <div class="field-grid">
+            <div><span class="field-label">Departemen</span><span class="field-val" id="d-dept"></span></div>
+            <div><span class="field-label">Divisi</span><span class="field-val" id="d-div"></span></div>
+            <div><span class="field-label">Jabatan</span><span class="field-val" id="d-pos"></span></div>
+            <div><span class="field-label">Level</span><span class="field-val" id="d-level"></span></div>
+            <div><span class="field-label">Tipe Karyawan</span><span class="field-val" id="d-type"></span></div>
+            <div><span class="field-label">Lokasi Kerja</span><span class="field-val" id="d-loc"></span></div>
+            <div><span class="field-label">Approver</span><span class="field-val" id="d-approver"></span></div>
+            <div><span class="field-label">Nomor Karyawan</span><span class="field-val" id="d-empno" style="font-family:'JetBrains Mono',monospace;font-size:12px"></span></div>
+          </div>
+          <div class="section-title">Kontak Kerja</div>
+          <div class="field-grid">
+            <div><span class="field-label">Email Kerja</span><span class="field-val" id="d-wemail"></span></div>
+            <div><span class="field-label">No. Telepon Kerja</span><span class="field-val" id="d-wphone"></span></div>
+            <div><span class="field-label">No. HP Mobile</span><span class="field-val" id="d-wmobile"></span></div>
+          </div>
+          <div class="section-title">Kepegawaian</div>
+          <div class="field-grid">
+            <div><span class="field-label">Tanggal Bergabung</span><span class="field-val" id="d-join"></span></div>
+            <div><span class="field-label">Tanggal Kontrak Pertama</span><span class="field-val" id="d-contract1"></span></div>
+            <div><span class="field-label">No. BPJS Kesehatan</span><span class="field-val" id="d-bpjsk"></span></div>
+            <div><span class="field-label">No. BPJS Ketenagakerjaan</span><span class="field-val" id="d-bpjstk"></span></div>
+          </div>
+        </div>
+
+        <!-- TAB PRIVATE -->
+        <div class="tab-content" id="tab-private">
+          <div class="notice">🔒 Field terenkripsi hanya dapat dilihat oleh user dengan permission <strong>employee.view_sensitive</strong>. NIK, NPWP, dan rekening bank dienkripsi di database.</div>
+          <div class="section-title">Identitas & Kewarganegaraan</div>
+          <div class="field-grid">
+            <div><span class="field-label">Jenis Kelamin</span><span class="field-val" id="d-gender"></span></div>
+            <div><span class="field-label">Tempat, Tanggal Lahir</span><span class="field-val" id="d-dob"></span></div>
+            <div><span class="field-label">Agama</span><span class="field-val" id="d-religion"></span></div>
+            <div><span class="field-label">Golongan Darah</span><span class="field-val" id="d-blood"></span></div>
+            <div><span class="field-label">Kewarganegaraan</span><span class="field-val">Indonesia</span></div>
+            <div><span class="field-label">Status Pernikahan</span><span class="field-val" id="d-marital"></span></div>
+            <div><span class="field-label">Jumlah Tanggungan</span><span class="field-val" id="d-children"></span></div>
+          </div>
+          <div class="section-title">Identitas Terenkripsi</div>
+          <div class="field-grid">
+            <div><span class="field-label">NIK KTP</span><span class="field-encrypted">🔒 ••••••••••••••••</span></div>
+            <div><span class="field-label">NPWP</span><span class="field-encrypted">🔒 ••••••••••••••</span></div>
+          </div>
+          <div class="section-title">Alamat</div>
+          <div class="field-grid">
+            <div><span class="field-label">Alamat KTP</span><span class="field-val" id="d-addr-ktp"></span></div>
+            <div><span class="field-label">Alamat Domisili</span><span class="field-val" id="d-addr-dom"></span></div>
+          </div>
+          <div class="section-title">Kontak Pribadi & Darurat</div>
+          <div class="field-grid">
+            <div><span class="field-label">No. HP Pribadi</span><span class="field-val" id="d-phone"></span></div>
+            <div><span class="field-label">Email Pribadi</span><span class="field-val" id="d-pemail"></span></div>
+            <div><span class="field-label">Nama Kontak Darurat</span><span class="field-val" id="d-emname"></span></div>
+            <div><span class="field-label">No. HP Kontak Darurat</span><span class="field-val" id="d-emphone"></span></div>
+            <div><span class="field-label">Hubungan</span><span class="field-val" id="d-emrel"></span></div>
+          </div>
+          <div class="section-title">Rekening Bank (Terenkripsi)</div>
+          <div class="field-grid">
+            <div><span class="field-label">Bank</span><span class="field-val" id="d-bank"></span></div>
+            <div><span class="field-label">No. Rekening</span><span class="field-encrypted">🔒 ••••••••••••</span></div>
+            <div><span class="field-label">Atas Nama</span><span class="field-val" id="d-bankname"></span></div>
+          </div>
+        </div>
+
+        <!-- TAB RESUME -->
+        <div class="tab-content" id="tab-resume">
+          <div class="section-title">Pengalaman Kerja</div>
+          <div id="resume-exp"></div>
+          <div class="section-title">Pendidikan</div>
+          <div id="resume-edu"></div>
+          <div class="section-title">Anggota Keluarga</div>
+          <div id="resume-family"></div>
+        </div>
+
+        <!-- TAB DOCS -->
+        <div class="tab-content" id="tab-docs">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <p style="font-size:12px;color:var(--text-secondary)">Akses dokumen via signed URL (time-limited, aman)</p>
+            <button class="btn btn-sm">↑ Upload Dokumen</button>
+          </div>
+          <div id="docs-list">
+            <div class="doc-item"><span class="doc-icon">📄</span><div style="flex:1"><div class="doc-name">KTP.pdf</div><div class="doc-meta">Diupload 12 Jan 2025 · 428 KB · Terverifikasi ✓</div></div><button class="btn btn-xs">👁 Lihat</button></div>
+            <div class="doc-item"><span class="doc-icon">📄</span><div style="flex:1"><div class="doc-name">Foto KTP.jpg</div><div class="doc-meta">Diupload 12 Jan 2025 · 1.1 MB</div></div><button class="btn btn-xs">👁 Lihat</button></div>
+            <div class="doc-item"><span class="doc-icon">📄</span><div style="flex:1"><div class="doc-name">Ijazah S1.pdf</div><div class="doc-meta">Diupload 12 Jan 2025 · 2.3 MB · Terverifikasi ✓</div></div><button class="btn btn-xs">👁 Lihat</button></div>
+            <div class="doc-item"><span class="doc-icon">📄</span><div style="flex:1"><div class="doc-name">SKCK.pdf</div><div class="doc-meta">Diupload 14 Jan 2025 · 890 KB</div></div><button class="btn btn-xs">👁 Lihat</button></div>
+          </div>
+        </div>
+
+        <!-- TAB CONTRACT -->
+        <div class="tab-content" id="tab-contract">
+          <div class="contract-header">
+            <p>History semua kontrak karyawan ini</p>
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-sm" onclick="openContractModal(false)">+ Kontrak Baru</button>
+              <button class="btn btn-sm btn-primary" id="btn-renew" onclick="openContractModal(true)" style="display:none">↺ Perpanjang PKWT</button>
+            </div>
+          </div>
+          <div id="contract-list"></div>
+        </div>
+
+        <!-- TAB CHATTER -->
+        <div class="tab-content" id="tab-chatter">
+          <div class="chatter-list" id="chatter-list"></div>
+          <div class="chatter-input-area">
+            <textarea class="chatter-textarea" rows="3" id="chatter-input" placeholder="Tulis catatan atau pesan... Gunakan @nama untuk mention seseorang"></textarea>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px">
+              <button class="btn btn-primary btn-sm" onclick="sendChatterMsg()">→ Kirim Pesan</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============ FORM PANEL ============ -->
+    <div class="panel" id="panel-form">
+      <div class="breadcrumb">
+        <button class="breadcrumb-back" onclick="cancelForm()">← Batal</button>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current" id="form-crumb"></span>
+      </div>
+      <div style="overflow:auto;flex:1;padding:20px 24px">
+
+        <div class="form-section">
+          <div class="form-section-title">Identitas Utama</div>
+          <div class="form-grid">
+            <div><label class="form-label">Nama Lengkap <span class="required">*</span></label><input class="form-input" type="text" placeholder="Sesuai KTP"></div>
+            <div><label class="form-label">Nama Panggilan</label><input class="form-input" type="text"></div>
+            <div><label class="form-label">Jenis Kelamin <span class="required">*</span></label><select class="form-input"><option value="">Pilih</option><option>Laki-laki</option><option>Perempuan</option></select></div>
+            <div><label class="form-label">Tempat Lahir <span class="required">*</span></label><input class="form-input" type="text"></div>
+            <div><label class="form-label">Tanggal Lahir <span class="required">*</span></label><input class="form-input" type="date"></div>
+            <div><label class="form-label">Agama</label><select class="form-input"><option value="">Pilih</option><option>Islam</option><option>Kristen</option><option>Katolik</option><option>Hindu</option><option>Buddha</option><option>Konghucu</option></select></div>
+            <div><label class="form-label">Golongan Darah</label><select class="form-input"><option value="">Pilih</option><option>A</option><option>B</option><option>AB</option><option>O</option></select></div>
+            <div><label class="form-label">Status Pernikahan</label><select class="form-input"><option>Belum Menikah</option><option>Menikah</option><option>Cerai</option><option>Duda/Janda</option></select></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">🔒 Data Terenkripsi</div>
+          <div class="notice">Field berikut akan dienkripsi secara otomatis saat disimpan. Tidak pernah tersimpan sebagai teks biasa di database.</div>
+          <div class="form-grid">
+            <div><label class="form-label">NIK KTP <span class="required">*</span></label><input class="form-input" type="text" placeholder="16 digit NIK" maxlength="16" style="font-family:'JetBrains Mono',monospace"></div>
+            <div><label class="form-label">NPWP</label><input class="form-input" type="text" placeholder="NPWP (jika ada)" style="font-family:'JetBrains Mono',monospace"></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Penempatan & Pekerjaan</div>
+          <div class="form-grid">
+            <div><label class="form-label">Departemen <span class="required">*</span></label><select class="form-input"><option value="">Pilih</option><option>Produksi</option><option>HRD</option><option>Finance</option><option>Warehouse</option><option>Engineering</option><option>QC</option></select></div>
+            <div><label class="form-label">Divisi</label><select class="form-input"><option value="">Pilih (opsional)</option></select></div>
+            <div><label class="form-label">Jabatan <span class="required">*</span></label><select class="form-input"><option value="">Pilih</option><option>Coating Operator</option><option>HR Officer</option><option>Warehouse Staff</option><option>Finance Admin</option><option>QC Inspector</option></select></div>
+            <div><label class="form-label">Level</label><select class="form-input"><option value="">Pilih</option><option>Staff</option><option>Supervisor</option><option>Manager</option><option>GM</option><option>Direktur</option></select></div>
+            <div><label class="form-label">Tipe Karyawan <span class="required">*</span></label><select class="form-input"><option value="">Pilih</option><option>Tetap</option><option>PKWT</option><option>Outsourcing</option><option>Magang</option><option>Freelance</option></select></div>
+            <div><label class="form-label">Lokasi Kerja</label><select class="form-input"><option>Pabrik Utama — Tangerang</option><option>Kantor HO</option><option>WFH</option></select></div>
+            <div><label class="form-label">Tanggal Bergabung <span class="required">*</span></label><input class="form-input" type="date"></div>
+            <div>
+              <label class="form-label">Approver <span class="required">*</span> <span style="font-size:10px;color:var(--text-tertiary)">(min. level Supervisor)</span></label>
+              <select class="form-input"><option value="">Pilih approver</option><option>Siti Rahayu — Supervisor Produksi</option><option>Ahmad Fauzi — Supervisor QC</option><option>Budi Hartono — Manager HRD</option><option>Dewi Lestari — Manager Finance</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Kontak</div>
+          <div class="form-grid">
+            <div><label class="form-label">Email Kerja</label><input class="form-input" type="email" placeholder="nama@saneng.co.id"></div>
+            <div><label class="form-label">No. Telepon Kerja</label><input class="form-input" type="text" placeholder="021-xxx"></div>
+            <div><label class="form-label">No. HP Pribadi</label><input class="form-input" type="text" placeholder="08xx"></div>
+            <div><label class="form-label">Email Pribadi</label><input class="form-input" type="email"></div>
+            <div><label class="form-label">No. BPJS Kesehatan</label><input class="form-input" type="text"></div>
+            <div><label class="form-label">No. BPJS Ketenagakerjaan</label><input class="form-input" type="text"></div>
+          </div>
+          <div style="margin-top:12px"><label class="form-label">Alamat KTP <span class="required">*</span></label><textarea class="form-input" rows="2" style="resize:vertical"></textarea></div>
+          <div style="margin-top:10px"><label class="form-label">Alamat Domisili <span style="font-size:11px;color:var(--text-tertiary)">(isi jika berbeda dengan KTP)</span></label><textarea class="form-input" rows="2" style="resize:vertical"></textarea></div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Kontak Darurat</div>
+          <div class="form-grid">
+            <div><label class="form-label">Nama <span class="required">*</span></label><input class="form-input" type="text"></div>
+            <div><label class="form-label">No. HP <span class="required">*</span></label><input class="form-input" type="text"></div>
+            <div><label class="form-label">Hubungan</label><select class="form-input"><option value="">Pilih</option><option>Orang Tua</option><option>Pasangan</option><option>Saudara</option><option>Lainnya</option></select></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Rekening Bank</div>
+          <div class="notice">Nomor rekening akan dienkripsi saat disimpan.</div>
+          <div class="form-grid">
+            <div><label class="form-label">Bank</label><select class="form-input"><option value="">Pilih bank</option><option>Mandiri</option><option>BCA</option><option>BRI</option><option>BNI</option><option>BTN</option><option>CIMB Niaga</option></select></div>
+            <div><label class="form-label">No. Rekening</label><input class="form-input" type="text" placeholder="Akan dienkripsi" style="font-family:'JetBrains Mono',monospace"></div>
+            <div><label class="form-label">Atas Nama Rekening</label><input class="form-input" type="text"></div>
+          </div>
+        </div>
+
+        <div class="consent-box">
+          <input type="checkbox" id="consent-check">
+          <label class="consent-text" for="consent-check">
+            <strong>Persetujuan UU PDP No. 27/2022</strong><br>
+            Saya menyatakan bahwa karyawan telah memberikan persetujuan untuk pengumpulan dan pemrosesan data pribadi ini sesuai dengan Undang-Undang Pelindungan Data Pribadi No. 27/2022. Data akan digunakan semata-mata untuk keperluan administrasi kepegawaian PT Saneng. <span class="required">*</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn" onclick="cancelForm()">Batal</button>
+        <button class="btn" onclick="saveDraft()">💾 Simpan</button>
+        <button class="btn btn-primary" onclick="submitApproval()">→ Simpan & Kirim Approval</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const colors=[
+  {bg:'#E1F5EE',fg:'#0F6E56'},{bg:'#E6F1FB',fg:'#185FA5'},
+  {bg:'#EEEDFE',fg:'#534AB7'},{bg:'#FAEEDA',fg:'#854F0B'},
+  {bg:'#FBEAF0',fg:'#993556'},{bg:'#EAF3DE',fg:'#3B6D11'},
+];
+function initials(n){return n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase()}
+function fmtDate(d){return d?new Date(d).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}):'';}
+
+const emps=[
+  {id:1,name:'Asep Hidayat',pos:'Coating Operator',dept:'Produksi',div:'Finishing',level:'Staff',type:'Tetap',loc:'Pabrik Utama',empno:'EMP-2022-0001',join:'2022-03-15',contract1:'2022-03-15',approver:'Siti Rahayu (Supervisor)',wemail:'asep.h@saneng.co.id',wphone:'021-55001',wmobile:'081234567890',gender:'Laki-laki',dob:'Bandung, 12 Mei 1990',religion:'Islam',blood:'O',marital:'Menikah',children:'2 orang',addrKtp:'Jl. Merdeka No. 12, Bandung',addrDom:'Jl. Industri Raya No. 5, Tangerang',phone:'081234567890',pemail:'asep.h@gmail.com',emname:'Siti Hidayat',emphone:'081298765432',emrel:'Pasangan',bank:'Mandiri',bankname:'Asep Hidayat',bpjsk:'0001234567',bpjstk:'0009876543',status:'active',
+    exp:[{co:'PT Maju Jaya',pos:'Operator Mesin',from:'2019',to:'2022',desc:'Operator mesin coating lini produksi.'},{co:'CV Karya Mandiri',pos:'Helper Produksi',from:'2017',to:'2019',desc:''}],
+    edu:[{school:'SMK Negeri 5 Bandung',field:'Teknik Mesin',level:'SMK',year:'2017',gpa:'8.2'}],
+    family:[{name:'Siti Hidayat',rel:'Pasangan',dob:'10 Jun 1992',dep:true},{name:'Andi Hidayat',rel:'Anak',dob:'5 Mar 2020',dep:true}],
+    contracts:[
+      {no:'CTR-2022-0001',type:'PKWT',pos:'Coating Operator',dept:'Produksi',start:'2022-03-15',end:'2023-03-14',status:'expired'},
+      {no:'CTR-2023-0004',type:'PKWT',pos:'Coating Operator',dept:'Produksi',start:'2023-03-15',end:'2024-03-14',status:'expired'},
+      {no:'CTR-2024-0008',type:'PKWT',pos:'Coating Operator',dept:'Produksi',start:'2024-03-15',end:'2025-03-14',status:'expired'},
+      {no:'CTR-2025-0003',type:'PKWT',pos:'Coating Operator',dept:'Produksi',start:'2025-03-15',end:'2025-12-31',status:'active'},
+    ],
+    chatter:[
+      {type:'system_log',text:'Karyawan dibuat oleh Rina Kartika (HR Staff)',user:'System',time:'15 Mar 2022, 08:30'},
+      {type:'system_log',text:'Approval dikirim ke Siti Rahayu (Supervisor)',user:'System',time:'15 Mar 2022, 08:35'},
+      {type:'manual_message',text:'Data sudah saya cek. NIK dan dokumen KTP sudah sesuai. Silakan dilanjutkan.',user:'Siti Rahayu',time:'15 Mar 2022, 10:00'},
+      {type:'system_log',text:'Status berubah: pending → active. No. karyawan di-generate: EMP-2022-0001',user:'System',time:'15 Mar 2022, 10:05'},
+      {type:'manual_message',text:'Kontrak PKWT akan berakhir 31 Des 2025. Mohon koordinasi perpanjangan segera. @AsepHidayat',user:'Budi Hartono (HR Manager)',time:'1 Nov 2025, 09:00'},
+      {type:'system_log',text:'Notifikasi H-60 kontrak expiry dikirim ke HR Manager dan HR Staff',user:'System',time:'31 Okt 2025, 06:00'},
+    ]
+  },
+  {id:2,name:'Rina Kartika',pos:'HR Officer',dept:'HRD',div:'Rekrutmen',level:'Staff',type:'Tetap',loc:'Kantor HO',empno:'EMP-2020-0002',join:'2020-07-01',contract1:'2020-07-01',approver:'Budi Hartono (Manager)',wemail:'rina.k@saneng.co.id',wphone:'021-55002',wmobile:'087654321098',gender:'Perempuan',dob:'Jakarta, 3 Nov 1995',religion:'Kristen',blood:'A',marital:'Belum Menikah',children:'0 orang',addrKtp:'Jl. Sudirman No. 88, Jakarta Pusat',addrDom:'Jl. Sudirman No. 88, Jakarta Pusat',phone:'087654321098',pemail:'rina.k@gmail.com',emname:'Hartono Kartika',emphone:'081299887766',emrel:'Orang Tua',bank:'BCA',bankname:'Rina Kartika',bpjsk:'0001234568',bpjstk:'0009876544',status:'active',
+    exp:[{co:'PT Sejahtera Abadi',pos:'HR Assistant',from:'2018',to:'2020',desc:'Rekrutmen, administrasi, payroll support.'}],
+    edu:[{school:'Universitas Indonesia',field:'Psikologi',level:'S1',year:'2018',gpa:'3.45'}],
+    family:[{name:'Hartono Kartika',rel:'Orang Tua',dob:'12 Apr 1965',dep:false}],
+    contracts:[{no:'CTR-2020-0001',type:'Karyawan Tetap',pos:'HR Officer',dept:'HRD',start:'2020-07-01',end:null,status:'active'}],
+    chatter:[
+      {type:'system_log',text:'Karyawan dibuat oleh System Admin',user:'System',time:'1 Jul 2020, 07:00'},
+      {type:'system_log',text:'Status berubah: pending → active. No. karyawan di-generate: EMP-2020-0002',user:'System',time:'1 Jul 2020, 09:30'},
+      {type:'system_log',text:'Kontrak Karyawan Tetap CTR-2020-0001 dibuat',user:'System',time:'1 Jul 2020, 09:35'},
+    ]
+  },
+  {id:3,name:'Dimas Prasetyo',pos:'QC Inspector',dept:'QC',div:'Quality Assurance',level:'Staff',type:'PKWT',loc:'Pabrik Utama',empno:null,join:'2025-02-05',contract1:'2025-02-05',approver:'Ahmad Fauzi (Supervisor)',wemail:'dimas.p@saneng.co.id',wphone:'',wmobile:'085612345678',gender:'Laki-laki',dob:'Semarang, 15 Des 1999',religion:'Islam',blood:'O',marital:'Belum Menikah',children:'0 orang',addrKtp:'Jl. Diponegoro No. 33, Semarang',addrDom:'Kost Bu RT, Jl. Industri No. 2, Tangerang',phone:'085612345678',pemail:'dimas.p@gmail.com',emname:'Prasetyo Agung',emphone:'081366778899',emrel:'Orang Tua',bank:'BRI',bankname:'Dimas Prasetyo',bpjsk:'',bpjstk:'',status:'pending',
+    exp:[],
+    edu:[{school:'Politeknik Negeri Semarang',field:'Teknik Industri',level:'D3',year:'2022',gpa:'3.30'}],
+    family:[],
+    contracts:[{no:'CTR-2025-0021',type:'PKWT',pos:'QC Inspector',dept:'QC',start:'2025-02-05',end:'2026-02-04',status:'active'}],
+    chatter:[
+      {type:'system_log',text:'Karyawan dibuat oleh Rina Kartika (HR Staff)',user:'System',time:'5 Feb 2025, 09:00'},
+      {type:'system_log',text:'Approval dikirim ke Ahmad Fauzi (Supervisor)',user:'System',time:'5 Feb 2025, 09:05'},
+      {type:'manual_message',text:'Dimas, foto karyawan belum diupload. Tolong lengkapi juga scan ijazah asli.',user:'Ahmad Fauzi (Supervisor)',time:'5 Feb 2025, 11:00'},
+    ]
+  },
+  {id:4,name:'Siti Aminah',pos:'Finance Admin',dept:'Finance',div:'Akuntansi',level:'Staff',type:'Tetap',loc:'Kantor HO',empno:'EMP-2019-0005',join:'2019-09-01',contract1:'2019-09-01',approver:'Dewi Lestari (Manager)',wemail:'siti.a@saneng.co.id',wphone:'021-55004',wmobile:'082345678901',gender:'Perempuan',dob:'Yogyakarta, 28 Feb 1993',religion:'Islam',blood:'AB',marital:'Menikah',children:'1 orang',addrKtp:'Jl. Malioboro No. 7, Yogyakarta',addrDom:'Jl. BSD Raya No. 12, Tangerang Selatan',phone:'082345678901',pemail:'siti.a@gmail.com',emname:'Amin Santoso',emphone:'081355667788',emrel:'Pasangan',bank:'BNI',bankname:'Siti Aminah',bpjsk:'0001234570',bpjstk:'0009876546',status:'active',
+    exp:[{co:'KAP Hendra & Rekan',pos:'Junior Accountant',from:'2017',to:'2019',desc:'Pembukuan, laporan keuangan, perpajakan.'}],
+    edu:[{school:'Universitas Gadjah Mada',field:'Akuntansi',level:'S1',year:'2017',gpa:'3.60'}],
+    family:[{name:'Amin Santoso',rel:'Pasangan',dob:'15 Mar 1990',dep:false},{name:'Zahra Santoso',rel:'Anak',dob:'20 Jun 2022',dep:true}],
+    contracts:[{no:'CTR-2019-0002',type:'Karyawan Tetap',pos:'Finance Admin',dept:'Finance',start:'2019-09-01',end:null,status:'active'}],
+    chatter:[
+      {type:'system_log',text:'Status berubah: pending → active. No. karyawan di-generate: EMP-2019-0005',user:'System',time:'1 Sep 2019, 08:00'},
+      {type:'system_log',text:'Data karyawan diperbarui oleh Rina Kartika — field: address_domisili',user:'System',time:'10 Jan 2024, 14:22'},
+    ]
+  },
+  {id:5,name:'Ridwan Hakim',pos:'Maintenance Technician',dept:'Engineering',div:'Maintenance',level:'Supervisor',type:'Tetap',loc:'Pabrik Utama',empno:'EMP-2016-0001',join:'2016-05-20',contract1:'2016-05-20',approver:'Hendra Gunawan (Manager)',wemail:'ridwan.h@saneng.co.id',wphone:'021-55007',wmobile:'082234567890',gender:'Laki-laki',dob:'Medan, 10 Mar 1988',religion:'Islam',blood:'B',marital:'Menikah',children:'3 orang',addrKtp:'Jl. Imam Bonjol No. 22, Medan',addrDom:'Perumahan Griya Mas Blok C5, Tangerang',phone:'082234567890',pemail:'ridwan.h@gmail.com',emname:'Fatimah Hakim',emphone:'081388990011',emrel:'Pasangan',bank:'Mandiri',bankname:'Ridwan Hakim',bpjsk:'0001234573',bpjstk:'0009876549',status:'active',
+    exp:[{co:'PT Teknik Jaya',pos:'Mekanik Senior',from:'2012',to:'2016',desc:'Perawatan mesin produksi dan utilitas pabrik.'},{co:'CV Mitra Teknik',pos:'Mekanik Junior',from:'2010',to:'2012',desc:''}],
+    edu:[{school:'SMK Negeri 1 Medan',field:'Teknik Mesin',level:'SMK',year:'2007',gpa:'8.1'}],
+    family:[{name:'Fatimah Hakim',rel:'Pasangan',dob:'22 Jul 1990',dep:false},{name:'Rafi Hakim',rel:'Anak',dob:'5 Jan 2015',dep:true},{name:'Nadia Hakim',rel:'Anak',dob:'12 Aug 2018',dep:true},{name:'Rafli Hakim',rel:'Anak',dob:'30 Mar 2022',dep:true}],
+    contracts:[{no:'CTR-2016-0001',type:'Karyawan Tetap',pos:'Maintenance Technician',dept:'Engineering',start:'2016-05-20',end:null,status:'active'}],
+    chatter:[
+      {type:'system_log',text:'Status berubah: pending → active. No. karyawan di-generate: EMP-2016-0001',user:'System',time:'20 Mei 2016, 08:00'},
+      {type:'system_log',text:'Level diperbarui: Staff → Supervisor oleh Budi Hartono (HR Manager)',user:'System',time:'15 Jan 2022, 10:00'},
+      {type:'manual_message',text:'Selamat atas promosi ke Supervisor. Kontrak sudah diperbarui.',user:'Budi Hartono (HR Manager)',time:'15 Jan 2022, 10:30'},
+    ]
+  },
+  {id:6,name:'Fitri Handayani',pos:'Finance Staff',dept:'Finance',div:'Keuangan',level:'Staff',type:'Outsourcing',loc:'Kantor HO',empno:'EMP-2024-0089',join:'2024-08-01',contract1:'2024-08-01',approver:'Dewi Lestari (Manager)',wemail:'fitri.h@saneng.co.id',wphone:'',wmobile:'083345678901',gender:'Perempuan',dob:'Bogor, 25 Sep 1997',religion:'Islam',blood:'O',marital:'Belum Menikah',children:'0 orang',addrKtp:'Jl. Pajajaran No. 11, Bogor',addrDom:'Jl. BSD Raya No. 7, Tangerang Selatan',phone:'083345678901',pemail:'fitri.h@gmail.com',emname:'Handayani Sri',emphone:'081399001122',emrel:'Orang Tua',bank:'BCA',bankname:'Fitri Handayani',bpjsk:'',bpjstk:'',status:'active',
+    exp:[{co:'PT Mitra Abadi',pos:'Admin Keuangan',from:'2022',to:'2024',desc:'Input data keuangan, rekonsiliasi bank.'}],
+    edu:[{school:'STIE Bogor',field:'Manajemen Keuangan',level:'D3',year:'2021',gpa:'3.20'}],
+    family:[],
+    contracts:[{no:'CTR-2024-0067',type:'Outsourcing',pos:'Finance Staff',dept:'Finance',start:'2024-08-01',end:'2025-07-31',status:'active'}],
+    chatter:[
+      {type:'system_log',text:'Status berubah: pending → active. No. karyawan di-generate: EMP-2024-0089',user:'System',time:'1 Agu 2024, 08:00'},
+    ]
+  },
+];
+
+let currentEmp=null;
+const typeBadgeMap={Tetap:'badge-tetap',PKWT:'badge-pkwt',Outsourcing:'badge-outsourcing',Magang:'badge-magang',Freelance:'badge-magang'};
+function statusBadge(s){const m={pending:'badge-pending',active:'badge-active',archived:'badge-archived'};const l={pending:'Pending Approval',active:'Active',archived:'Archived'};return`<span class="badge ${m[s]||'badge-pending'}">${l[s]||s}</span>`;}
+function typeBadge(t){return`<span class="badge ${typeBadgeMap[t]||'badge-tetap'}">${t}</span>`;}
+
+function renderTable(){
+  const tb=document.getElementById('emp-table');
+  tb.innerHTML=emps.map((e,i)=>{
+    const c=colors[i%colors.length];
+    const av=`<div class="avatar" style="background:${c.bg};color:${c.fg}">${initials(e.name)}</div>`;
+    const empno=e.empno?`<span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6B6B68">${e.empno}</span>`:`<span style="font-size:11px;color:#9B9B98">–</span>`;
+    return`<tr onclick="showDetail(${e.id})">
+      <td style="padding-left:16px">${av}</td>
+      <td><div class="emp-name">${e.name}</div><div class="emp-sub">${e.pos}</div></td>
+      <td>${empno}</td>
+      <td>${e.dept}</td>
+      <td>${typeBadge(e.type)}</td>
+      <td style="font-size:12px;color:#6B6B68">${fmtDate(e.join)}</td>
+      <td>${statusBadge(e.status)}</td>
+      <td><button class="btn btn-xs" onclick="event.stopPropagation();showDetail(${e.id})">Lihat</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function showDetail(id){
+  const e=emps.find(x=>x.id===id);currentEmp=e;
+  const i=emps.indexOf(e);const c=colors[i%colors.length];
+  document.getElementById('detail-crumb').textContent=e.name;
+  const av=document.getElementById('detail-avatar');
+  av.style.background=c.bg;av.style.color=c.fg;av.textContent=initials(e.name);
+  document.getElementById('detail-name').textContent=e.name;
+  document.getElementById('detail-sub').textContent=`${e.pos} · ${e.dept}${e.div?' · '+e.div:''}`;
+  document.getElementById('detail-status-badge').innerHTML=statusBadge(e.status);
+  document.getElementById('detail-tags').innerHTML=
+    typeBadge(e.type)+
+    ` <span class="chip">🏢 ${e.dept}</span>`+
+    ` <span class="chip">📍 ${e.loc}</span>`+
+    (e.level?` <span class="chip">⭐ ${e.level}</span>`:'');
+
+  document.getElementById('smart-btns').innerHTML=`
+    <div class="smart-btn"><div class="smart-btn-num">${e.contracts.length}</div>Kontrak</div>
+    <div class="smart-btn"><div class="smart-btn-num">${e.exp.length+e.edu.length}</div>Riwayat</div>
+    <div class="smart-btn"><div class="smart-btn-num">4</div>Dokumen</div>
+    <div class="smart-btn"><div class="smart-btn-num">${e.family.length}</div>Keluarga</div>
+    <div class="smart-btn"><div class="smart-btn-num">${e.chatter.length}</div>Log & Pesan</div>`;
+
+  // ACTION BUTTONS
+  let btns=`<button class="btn btn-sm" onclick="showForm(${e.id})">✏ Edit</button>`;
+  if(e.status==='pending'){
+    btns+=`<button class="btn btn-sm btn-primary" onclick="approveEmp(${e.id})">✓ Approve</button>`;
+    btns+=`<button class="btn btn-sm" onclick="archivePending(${e.id})" style="color:#6B6B68">🗄 Archive</button>`;
+  }
+  if(e.status==='active'){
+    btns+=`<button class="btn btn-sm btn-danger" onclick="openOffboarding()">🚪 Offboarding</button>`;
+  }
+  document.getElementById('detail-actions').innerHTML=btns;
+
+  // INFO TAB
+  setText('d-dept',e.dept);setText('d-div',e.div||'–');setText('d-pos',e.pos);setText('d-level',e.level||'–');
+  setText('d-type',e.type);setText('d-loc',e.loc);setText('d-approver',e.approver);
+  document.getElementById('d-empno').textContent=e.empno||'Belum di-generate (menunggu approval)';
+  setText('d-wemail',e.wemail||'–');setText('d-wphone',e.wphone||'–');setText('d-wmobile',e.wmobile||'–');
+  setText('d-join',fmtDate(e.join));setText('d-contract1',fmtDate(e.contract1));
+  setText('d-bpjsk',e.bpjsk||'–');setText('d-bpjstk',e.bpjstk||'–');
+
+  // PRIVATE TAB
+  setText('d-gender',e.gender);setText('d-dob',e.dob);setText('d-religion',e.religion);
+  setText('d-blood',e.blood);setText('d-marital',e.marital);setText('d-children',e.children);
+  setText('d-addr-ktp',e.addrKtp);setText('d-addr-dom',e.addrDom||e.addrKtp);
+  setText('d-phone',e.phone||'–');setText('d-pemail',e.pemail||'–');
+  setText('d-emname',e.emname||'–');setText('d-emphone',e.emphone||'–');setText('d-emrel',e.emrel||'–');
+  setText('d-bank',e.bank||'–');setText('d-bankname',e.bankname||'–');
+
+  // RESUME
+  document.getElementById('resume-exp').innerHTML=e.exp.length?e.exp.map(x=>`
+    <div class="resume-item"><div style="display:flex;gap:10px">
+      <div class="resume-dot"></div>
+      <div><div class="resume-title">${x.pos} — ${x.co}</div>
+      <div class="resume-sub">${x.from} – ${x.to}${x.desc?' · '+x.desc:''}</div></div>
+    </div></div>`).join(''):`<div class="empty">Belum ada riwayat pengalaman kerja.</div>`;
+
+  document.getElementById('resume-edu').innerHTML=e.edu.map(x=>`
+    <div class="resume-item"><div style="display:flex;gap:10px">
+      <div class="resume-dot resume-dot-blue"></div>
+      <div><div class="resume-title">${x.level} ${x.field} — ${x.school}</div>
+      <div class="resume-sub">Lulus ${x.year} · IPK/Nilai Akhir: ${x.gpa}</div></div>
+    </div></div>`).join('');
+
+  document.getElementById('resume-family').innerHTML=e.family.length?e.family.map(x=>`
+    <div class="resume-item">
+      <div class="resume-title">${x.name} <span style="font-weight:400;color:#6B6B68">(${x.rel})</span> ${x.dep?'<span style="font-size:10px;background:#E6F1FB;color:#185FA5;padding:1px 6px;border-radius:999px;margin-left:4px">Tanggungan</span>':''}</div>
+      <div class="resume-sub">Tgl Lahir: ${x.dob}</div>
+    </div>`).join(''):`<div class="empty">Belum ada data anggota keluarga.</div>`;
+
+  // CONTRACTS
+  const cBadge={active:'badge-active',expired:'badge-expired',terminated:'badge-terminated',draft:'badge-pending'};
+  document.getElementById('contract-list').innerHTML=e.contracts.map(ct=>`
+    <div class="contract-card ${ct.status==='active'?'contract-active':''}">
+      <div style="flex:1">
+        <div class="contract-num">${ct.no}</div>
+        <div class="contract-detail">${ct.type} · ${ct.pos} · ${fmtDate(ct.start)} ${ct.end?'→ '+fmtDate(ct.end):'(Tidak ada batas)'}</div>
+      </div>
+      <span class="badge ${cBadge[ct.status]||'badge-pending'}">${ct.status}</span>
+      ${ct.status==='active'?`<button class="btn btn-xs">↓ Unduh</button>`:''}
+    </div>`).join('')||`<div class="empty">Belum ada kontrak.</div>`;
+
+  const hasActivePKWT=e.contracts.some(ct=>ct.status==='active'&&ct.type==='PKWT'&&ct.end);
+  document.getElementById('btn-renew').style.display=hasActivePKWT?'inline-flex':'none';
+
+  // CHATTER
+  renderChatter();
+
+  // Reset tab to first
+  switchTabByName('info');
+  show('panel-detail');
+}
+
+function renderChatter(){
+  const e=currentEmp;
+  document.getElementById('chatter-list').innerHTML=e.chatter.slice().reverse().map(c=>{
+    if(c.type==='system_log'){
+      return`<div class="chatter-item">
+        <div style="width:28px;height:28px;border-radius:50%;background:#F1EFE8;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🤖</div>
+        <div class="chatter-system-bubble">
+          <div class="chatter-system-icon">📋</div>
+          <div>
+            <div class="chatter-system-text">${c.text}</div>
+            <div class="chatter-system-time">${c.time}</div>
+          </div>
+        </div>
+      </div>`;
+    }
+    const ci=emps.findIndex(x=>x.name===c.user.split(' ')[0]+' '+c.user.split(' ')[1]);
+    const cc=colors[Math.abs(ci)%colors.length];
+    const initials_u=c.user.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+    const msgFormatted=c.text.replace(/@(\w+)/g,'<span class="chatter-mention">@$1</span>');
+    return`<div class="chatter-item">
+      <div style="width:28px;height:28px;border-radius:50%;background:${cc.bg};color:${cc.fg};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0">${initials_u}</div>
+      <div class="chatter-manual">
+        <div class="chatter-msg-name">${c.user}</div>
+        <div class="chatter-msg-text">${msgFormatted}</div>
+        <div class="chatter-msg-time">${c.time}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function sendChatterMsg(){
+  const inp=document.getElementById('chatter-input');
+  const msg=inp.value.trim();
+  if(!msg||!currentEmp)return;
+  currentEmp.chatter.push({type:'manual_message',text:msg,user:'Rina Kartika (HR Staff)',time:new Date().toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})});
+  inp.value='';
+  renderChatter();
+}
+
+function setText(id,val){const el=document.getElementById(id);if(el)el.textContent=val||'–';}
+
+function switchTab(name,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+}
+function switchTabByName(name){
+  const names=['info','private','resume','docs','contract','chatter'];
+  const tabs=document.querySelectorAll('.tab');
+  names.forEach((n,i)=>{
+    tabs[i].classList.toggle('active',n===name);
+    document.getElementById('tab-'+n).classList.toggle('active',n===name);
+  });
+}
+
+function approveEmp(id){
+  const e=emps.find(x=>x.id===id);
+  e.status='active';
+  const yr=new Date().getFullYear();
+  const allNums=emps.filter(x=>x.empno&&x.empno.startsWith('EMP-'+yr)).length+1;
+  e.empno=`EMP-${yr}-${String(allNums).padStart(4,'0')}`;
+  const now=new Date().toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  e.chatter.push({type:'system_log',text:`Status berubah: pending → active. Nomor karyawan di-generate: ${e.empno}. Diapprove oleh Ahmad Fauzi (Supervisor).`,user:'System',time:now});
+  showDetail(id);renderTable();
+}
+
+function archivePending(id){
+  const e=emps.find(x=>x.id===id);
+  if(!confirm(`Archive ${e.name} langsung tanpa checklist offboarding?\n\nKarena masih pending, tidak ada offboarding process.`))return;
+  e.status='archived';
+  const now=new Date().toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  e.chatter.push({type:'system_log',text:'Karyawan diarsipkan dari status pending (tanpa offboarding checklist) oleh Rina Kartika.',user:'System',time:now});
+  showList();renderTable();
+}
+
+// OFFBOARDING
+const checklists={
+  resign:[
+    {item:'Kembalikan laptop / perangkat kerja',dept:'IT / Warehouse',mandatory:true},
+    {item:'Kembalikan ID card & akses gedung',dept:'Security / IT',mandatory:true},
+    {item:'Cabut semua akses sistem (IT)',dept:'IT',mandatory:true},
+    {item:'Exit interview dengan HRD',dept:'HRD',mandatory:true},
+    {item:'Serahkan surat pengalaman kerja',dept:'HRD',mandatory:true},
+    {item:'Clearance Finance (kasbon, dll)',dept:'Finance',mandatory:true},
+    {item:'Serahkan dokumen BPJS',dept:'HRD',mandatory:false},
+  ],
+  contract_ended:[
+    {item:'Kembalikan perangkat kerja',dept:'IT / Warehouse',mandatory:true},
+    {item:'Kembalikan ID card',dept:'Security',mandatory:true},
+    {item:'Cabut akses sistem',dept:'IT',mandatory:true},
+    {item:'Clearance Finance',dept:'Finance',mandatory:true},
+    {item:'Serahkan dokumen BPJS',dept:'HRD',mandatory:false},
+  ],
+  termination:[
+    {item:'Kembalikan semua aset perusahaan',dept:'IT / Warehouse',mandatory:true},
+    {item:'Cabut semua akses sistem segera',dept:'IT',mandatory:true},
+    {item:'Serahkan dokumen PHK yang telah ditandatangani',dept:'HRD / Legal',mandatory:true},
+    {item:'Clearance Finance (pesangon, dll)',dept:'Finance',mandatory:true},
+  ],
+  retirement:[
+    {item:'Serahkan penghargaan masa kerja',dept:'HRD',mandatory:true},
+    {item:'Proses dokumen pensiun BPJS Ketenagakerjaan',dept:'HRD',mandatory:true},
+    {item:'Cabut akses sistem',dept:'IT',mandatory:true},
+    {item:'Exit interview',dept:'HRD',mandatory:false},
+  ],
+  deceased:[
+    {item:'Proses dokumen ahli waris',dept:'HRD / Legal',mandatory:true},
+    {item:'Koordinasi BPJS Ketenagakerjaan (klaim santunan)',dept:'HRD',mandatory:true},
+    {item:'Cabut akses sistem',dept:'IT',mandatory:true},
+    {item:'Arsip seluruh dokumen kepegawaian',dept:'HRD',mandatory:true},
+  ],
+};
+
+function openOffboarding(){document.getElementById('modal-offboarding').classList.add('open');}
+function closeOffboarding(){
+  document.getElementById('modal-offboarding').classList.remove('open');
+  document.getElementById('checklist-section').style.display='none';
+  document.getElementById('offboard-reason').value='';
+  document.getElementById('finalize-btn').style.display='none';
+}
+
+function loadChecklist(){
+  const reason=document.getElementById('offboard-reason').value;
+  const section=document.getElementById('checklist-section');
+  if(!reason){section.style.display='none';document.getElementById('finalize-btn').style.display='none';return;}
+  const items=checklists[reason]||[];
+  document.getElementById('checklist-items').innerHTML=items.map((x,i)=>`
+    <div class="offboard-item" id="oi-${i}">
+      <input type="checkbox" id="chk-${i}" onchange="onCheckItem(${i})">
+      <label for="chk-${i}">
+        <div class="offboard-item-label">${x.item} ${x.mandatory?'<span class="offboard-mandatory">*</span>':''}</div>
+        <div class="offboard-item-dept">Koordinasi: ${x.dept}</div>
+      </label>
+    </div>`).join('');
+  section.style.display='block';
+  document.getElementById('finalize-btn').style.display='none';
+}
+
+function onCheckItem(i){
+  const cb=document.getElementById(`chk-${i}`);
+  document.getElementById(`oi-${i}`).classList.toggle('checked',cb.checked);
+  checkFinalize();
+}
+
+function checkFinalize(){
+  const reason=document.getElementById('offboard-reason').value;
+  if(!reason)return;
+  const items=checklists[reason]||[];
+  const mandatory=items.filter(x=>x.mandatory);
+  const allMandatoryDone=mandatory.every((_,i)=>{
+    const globalIdx=items.findIndex((x,gi)=>x===mandatory[_]||items[i+items.indexOf(mandatory[0])]===mandatory[i]);
+    return true;
+  });
+  const allCbs=document.querySelectorAll('#checklist-items input[type=checkbox]');
+  const mandatoryCbs=[...allCbs].filter((_,i)=>items[i]&&items[i].mandatory);
+  const allMandChecked=mandatoryCbs.every(c=>c.checked);
+  document.getElementById('finalize-btn').style.display=allMandChecked?'inline-flex':'none';
+}
+
+function finalizeOffboarding(){
+  if(!currentEmp)return;
+  const reason=document.getElementById('offboard-reason').value;
+  const date=document.getElementById('offboard-date').value;
+  const e=currentEmp;
+  e.status='archived';
+  e.contracts.forEach(ct=>{if(ct.status==='active')ct.status='terminated';});
+  const now=new Date().toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  const reasonLabel={resign:'Resign',contract_ended:'Kontrak Habis',termination:'PHK',retirement:'Pensiun',deceased:'Meninggal'};
+  e.chatter.push({type:'system_log',text:`Offboarding difinalisasi oleh Rina Kartika. Alasan: ${reasonLabel[reason]||reason}. Tanggal berakhir: ${fmtDate(date)}. Semua kontrak aktif diterminasi. Akun user dinonaktifkan secara otomatis.`,user:'System',time:now});
+  closeOffboarding();
+  showList();renderTable();
+  alert(`✓ Offboarding ${e.name} selesai.\n\nData telah diarsipkan, kontrak diterminasi, dan akun user dinonaktifkan.`);
+}
+
+// CONTRACT MODAL
+function openContractModal(isRenew){
+  document.getElementById('contract-modal-title').textContent=isRenew?'Perpanjang Kontrak PKWT':'Buat Kontrak Baru';
+  const yr=new Date().getFullYear();
+  const seq=String(Math.floor(Math.random()*900)+100).padStart(4,'0');
+  document.getElementById('ct-no').value=`CTR-${yr}-${seq}`;
+  if(isRenew&&currentEmp){
+    const active=currentEmp.contracts.find(ct=>ct.status==='active'&&ct.type==='PKWT');
+    if(active&&active.end){
+      const d=new Date(active.end);d.setDate(d.getDate()+1);
+      document.getElementById('ct-start').value=d.toISOString().split('T')[0];
+    }
+    document.getElementById('ct-pos').value=currentEmp.pos;
+    document.getElementById('ct-dept').value=currentEmp.dept;
+  } else {
+    document.getElementById('ct-start').value='';
+    document.getElementById('ct-end').value='';
+  }
+  document.getElementById('modal-contract').classList.add('open');
+}
+function closeContract(){document.getElementById('modal-contract').classList.remove('open');}
+function saveContract(){
+  if(!currentEmp)return;
+  const no=document.getElementById('ct-no').value;
+  const type=document.getElementById('ct-type').value;
+  const pos=document.getElementById('ct-pos').value;
+  const dept=document.getElementById('ct-dept').value;
+  const start=document.getElementById('ct-start').value;
+  const end=document.getElementById('ct-end').value;
+  currentEmp.contracts.forEach(ct=>{if(ct.status==='active')ct.status='expired';});
+  currentEmp.contracts.push({no,type,pos,dept,start,end:end||null,status:'active'});
+  const now=new Date().toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  currentEmp.chatter.push({type:'system_log',text:`Kontrak baru dibuat: ${no} (${type}). Periode: ${fmtDate(start)} → ${end?fmtDate(end):'Tidak ada batas'}`,user:'System',time:now});
+  closeContract();
+  showDetail(currentEmp.id);
+}
+
+// NAVIGATION
+function show(id){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function showList(){show('panel-list');renderTable();}
+function showForm(id){
+  document.getElementById('form-crumb').textContent=id?`Edit: ${emps.find(e=>e.id===id)?.name}`:'Tambah Karyawan Baru';
+  show('panel-form');
+}
+function cancelForm(){if(currentEmp)showDetail(currentEmp.id);else showList();}
+function saveDraft(){
+  if(!currentEmp)return;
+  const now=new Date().toLocaleString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  currentEmp.chatter.push({type:'system_log',text:'Data karyawan diperbarui oleh Rina Kartika (HR Staff)',user:'System',time:now});
+  showDetail(currentEmp.id);
+}
+function submitApproval(){
+  const consent=document.getElementById('consent-check');
+  if(!consent.checked){alert('⚠ Centang persetujuan UU PDP terlebih dahulu.');return;}
+  showList();
+  alert('✓ Data disimpan dan approval telah dikirim ke approver yang ditunjuk.\n\nApprover akan mendapat notifikasi in-app dan email.');
+}
+
+renderTable();
+</script>
+</body>
+</html>
