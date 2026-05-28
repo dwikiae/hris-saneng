@@ -19,7 +19,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @property int $id
- * @property int $company_id
+ * @property int|null $company_id
  * @property string $name
  * @property string $email
  * @property string $password
@@ -111,6 +111,11 @@ class User extends Authenticatable implements Archivable
     public function isLocked(): bool
     {
         return $this->locked_until !== null && $this->locked_until->isFuture();
+    }
+
+    public function isInstanceAdmin(): bool
+    {
+        return $this->company_id === null;
     }
 
     /**

@@ -28,6 +28,15 @@ class PermissionSeeder extends Seeder
         ['code' => 'settings.update', 'name' => 'Update Settings', 'description' => 'Update system settings'],
         ['code' => 'audit.view', 'name' => 'View Audit Log', 'description' => 'View audit logs'],
         ['code' => 'archive.manage', 'name' => 'Manage Archive', 'description' => 'Manage archived records'],
+        ['code' => 'company.view', 'name' => 'View Company', 'description' => 'View company records'],
+        ['code' => 'company.create', 'name' => 'Create Company', 'description' => 'Create company records'],
+        ['code' => 'company.update', 'name' => 'Update Company', 'description' => 'Update company records'],
+        ['code' => 'company.archive', 'name' => 'Archive Company', 'description' => 'Archive company records'],
+        ['code' => 'user.view', 'name' => 'View User', 'description' => 'View user records'],
+        ['code' => 'user.create', 'name' => 'Create User', 'description' => 'Create company users'],
+        ['code' => 'user.update', 'name' => 'Update User', 'description' => 'Update company users'],
+        ['code' => 'user.archive', 'name' => 'Archive User', 'description' => 'Archive company users'],
+        ['code' => 'user.assign_role', 'name' => 'Assign User Role', 'description' => 'Assign roles to company users'],
     ];
 
     public function run(): void

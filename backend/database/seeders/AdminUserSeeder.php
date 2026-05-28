@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Company;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -11,12 +10,10 @@ class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
-        $company = Company::query()->where('name', 'PT Saneng')->firstOrFail();
-
         User::withoutCompanyScope()->updateOrCreate(
             ['email' => 'admin@saneng.co.id'],
             [
-                'company_id' => $company->id,
+                'company_id' => null,
                 'name' => 'System Administrator',
                 'password' => Hash::make('Admin@12345'),
                 'force_password_reset' => true,

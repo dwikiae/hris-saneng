@@ -2,16 +2,28 @@
 
 namespace App\Models\Concerns;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 trait HasCompany
 {
     protected static function bootHasCompany(): void
     {
         static::addGlobalScope('company', function (Builder $query) {
-            $companyId = (int) config('company.default_id', 1);
+            $user = Auth::user();
 
-            if ($companyId > 0) {
+            if ($user instanceof User) {
+                if ($user->isInstanceAdmin()) {
+                    return;
+                }
+
+                $companyId = $user->company_id;
+            } else {
+                $companyId = (int) config('company.default_id', 1);
+            }
+
+            if ($companyId !== null && $companyId > 0) {
                 $query->where($query->getModel()->getTable().'.company_id', $companyId);
             }
         });

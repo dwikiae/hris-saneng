@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -17,10 +18,15 @@ class UserRepository
      */
     public function all(array $filters = []): Collection
     {
-        $query = $this->model->newQuery();
+        $query = $this->model->newQuery()->with('roles');
 
         if (array_key_exists('is_active', $filters)) {
             $query->where('is_active', (bool) $filters['is_active']);
+        }
+
+        if (array_key_exists('company_id', $filters)) {
+            $query->withoutGlobalScope('company')
+                ->where('company_id', $filters['company_id']);
         }
 
         /** @var Collection<int, Model> $results */
@@ -32,7 +38,7 @@ class UserRepository
     public function findById(int $id): ?Model
     {
         /** @var User|null $record */
-        $record = $this->model->newQuery()->where('id', $id)->first();
+        $record = $this->model->newQuery()->with('roles')->where('id', $id)->first();
 
         return $record;
     }
@@ -146,6 +152,33 @@ class UserRepository
 
         /** @var User $record */
         $record->roles()->sync($roleIds);
+
+        return $record->load('roles');
+    }
+
+    /**
+     * @param  array<int, int>  $roleIds
+     */
+    public function syncRolesForCompany(int $id, array $roleIds, int $companyId): Model
+    {
+        $record = $this->findById($id);
+
+        if ($record === null || (int) $record->getAttribute('company_id') !== $companyId) {
+            throw (new ModelNotFoundException)->setModel(User::class, $id);
+        }
+
+        /** @var User $record */
+        $validRoleIds = Role::query()
+            ->where('company_id', $companyId)
+            ->whereIn('id', $roleIds)
+            ->pluck('id')
+            ->all();
+
+        if (count($validRoleIds) !== count(array_unique($roleIds))) {
+            throw new ModelNotFoundException;
+        }
+
+        $record->roles()->sync($validRoleIds);
 
         return $record->load('roles');
     }

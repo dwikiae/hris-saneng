@@ -18,6 +18,10 @@ class AuthServiceProvider extends ServiceProvider
                 return null;
             }
 
+            if ($user->isInstanceAdmin()) {
+                return true;
+            }
+
             if ($user->roles()->where('code', 'system_admin')->exists()) {
                 return true;
             }

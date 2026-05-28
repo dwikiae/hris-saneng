@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Company;
+use App\Models\Permission;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -10,12 +12,33 @@ beforeEach(function () {
     $company = Company::create(['name' => 'PT Saneng', 'legal_name' => 'PT Saneng']);
     $this->company = $company;
     $this->actor = User::create([
-        'company_id'          => $company->id,
-        'name'                => 'Admin',
-        'email'               => 'admin@saneng.co.id',
-        'password'            => 'Admin@1234',
+        'company_id' => $company->id,
+        'name' => 'Admin',
+        'email' => 'admin@saneng.co.id',
+        'password' => 'Admin@1234',
         'language_preference' => 'id',
     ]);
+
+    $role = Role::create([
+        'company_id' => $company->id,
+        'code' => 'user_admin',
+        'name' => 'User Admin',
+    ]);
+
+    foreach (['user.view', 'user.create', 'user.update', 'user.archive'] as $code) {
+        [$module, $action] = explode('.', $code, 2);
+        $permission = Permission::create([
+            'company_id' => $company->id,
+            'code' => $code,
+            'module' => $module,
+            'action' => $action,
+            'name' => $code,
+        ]);
+
+        $role->permissions()->attach($permission->id);
+    }
+
+    $this->actor->roles()->attach($role->id);
     $this->actingAs($this->actor);
 });
 
@@ -24,9 +47,9 @@ beforeEach(function () {
 it('index returns list of users', function () {
     User::create([
         'company_id' => $this->company->id,
-        'name'       => 'Employee One',
-        'email'      => 'emp1@saneng.co.id',
-        'password'   => 'password',
+        'name' => 'Employee One',
+        'email' => 'emp1@saneng.co.id',
+        'password' => 'password',
     ]);
 
     $this->getJson('/api/v1/users')
@@ -59,13 +82,14 @@ it('show returns 404 for unknown id', function () {
 
 it('store creates user and sets force_password_reset', function () {
     $this->postJson('/api/v1/users', [
-        'name'                => 'New Employee',
-        'email'               => 'new@saneng.co.id',
-        'password'            => 'Secret@1234',
+        'name' => 'New Employee',
+        'email' => 'new@saneng.co.id',
+        'password' => 'Secret@1234',
         'language_preference' => 'en',
     ])
         ->assertCreated()
         ->assertJsonPath('success', true)
+        ->assertJsonPath('message', 'user.created')
         ->assertJsonPath('data.force_password_reset', true);
 
     expect(User::where('email', 'new@saneng.co.id')->exists())->toBeTrue();
@@ -73,8 +97,8 @@ it('store creates user and sets force_password_reset', function () {
 
 it('store fails with duplicate email', function () {
     $this->postJson('/api/v1/users', [
-        'name'     => 'Duplicate',
-        'email'    => 'admin@saneng.co.id',
+        'name' => 'Duplicate',
+        'email' => 'admin@saneng.co.id',
         'password' => 'Secret@1234',
     ])
         ->assertUnprocessable()
@@ -83,7 +107,7 @@ it('store fails with duplicate email', function () {
 
 it('store fails with missing name', function () {
     $this->postJson('/api/v1/users', [
-        'email'    => 'noname@saneng.co.id',
+        'email' => 'noname@saneng.co.id',
         'password' => 'Secret@1234',
     ])
         ->assertUnprocessable()
@@ -92,8 +116,8 @@ it('store fails with missing name', function () {
 
 it('store fails with short password', function () {
     $this->postJson('/api/v1/users', [
-        'name'     => 'Short Pass',
-        'email'    => 'short@saneng.co.id',
+        'name' => 'Short Pass',
+        'email' => 'short@saneng.co.id',
         'password' => 'short',
     ])
         ->assertUnprocessable()
@@ -104,12 +128,13 @@ it('store fails with short password', function () {
 
 it('update changes name and language_preference', function () {
     $this->putJson("/api/v1/users/{$this->actor->id}", [
-        'name'                => 'Updated Admin',
-        'email'               => 'admin@saneng.co.id',
+        'name' => 'Updated Admin',
+        'email' => 'admin@saneng.co.id',
         'language_preference' => 'en',
     ])
         ->assertOk()
         ->assertJsonPath('success', true)
+        ->assertJsonPath('message', 'user.updated')
         ->assertJsonPath('data.name', 'Updated Admin');
 
     expect($this->actor->fresh()->language_preference)->toBe('en');
@@ -118,13 +143,13 @@ it('update changes name and language_preference', function () {
 it('update fails with duplicate email from another user', function () {
     $other = User::create([
         'company_id' => $this->company->id,
-        'name'       => 'Other',
-        'email'      => 'other@saneng.co.id',
-        'password'   => 'password',
+        'name' => 'Other',
+        'email' => 'other@saneng.co.id',
+        'password' => 'password',
     ]);
 
     $this->putJson("/api/v1/users/{$this->actor->id}", [
-        'name'  => 'Admin',
+        'name' => 'Admin',
         'email' => 'other@saneng.co.id',
     ])
         ->assertUnprocessable()
@@ -133,7 +158,7 @@ it('update fails with duplicate email from another user', function () {
 
 it('update returns 404 for unknown id', function () {
     $this->putJson('/api/v1/users/9999', [
-        'name'  => 'Ghost',
+        'name' => 'Ghost',
         'email' => 'ghost@saneng.co.id',
     ])
         ->assertNotFound()
@@ -145,14 +170,15 @@ it('update returns 404 for unknown id', function () {
 it('archive soft-archives user', function () {
     $user = User::create([
         'company_id' => $this->company->id,
-        'name'       => 'To Archive',
-        'email'      => 'archive@saneng.co.id',
-        'password'   => 'password',
+        'name' => 'To Archive',
+        'email' => 'archive@saneng.co.id',
+        'password' => 'password',
     ]);
 
     $this->postJson("/api/v1/users/{$user->id}/archive")
         ->assertOk()
-        ->assertJsonPath('success', true);
+        ->assertJsonPath('success', true)
+        ->assertJsonPath('message', 'user.archived');
 
     expect(User::find($user->id))->toBeNull();
     expect($user->fresh()->archived_at)->not->toBeNull();
@@ -169,15 +195,16 @@ it('archive returns 404 for unknown id', function () {
 it('restore brings user back', function () {
     $user = User::create([
         'company_id' => $this->company->id,
-        'name'       => 'To Restore',
-        'email'      => 'restore@saneng.co.id',
-        'password'   => 'password',
+        'name' => 'To Restore',
+        'email' => 'restore@saneng.co.id',
+        'password' => 'password',
     ]);
     $user->archive($this->actor->id);
 
     $this->postJson("/api/v1/users/{$user->id}/restore")
         ->assertOk()
-        ->assertJsonPath('success', true);
+        ->assertJsonPath('success', true)
+        ->assertJsonPath('message', 'user.restored');
 
     expect(User::find($user->id))->not->toBeNull();
 });

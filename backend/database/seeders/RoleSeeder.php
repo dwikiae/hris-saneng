@@ -18,6 +18,16 @@ class RoleSeeder extends Seeder
             'description' => 'Full system access',
             'permissions' => '*',
         ],
+        'manager' => [
+            'name' => 'Manager',
+            'description' => 'Company manager access',
+            'permissions' => ['company.view', 'company.update', 'user.view', 'user.create', 'user.update', 'user.assign_role'],
+        ],
+        'staff' => [
+            'name' => 'Staff',
+            'description' => 'Company staff access',
+            'permissions' => ['company.view', 'user.view'],
+        ],
         'hr_manager' => [
             'name' => 'HR Manager',
             'description' => 'Full HR and recruitment access',

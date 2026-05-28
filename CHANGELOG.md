@@ -28,6 +28,12 @@ Semua perubahan penting project dicatat di file ini.
 - Menambahkan registry ringan untuk validasi manifest module wajib tanpa install/uninstall execution.
 - Menambahkan test manifest untuk memastikan module wajib tidak bisa di-uninstall atau di-toggle.
 
+## Milestone 8
+
+- Menambahkan baseline backend pengelolaan company dan user dengan boundary Instance Admin versus Company User.
+- Menambahkan dukungan Instance Admin `company_id` nullable, role Manager/Staff baseline, dan permission company/user.
+- Menambahkan test company management, company-scoped user isolation, dan proteksi role lintas company.
+
 ## Sprint 7
 
 - Menambahkan migration, model Eloquent, enum, company settings, dan smoke test dasar untuk fondasi modul Recruitment.
