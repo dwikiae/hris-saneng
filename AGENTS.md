@@ -1,253 +1,195 @@
 # AGENTS.md
-## HRIS PT Saneng — Konstitusi untuk AI Coder
-### Version: 1.0 | Status: ACTIVE | Last updated: Sprint 0
+## Dictive-HR — Konstitusi untuk AI Coder
+### Version: 1.0 | Status: ACTIVE | Phase: Foundation
 
 > **BACA DULU SEBELUM MENGEKSEKUSI APAPUN.**
 > File ini adalah hukum tertinggi dalam repository ini.
-> Semua task packet, semua instruksi eksekusi, semua request AI — tunduk pada aturan di sini.
 > Jika ada konflik antara task packet dan AGENTS.md, AGENTS.md menang.
 
 ---
 
 ## Project Purpose
 
-Repository ini berisi production codebase HRIS (Human Resource Information System) milik PT Saneng.
-Sistem ini mengelola data karyawan, rekrutmen, aset, dan compliance UU PDP untuk ~700 karyawan
-dengan ~3 operator HR aktif. Deployment: single-tenant, internal perusahaan, VPS Linux.
+Dictive-HR adalah platform HRIS self-hosted modular untuk pasar Indonesia. Satu instance bisa menampung banyak company. Modul bisa di-install dan di-uninstall di level instance, di-enable dan di-disable di level company.
 
-**Arsitektur:** Monorepo (Laravel 11 backend + dua frontend Next.js 14 terpisah).
-**Maintainer:** Solo developer (Principal = owner sistem).
+**Stack:** Laravel 11 (backend API) + Next.js 14 App Router (frontend semua surface).
+**Maintainer:** Solo developer (vendor platform).
 
 ---
 
 ## Repository Map
 
 ```
-/backend          → Laravel 11 (PHP) — API + business logic
+/backend
   /app
-    /Domain       → Business rules, validations — TIDAK boleh bergantung pada framework
-    /Application  → Use cases, services (EvaluateApproval, CreateEmployee, dll)
-    /Infrastructure → Adapter: MinIO, SMTP, fingerprint, AI — semua external API di sini
+    /Core              → Core platform logic (Company, Auth, Permission, ModuleRegistry, dll)
+    /Modules           → Semua modul (mandatory + optional), masing-masing self-contained
+      /Karyawan        → MANDATORY
+      /Kalender        → MANDATORY
+      /Recruitment     → OPTIONAL
+      /Aset            → OPTIONAL
+      /Website         → OPTIONAL
+    /Domain            → Shared domain logic lintas modul
+    /Application       → Shared use cases
+    /Infrastructure    → External adapters (MinIO, SMTP)
     /Http
-      /Controllers  → Hanya terima request, panggil Application layer, return response
-      /Middleware   → Auth, IPWhitelist, RateLimit, FieldPermission
-      /Requests     → Form request + validation
-    /Models         → Eloquent models + casts + scopes
-    /Repositories   → Akses DB terpusat — dipanggil dari Application layer
+      /Controllers/Api/V1
+        /Core          → Instance-level endpoints
+        /Public        → Public endpoints (tanpa auth)
+      /Middleware
+      /Requests
+    /Models
+    /Repositories
+    /Providers
+      /ModuleServiceProvider.php  → Register modul aktif secara dinamis
   /database
-    /migrations   → Semua migration — tidak pernah destructive tanpa backup step
-    /seeders      → Default data seeder
-  /tests
-    /Unit         → Test fungsi/class terisolasi
-    /Feature      → HTTP integration test
-/frontend-hris    → Next.js 14 (internal portal — hris.saneng.co.id)
+    /migrations        → Core migrations only (module migrations ada di dalam modul)
+    /seeders           → Core seeders only
+  /lang/id, /lang/en
+
+/frontend
   /src
-    /components   → UI components + shadcn/ui
-    /pages        → Next.js pages
-    /hooks        → Custom React hooks
-    /services     → API call layer (axios/fetch)
-    /locales      → i18n namespace per modul
-/frontend-web     → Next.js 14 (website publik — saneng.co.id)
-/docs             → Dokumen fondasi (PROJECT_BRIEF, ARCHITECTURE, dll)
-AGENTS.md         → File ini
-CLAUDE.md         → Instruksi spesifik Claude Code
-README.md         → Setup operasional
-CHANGELOG.md      → Catatan perubahan per sprint
+    /app
+      /dashboard       → Surface 1: Platform Dashboard (protected)
+      /[company]       → Surface 2 + 3: Company Website + Candidate Portal (public)
+    /components/ui, /core, /modules
+    /services          → Semua API call dari sini, tidak langsung dari component
+    /locales/id, /en
 ```
 
 ---
 
 ## Core Architectural Rules
 
-### A. Data Isolation & Multi-Company Guard
+### A. Multi-Company Data Isolation
 
 ```
 RULE-A1: Semua query ke tabel utama WAJIB filter company_id.
          Tidak ada query yang mengembalikan data lintas company.
-         Default company_id = ID PT Saneng (dari config/dari seeder).
+         Diimplementasikan via Global Scope di semua model.
 
-RULE-A2: Semua tabel utama WAJIB punya kolom berikut (tanpa pengecualian):
-         - company_id          (FK ke tabel companies, NOT NULL)
-         - archived_at         (nullable timestamp)
-         - archived_by         (nullable FK ke users.id)
-         - created_by          (nullable FK ke users.id)
-         - updated_by          (nullable FK ke users.id)
-         - created_at          (Laravel default)
-         - updated_at          (Laravel default)
+RULE-A2: Semua tabel utama WAJIB punya kolom:
+         company_id, archived_at, archived_by, created_by, updated_by, created_at, updated_at
+         Pengecualian: tabel instance-level (instance_settings, module_registry, companies)
+         tidak punya company_id.
+
+RULE-A3: Middleware ResolveCompany wajib inject company_id ke setiap request company-scoped.
+         Request tanpa company context yang valid → 400 Bad Request.
 ```
 
-### B. Archive Policy — ZERO Hard Delete
+### B. Module System
 
 ```
-RULE-B1: TIDAK ADA ->delete() di production code.
-         Satu-satunya yang boleh memanggil delete/forceDelete adalah ArchiveService.
-         Jika temukan ->delete() di luar ArchiveService → STOP, laporkan sebagai violation.
+RULE-B1: Setiap modul WAJIB punya module.json dengan field:
+         code, name, version, is_mandatory, dependencies, min_core_version
 
-RULE-B2: Semua model utama WAJIB pakai Global Scope yang filter whereNull('archived_at').
-         Sehingga semua query otomatis exclude archived records.
+RULE-B2: Module migration ada di dalam folder modul (/Modules/{Name}/Database/migrations/)
+         bukan di /database/migrations/ core.
 
-RULE-B3: Semua migration destruktif (drop column, rename, drop table) WAJIB diawali dengan
-         backup step yang terdokumentasi. Tidak pernah langsung destructive.
+RULE-B3: Modul mandatory (Karyawan, Kalender) tidak boleh muncul di UI toggle install/uninstall.
+         is_mandatory: true di module.json mereka.
+
+RULE-B4: Sebelum enable modul di company, sistem WAJIB cek semua dependencies sudah enabled.
+         Jika dependency tidak terpenuhi → tolak dengan pesan jelas modul apa yang dibutuhkan.
+
+RULE-B5: Sebelum uninstall modul di instance, sistem WAJIB generate export data per company.
+         Uninstall tidak bisa dilanjutkan tanpa konfirmasi Instance Admin + warning UU PDP.
 ```
 
-### C. Security — Permission & Auth
+### C. Archive Policy — ZERO Hard Delete
 
 ```
-RULE-C1: Permission check SELALU di backend (Laravel Gate/Policy).
-         Frontend PermissionGate hanya untuk UX (sembunyikan tombol).
-         Frontend TIDAK pernah menjadi satu-satunya security layer.
+RULE-C1: TIDAK ADA ->delete() di production code.
+         Satu-satunya yang boleh memanggil delete adalah proses uninstall modul dan
+         proses retensi data yang sudah diapprove Instance Admin.
 
-RULE-C2: Field-level permission via tabel field_permissions.
-         Field sensitif (salary, NIK, rekening, NPWP) tidak boleh dikembalikan
-         di API response jika user tidak punya field permission yang sesuai.
+RULE-C2: Semua model utama WAJIB pakai Global Scope whereNull('archived_at').
 
-RULE-C3: IP whitelist enforcement via middleware IPWhitelist.
-         Akses ke frontend-hris dan semua /api/v1/* private endpoint
-         hanya boleh dari IP range kantor atau IP WireGuard VPN.
-         Jika akses dari luar → 403 "Akses hanya dari jaringan perusahaan".
+RULE-C3: Method archive(int $userId) tersedia di semua model utama.
+         Tombol di UI: "Arsipkan" bukan "Hapus".
+```
 
-RULE-C4: Rate limiting wajib di:
-         - Login endpoint: 5 request/menit per IP
-         - Public form lamaran: 5 submission/10 menit per IP
+### D. Security — Permission & Auth
+
+```
+RULE-D1: Permission check SELALU di backend (Gate/Policy).
+         Frontend PermissionGate hanya untuk UX — bukan security layer.
+
+RULE-D2: Field sensitif (NIK, NPWP, rekening, gaji) WAJIB pakai Laravel encrypted cast.
+         Field ini tidak boleh di-filter langsung via SQL.
+
+RULE-D3: Rate limiting wajib di:
+         - Login: 5 req/menit per IP
+         - Public apply lamaran: 5/10 menit per IP
          - Semua /api/v1/public/* endpoint
+
+RULE-D4: Login lockout: 3 kali gagal → lockout sesuai setting company.
 ```
 
-### D. Enkripsi — Field Sensitif
-
-```
-RULE-D1: Field berikut WAJIB menggunakan Laravel `encrypted` cast di Model:
-         - NIK KTP
-         - NPWP pribadi
-         - Nomor rekening bank
-         - Data gaji/kompensasi (salary, allowances, deductions)
-
-RULE-D2: Field terenkripsi TIDAK boleh di-filter langsung via SQL/query builder.
-         Jika perlu search, ambil dan decrypt di application layer.
-
-RULE-D3: Data biometrik (sidik jari fingerprint — future) masuk Data Pribadi Spesifik
-         per Pasal 4 UU PDP — enkripsi wajib saat diintegrasikan.
-```
-
-### E. Layered Architecture — Dependency Direction
+### E. Layered Architecture
 
 ```
 RULE-E1: Dependency direction: Interface → Application → Domain.
-         Domain TIDAK bergantung pada framework, Eloquent, atau external service apapun.
-         Infrastructure bergantung pada interface yang didefinisikan Domain.
+         Domain TIDAK bergantung pada framework, Eloquent, atau external service.
 
 RULE-E2: Controller hanya boleh:
-         1. Menerima request (via FormRequest)
-         2. Memanggil satu method Application Service
-         3. Return response (resource/JSON)
+         1. Terima request (via FormRequest)
+         2. Panggil satu Application Service
+         3. Return response
          Controller TIDAK boleh memuat business logic.
 
 RULE-E3: Akses DB hanya melalui Repository.
-         Tidak ada Eloquent query di Controller atau Application Service secara langsung.
-         Semua DB interaction: Controller → Service → Repository → Model.
+         Controller → Service → Repository → Model.
 
-RULE-E4: Semua external API (MinIO, SMTP, fingerprint, AI) wajib melalui Adapter
-         di Infrastructure layer. Domain tidak pernah tahu implementasi eksternal.
-         Saat vendor diganti: buat adapter baru, tidak ubah domain.
+RULE-E4: Semua external API (MinIO, SMTP) wajib melalui Adapter di Infrastructure layer.
 ```
 
-### F. File Storage
+### F. i18n — Zero Hardcoded String
 
 ```
-RULE-F1: Semua akses file WAJIB melalui Storage::disk('documents')->...
-         atau Storage::disk('public')->...
-         TIDAK PERNAH memanggil MinIO/S3 SDK secara langsung dari luar adapter.
+RULE-F1: TIDAK ADA hardcoded string di UI maupun backend response.
+         Backend: __('namespace.context.label')
+         Frontend: t('namespace:context.label')
 
-RULE-F2: Path file mengikuti konvensi yang sudah ditetapkan:
-         - Foto karyawan:   employees/{employee_id}/photo/
-         - Dokumen:         employees/{employee_id}/documents/{doc_type}/
-         - Recruitment:     recruitment/{job_id}/applicants/{applicant_id}/
-         - Asset:           assets/{asset_id}/
-         - Export:          exports/{YYYY-MM-DD}/
-         - Backup:          backups/{YYYY-MM-DD}/
+RULE-F2: Format key: {namespace}.{context}.{label}
+         Contoh: karyawan.form.nama, recruitment.status.pending, common.button.simpan
 
-RULE-F3: Foto karyawan max 2MB, format JPG/PNG, auto-resize saat upload.
-         Dokumen karyawan max 10MB, format PDF/JPG/PNG.
+RULE-F3: Setiap komponen UI baru WAJIB tambah translation key di KEDUA bahasa (id + en).
 ```
 
-### G. Internasionalisasi (i18n) — Zero Hardcoded String
+### G. Audit Log
 
 ```
-RULE-G1: TIDAK ADA hardcoded string di UI (frontend maupun backend response).
-         Semua string melalui i18n key.
-         Backend: lang/id/ dan lang/en/ (namespace per modul).
-         Frontend: next-i18next, namespace per modul.
+RULE-G1: Semua CRUD pada data utama WAJIB dicatat via spatie/laravel-activitylog.
+         Model yang handle data utama WAJIB pakai trait LogsActivity.
 
-RULE-G2: Format key: {namespace}.{context}.{label}
-         Contoh: employee.form.name, recruitment.status.pending, common.button.save
+RULE-G2: Field sensitif di log tampil sebagai [REDACTED] untuk user tanpa permission.
 
-RULE-G3: Jika membuat UI component baru → WAJIB buat translation key di kedua bahasa (id + en).
-         Jangan pernah buat key hanya di satu bahasa.
+RULE-G3: Audit log adalah append-only. Tidak ada delete atau update pada audit log,
+         termasuk oleh Instance Admin.
 
-RULE-G4: Di frontend-hris (Pages Router), import useTranslation SELALU dari
-         'next-i18next/pages' — bukan dari 'next-i18next'.
-         Contoh benar:   import { useTranslation } from 'next-i18next/pages'
-         Contoh salah:   import { useTranslation } from 'next-i18next'
-         Ini berlaku untuk semua komponen dan pages tanpa pengecualian.
+RULE-G4: Setiap export data WAJIB dicatat: siapa, kapan, modul apa, berapa record.
 ```
 
-### H. Audit Log & Compliance UU PDP
+### H. Queue & Notification
 
 ```
-RULE-H1: Semua operasi CRUD pada data pribadi karyawan WAJIB dicatat oleh
-         spatie/laravel-activitylog. Model yang handle data pribadi WAJIB pakai trait LogsActivity.
+RULE-H1: Semua email dikirim via Laravel Queue — tidak pernah synchronous dalam request cycle.
 
-RULE-H2: Field sensitif DI-MASK di log (tampil sebagai [REDACTED]) untuk user tanpa permission.
-         NIK, salary, rekening, NPWP tidak boleh muncul sebagai plaintext di activity log.
-
-RULE-H3: Setiap export data (Excel/CSV) WAJIB dicatat: siapa, kapan, modul apa, berapa record.
-         Log export tidak bisa dinonaktifkan.
-
-RULE-H4: Kolom consent WAJIB di tabel employees:
-         - consent_at  (timestamp, kapan HR centang)
-         - consent_by  (FK ke users.id, siapa HR yang centang)
-         Data karyawan baru TIDAK BISA disimpan tanpa consent_at terisi.
+RULE-H2: Retry policy: 3x dengan exponential backoff (30s, 60s, 120s).
+         Gagal 3x → failed_jobs → alert Instance Admin.
 ```
 
-### I. Approval & Status Guard
+### I. API & Response
 
 ```
-RULE-I1: Semua tabel yang punya workflow approval WAJIB punya kolom:
-         - status      (enum/string, minimal: draft | active)
-         - approved_by (nullable FK ke users.id)
-         - approved_at (nullable timestamp)
-         Ini mencegah ALTER TABLE saat approval workflow diaktifkan.
+RULE-I1: Backend tidak pernah serve HTML. Pure REST API.
 
-RULE-I2: Transisi status TIDAK boleh bebas diubah langsung via mass assignment.
-         Status transition harus melalui dedicated method/service yang validate
-         bahwa transisi tersebut valid (state machine pattern).
+RULE-I2: Semua response mengikuti format standard:
+         { "success": bool, "data": {}, "message": "i18n.key", "meta": {} }
 
-RULE-I3: Approval request mengirim notifikasi ke approver via:
-         1. In-app real-time (Soketi WebSocket)
-         2. Email (SMTP via Queue, retry 3x dengan exponential backoff)
-         Notifikasi TIDAK boleh blocking request cycle.
-```
-
-### J. Queue & Notification
-
-```
-RULE-J1: Semua email notification dikirim via Laravel Queue (tidak blocking).
-         Tidak pernah kirim email synchronous dalam request cycle.
-
-RULE-J2: Queue retry: 3x dengan exponential backoff.
-         Setelah 3x gagal: masuk failed_jobs, kirim alert ke System Admin.
-
-RULE-J3: Failed jobs HARUS visible di admin dashboard dan bisa di-retry manual.
-```
-
-### K. Master Data
-
-```
-RULE-K1: Master data (department, position, employee type, dll) tidak pernah dihapus.
-         Gunakan kolom is_active untuk menonaktifkan.
-         Foreign key TIDAK cascade delete.
-
-RULE-K2: Setiap master data punya kolom `code` yang stabil untuk referensi di kode.
-         Jangan hardcode nama/label — selalu gunakan code.
+RULE-I3: Semua API call dari frontend WAJIB melalui service layer (/services/).
+         Tidak pernah fetch langsung dari component.
 ```
 
 ---
@@ -255,58 +197,20 @@ RULE-K2: Setiap master data punya kolom `code` yang stabil untuk referensi di ko
 ## Do-Not-Touch Areas
 
 ```
-DO-NOT-TOUCH-1: Jangan modifikasi ArchiveService kecuali task secara eksplisit menyebutnya.
-                ArchiveService adalah single point of truth untuk semua soft-delete logic.
+DNT-1: Jangan modifikasi ModuleServiceProvider kecuali task eksplisit menyebutnya.
+       Ini adalah titik registrasi semua modul — bug di sini mempengaruhi seluruh platform.
 
-DO-NOT-TOUCH-2: Jangan modifikasi middleware IPWhitelist kecuali task secara eksplisit menyebutnya.
-                Perubahan di sini bisa membuka celah akses keamanan.
+DNT-2: Jangan modifikasi struktur tabel companies dan instance_settings
+       tanpa diskusi dengan Principal.
 
-DO-NOT-TOUCH-3: Jangan drop atau rename kolom di migration tanpa backup step eksplisit
-                yang tertulis di task packet.
+DNT-3: Jangan drop atau rename kolom di migration tanpa backup step eksplisit di task packet.
 
-DO-NOT-TOUCH-4: Jangan ubah struktur tabel companies dan company_settings
-                tanpa diskusi dengan Principal terlebih dahulu.
+DNT-4: Jangan ubah format permission string (module.action) — ini kontrak global.
+       Mengubah format = breaking change di seluruh codebase.
 
-DO-NOT-TOUCH-5: Jangan ubah format permission string (module.action) — ini adalah kontrak
-                yang digunakan di seluruh codebase. Mengubah format = breaking change global.
+DNT-5: Jangan tambah dependency (composer/npm) baru tanpa menyebutkan di completion report.
 
-DO-NOT-TOUCH-6: Jangan tambah dependency (composer package atau npm package) baru
-                tanpa menyebutkannya di completion report. Principal harus tahu semua dependency baru.
-```
-
----
-
-## Development Commands
-
-```bash
-# Backend (dari /backend)
-composer install          # Install dependencies
-php artisan migrate       # Jalankan migration
-php artisan db:seed       # Jalankan seeders
-php artisan test          # Jalankan semua test (PHPUnit/Pest)
-./vendor/bin/pest         # Jalankan Pest PHP tests
-php artisan test --filter # Jalankan test spesifik
-php artisan lint          # (jika dikonfigurasi) Jalankan linter
-./vendor/bin/phpstan analyse  # Static analysis
-
-# Frontend HRIS (dari /frontend-hris)
-npm install               # Install dependencies
-npm run dev               # Dev server
-npm run build             # Production build
-npm run lint              # ESLint
-npx tsc --noEmit          # TypeScript check
-
-# Frontend Web (dari /frontend-web)
-npm install
-npm run dev
-npm run build
-npm run lint
-npx tsc --noEmit
-
-# Docker Compose (dari root)
-docker compose up -d      # Start semua service (dev)
-docker compose down       # Stop semua service
-docker compose logs -f    # Lihat logs
+DNT-6: Jangan ubah audit log table schema — append-only, tidak boleh ada delete.
 ```
 
 ---
@@ -314,40 +218,36 @@ docker compose logs -f    # Lihat logs
 ## Coding Conventions
 
 ### PHP/Laravel
-- Prefer small pure functions dengan nama yang mencerminkan business intent.
-- Gunakan explicit error handling — tidak pernah swallow exception diam-diam.
-- Tidak ada hidden global state.
-- Semua FormRequest wajib punya `authorize()` yang benar (tidak selalu return true).
-- Gunakan typed properties dan return types (PHP 8.x features).
-- Eloquent: gunakan `$fillable` atau `$guarded`, tidak pernah `$guarded = []` secara global.
-- Magic numbers dan magic strings → extract ke konstanta atau config.
-- Decimal/monetary calculation: gunakan BCMath atau dedicated Money library, TIDAK pernah float.
+- Small pure functions, nama mencerminkan business intent
+- Typed properties dan return types (PHP 8.x)
+- Explicit error handling — tidak pernah swallow exception
+- `$fillable` di semua Eloquent model — tidak pernah `$guarded = []` global
+- Decimal/monetary: BCMath atau Money library — TIDAK float
+- Magic numbers → konstanta atau config
 
 ### TypeScript/React
-- Strict TypeScript: tidak ada `any` kecuali ada alasan sangat kuat dan dikomentari.
-- Component kecil dan single-responsibility.
-- Custom hooks untuk business logic yang reusable.
-- Semua API call melalui service layer (`/services/`), tidak langsung dari component.
-- PermissionGate component untuk sembunyikan UI — bukan untuk security enforcement.
+- Strict TypeScript — tidak ada `any` tanpa alasan kuat + komentar
+- Component single-responsibility, file max 300 baris
+- Custom hooks untuk business logic reusable
+- Semua API call melalui `/services/` — tidak langsung dari component
 
 ### Umum
-- File tidak boleh melebihi 300 baris. Jika melebihi → pecah menjadi file lebih kecil.
-- Nama fungsi/method mencerminkan business intent (bukan teknis). Contoh: `createEmployee()` bukan `insertUserRecord()`.
-- Tidak ada TODO pada flow kritis — selesaikan atau dokumentasikan sebagai known limitation.
-- Semua perubahan behavior → update test yang relevan.
+- File tidak melebihi 300 baris — jika lebih, pecah jadi file lebih kecil
+- Tidak ada TODO pada flow kritis
+- Semua perubahan behavior → update test yang relevan
 
 ---
 
 ## Verification Rule
 
-Sebelum mengklaim task selesai, AI WAJIB:
+Sebelum klaim task selesai, AI WAJIB:
 
-1. Jalankan test yang relevan dan laporkan hasilnya.
-2. Jalankan lint/typecheck jika berlaku.
-3. Verifikasi tidak ada file di luar scope yang tersentuh.
-4. Laporkan semua file yang diubah.
-5. Laporkan semua test yang dijalankan dan statusnya.
-6. Laporkan jika ada unresolved issue atau risiko residual.
+1. Jalankan test relevan dan laporkan hasilnya
+2. Jalankan lint/typecheck jika berlaku
+3. Verifikasi tidak ada file di luar scope yang tersentuh
+4. Laporkan semua file yang diubah
+5. Laporkan semua test yang dijalankan dan statusnya
+6. Laporkan jika ada unresolved issue atau risiko residual
 
 **Completion report format:**
 ```
@@ -357,89 +257,54 @@ Sebelum mengklaim task selesai, AI WAJIB:
 [Apa yang diimplementasikan]
 
 ### Files Changed
-- path/to/file.php — [deskripsi singkat perubahan]
-- path/to/test.php — [deskripsi singkat]
+- path/to/file.php — [deskripsi singkat]
 
 ### Tests Run
 - TestClass::testMethod → PASS
-- TestClass::testMethod2 → PASS
 
 ### Risks & Follow-up
 - [Jika ada]
 
-### Violations Found (jika ada)
-- [Jika ditemukan violation dari AGENTS.md rules]
+### Violations Found
+- [Jika ada violation dari AGENTS.md]
 ```
-
----
-
-## Documentation Rule
-
-Update dokumentasi ketika:
-- Behavior sistem berubah → update docs/ yang relevan
-- Environment variable baru ditambahkan → update .env.example + docs/06_OPERATIONS.md
-- API contract berubah → update docs/03_TECH_SPEC.md
-- Arsitektur berubah → update docs/02_ARCHITECTURE.md
-- Sprint task selesai → update CHANGELOG.md
-
-Dokumen yang tidak diperbarui lebih berbahaya daripada tidak ada dokumen.
 
 ---
 
 ## Security Rules
 
 ```
-SEC-1: TIDAK PERNAH hardcode secret, API key, password, atau credential di kode.
-       Semua melalui .env — jika tidak ada di .env, buat entry di .env.example (tanpa nilai).
-
-SEC-2: TIDAK PERNAH log credential, token, password, NIK, rekening, atau data pribadi spesifik.
-       Field sensitif di log = [REDACTED].
-
+SEC-1: TIDAK PERNAH hardcode secret, API key, password di kode. Semua via .env.
+SEC-2: TIDAK PERNAH log credential, token, NIK, rekening, atau data pribadi spesifik.
 SEC-3: Semua external input WAJIB divalidasi via FormRequest sebelum diproses.
-       Ini berlaku untuk endpoint public maupun private.
-
-SEC-4: Public form (form lamaran kandidat di website) WAJIB sanitasi input XSS.
-
-SEC-5: Raw SQL query DILARANG kecuali sangat perlu. Jika terpaksa raw query,
-       WAJIB menggunakan parameter binding. Tidak pernah string concatenation di SQL.
-
-SEC-6: Login lockout: 5 percobaan gagal → lockout 15 menit. Ini TIDAK boleh dinonaktifkan.
-
-SEC-7: Semua file upload WAJIB divalidasi: MIME type, ukuran max, extension whitelist.
-       Tidak pernah trust client-provided MIME type saja.
+SEC-4: Raw SQL DILARANG kecuali sangat perlu — wajib parameter binding, tidak pernah string concatenation.
+SEC-5: Semua file upload WAJIB divalidasi: MIME type, ukuran max, extension whitelist.
 ```
 
 ---
 
-## Compliance Rules (UU PDP No. 27/2022)
+## Compliance Rules (UU PDP No. 27/2022 & UU Ketenagakerjaan)
 
 ```
-COMP-1: Data retensi default (configurable via Settings, minimum tidak bisa dikurangi):
+COMP-1: Data retensi (minimum, tidak bisa dikurangi via settings):
         - Data karyawan + dokumen pembukuan: 10 tahun (UU KUP Pasal 28 ayat 11)
-        - Data karyawan non-pembukuan:       5 tahun setelah hubungan kerja berakhir
-        - Data kandidat tidak lolos:         1 tahun
-        - Audit log:                         2 tahun minimum
-        - Log teknis aplikasi:               90 hari
+        - Data karyawan non-pembukuan: 5 tahun setelah hubungan kerja berakhir
+        - Data kandidat tidak lolos: 1 tahun
+        - Audit log: 2 tahun minimum
 
 COMP-2: Sistem TIDAK auto-delete data yang melewati retensi.
-        Sistem kirim notifikasi ke System Admin → Admin yang review dan approve penghapusan.
-        Penghapusan yang diapprove tetap dicatat di audit trail.
+        Sistem kirim notifikasi → Instance Admin / HR review dan approve penghapusan.
 
-COMP-3: Incident log (tabel incident_logs) WAJIB tersedia untuk dokumentasi
-        kebocoran data jika terjadi (Pasal 46 UU PDP).
+COMP-3: Warning UU PDP wajib tampil setiap kali ada aksi yang berpotensi hapus data permanen
+        (uninstall modul, proses retensi).
+
+COMP-4: Data model modul Karyawan WAJIB accommodate PKWT dan PKWTT
+        sesuai UU Ketenagakerjaan No. 13/2003.
+
+COMP-5: Export data karyawan WAJIB tersedia dan dicatat di audit log.
 ```
 
 ---
 
-## Hal yang TIDAK Boleh Masuk ke File Ini
-
-- Acceptance criteria per fitur (masuk task packet)
-- Catatan debugging satu masalah spesifik
-- Transcript diskusi atau keputusan sementara
-- PRD atau requirement detail per modul
-- Log error spesifik sesi development
-
----
-
-*AGENTS.md adalah living document — update ketika ada aturan baru yang perlu berlaku lintas sesi.*
-*Setiap perubahan di AGENTS.md harus di-commit dengan message yang jelas dan dicatat di CHANGELOG.md.*
+*AGENTS.md adalah living document — update ketika ada aturan baru yang berlaku lintas sesi.*
+*Setiap perubahan harus di-commit dengan message jelas dan dicatat di CHANGELOG.md.*

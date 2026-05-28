@@ -2,6 +2,7 @@
 
 namespace App\Models\Concerns;
 
+use App\Core\Company\Application\CompanyContext;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,14 @@ trait HasCompany
     protected static function bootHasCompany(): void
     {
         static::addGlobalScope('company', function (Builder $query) {
+            $companyContext = app(CompanyContext::class);
+
+            if ($companyContext->hasCompany()) {
+                $query->where($query->getModel()->getTable().'.company_id', $companyContext->companyId());
+
+                return;
+            }
+
             $user = Auth::user();
 
             if ($user instanceof User) {

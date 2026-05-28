@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Middleware\SetLocale;
 use App\Http\Middleware\IPWhitelist;
+use App\Http\Middleware\ResolveCompany;
+use App\Http\Middleware\SetLocale;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
@@ -19,7 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->api(append: [SetLocale::class]);
-        $middleware->alias(['ip.whitelist' => IPWhitelist::class]);
+        $middleware->alias([
+            'company.resolve' => ResolveCompany::class,
+            'ip.whitelist' => IPWhitelist::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (AuthenticationException $exception, Request $request) {

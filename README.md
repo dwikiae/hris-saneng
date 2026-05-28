@@ -1,18 +1,22 @@
-# HRIS PT Saneng
+# Dictive-HR
 
-Monorepo HRIS internal PT Saneng.
+Self-hosted modular HRIS platform for Indonesian companies.
 
-## Struktur
+## Structure
 
-- `backend/` - Laravel 11 API dan business logic.
-- `frontend-hris/` - Next.js 14 portal internal HRIS.
-- `frontend-web/` - Next.js 14 website publik.
-- `docs/` - Dokumen fondasi, arsitektur, ADR, dan task sprint.
+- `backend/` - Laravel 11 REST API and backend business logic.
+- `frontend-hris/` - Legacy Next.js HRIS frontend, pending future frontend rebase.
+- `frontend-web/` - Legacy Next.js public website frontend, pending future frontend rebase.
+- `docs/` - Authority documents, architecture, ADR, and temporary alignment gap tracking.
 
-## Status
+## Authority
 
-Sprint 0 sedang menyiapkan project skeleton dan local development infrastructure.
+Read these first before changing code:
 
-## Instruksi
+- `AGENTS.md`
+- `CLAUDE.md`
+- `docs/00_PROJECT_BRIEF.md`
+- `docs/02_ARCHITECTURE.md`
+- `docs/ALL_ADR.md`
 
-Baca `AGENTS.md` sebelum menjalankan command atau mengubah file apa pun.
+Temporary alignment gaps are tracked in `docs/alignment/GAP_REGISTER.md`. Delete that file when all tracked gaps are resolved and recorded in `CHANGELOG.md`.

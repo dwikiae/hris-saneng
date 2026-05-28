@@ -1,153 +1,186 @@
 # 02_ARCHITECTURE.md
-## HRIS PT Saneng — System Architecture
-### Version: 1.0 | Status: FINAL | Last updated: Sprint 0
+## Dictive-HR — System Architecture
+### Version: 1.0 | Status: FINAL | Phase: Foundation
 
 > Dokumen ini menjelaskan arsitektur sistem secara menyeluruh.
-> Semua keputusan di sini sudah final dan terkunci di Master Decision Log.
-> Perubahan arsitektur harus melalui ADR baru dan persetujuan Principal.
+> Semua keputusan di sini sudah final dan terkunci di ALL_ADR.md.
+> Perubahan arsitektur harus melalui ADR baru.
 
 ---
 
 ## 1. Gambaran Sistem
 
-HRIS PT Saneng adalah sistem internal single-tenant yang dibangun dengan arsitektur
-**modular monolith** — satu backend Laravel 11 melayani dua frontend Next.js 14 terpisah
-via REST API. Tidak ada microservices. Semua berjalan di satu VPS Linux.
+Dictive-HR adalah platform HRIS self-hosted dengan arsitektur **modular monolith** — satu backend Laravel 11 melayani satu frontend Next.js 14 via REST API. Platform berjalan dalam satu Docker Compose stack di server customer.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                         VPS Linux (Single Server)                   │
+│                    Server Customer (Self-Hosted)                     │
 │                                                                     │
 │  ┌──────────────┐    ┌──────────────────────────────────────────┐  │
-│  │  Nginx       │    │  Application Layer                       │  │
+│  │    Nginx     │    │           Application Layer              │  │
 │  │  (Reverse    │    │                                          │  │
-│  │   Proxy +    │    │  ┌─────────────┐  ┌─────────────────┐   │  │
-│  │   SSL)       │───▶│  │ frontend-   │  │  frontend-web   │   │  │
-│  │              │    │  │ hris        │  │  (Next.js 14)   │   │  │
-│  │              │    │  │ (Next.js 14)│  │  saneng.co.id   │   │  │
-│  │              │    │  │ hris.saneng │  │  [PUBLIC]       │   │  │
-│  │              │    │  │ .co.id      │  │                 │   │  │
-│  │              │    │  │ [IP LOCKED] │  └────────┬────────┘   │  │
-│  └──────────────┘    │  └──────┬──────┘           │            │  │
-│                      │         │                  │            │  │
-│                      │         ▼                  ▼            │  │
-│                      │  ┌─────────────────────────────────┐    │  │
-│                      │  │      Laravel 11 (Backend API)   │    │  │
-│                      │  │      PHP-FPM                    │    │  │
-│                      │  │  /api/v1/*       (Sanctum auth) │    │  │
-│                      │  │  /api/v1/public/* (rate limited)│    │  │
-│                      │  └──────┬──────────────────────────┘    │  │
-│                      │         │                               │  │
-│                      │    ┌────┴──────────────────┐           │  │
-│                      │    │                       │           │  │
-│                      │    ▼                       ▼           │  │
-│                      │  ┌──────────┐  ┌────────┐ ┌────────┐  │  │
-│                      │  │PostgreSQL│  │ Redis  │ │ MinIO  │  │  │
-│                      │  │          │  │(Cache+ │ │(File   │  │  │
-│                      │  │          │  │ Queue) │ │Storage)│  │  │
-│                      │  └──────────┘  └────────┘ └────────┘  │  │
-│                      │                                        │  │
-│                      │  ┌────────┐  ┌────────┐               │  │
-│                      │  │ Soketi │  │WireGrd │               │  │
-│                      │  │(WS)    │  │(VPN)   │               │  │
-│                      │  └────────┘  └────────┘               │  │
-│                      └──────────────────────────────────────────┘  │
+│  │   Proxy +    │    │  ┌────────────────────────────────────┐  │  │
+│  │    SSL)      │───▶│  │     Next.js 14 (App Router)        │  │  │
+│  │              │    │  │                                    │  │  │
+│  │              │    │  │  /dashboard/*   → Surface 1        │  │  │
+│  │              │    │  │  /[company]/*   → Surface 2 + 3    │  │  │
+│  └──────────────┘    │  └─────────────────┬──────────────────┘  │  │
+│                      │                    │                      │  │
+│                      │                    ▼                      │  │
+│                      │  ┌────────────────────────────────────┐  │  │
+│                      │  │     Laravel 11 (Backend API)       │  │  │
+│                      │  │     PHP-FPM                        │  │  │
+│                      │  │  /api/v1/*          (Sanctum auth) │  │  │
+│                      │  │  /api/v1/public/*   (rate limited) │  │  │
+│                      │  └──────┬─────────────────────────────┘  │  │
+│                      │         │                                 │  │
+│                      │   ┌─────┴──────────────────┐            │  │
+│                      │   │                        │            │  │
+│                      │   ▼                        ▼            │  │
+│                      │  ┌──────────┐  ┌────────┐ ┌────────┐   │  │
+│                      │  │PostgreSQL│  │ Redis  │ │ MinIO  │   │  │
+│                      │  │          │  │(Cache+ │ │(File   │   │  │
+│                      │  │          │  │ Queue) │ │Storage)│   │  │
+│                      │  └──────────┘  └────────┘ └────────┘   │  │
+│                      │                                         │  │
+│                      │  ┌────────┐  ┌──────────┐              │  │
+│                      │  │ Soketi │  │  Mailpit │              │  │
+│                      │  │  (WS)  │  │ (dev)/   │              │  │
+│                      │  │        │  │  SMTP    │              │  │
+│                      │  └────────┘  └──────────┘              │  │
+│                      └─────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 2. Repository Structure (Monorepo)
+## 2. Frontend Surfaces
+
+Satu aplikasi Next.js 14 dengan App Router menangani tiga surface berbeda:
+
+```
+Surface 1: Platform Dashboard   → /dashboard/*
+  - Diakses Instance Admin & semua Company User
+  - Protected routes, client-side heavy
+  - Manage company, modules, users, data HR
+
+Surface 2: Company Website      → /[company-slug]/*
+  - Public, SSR, SEO-friendly
+  - Dikelola kontennya via modul Website
+  - Profil perusahaan, halaman karir
+
+Surface 3: Candidate Portal     → /[company-slug]/kandidat/*
+  - Public, bagian dari Surface 2
+  - Same theme dengan company website
+  - Form lamaran, tes tulis, pemberkasan
+  - Akses via token, tidak butuh login
+```
+
+**Theming per company:** CSS variables di-load berdasarkan company slug. Setiap company bisa punya warna, logo, dan tampilan berbeda di Surface 2 & 3.
+
+---
+
+## 3. Repository Structure (Monorepo)
 
 ```
 / (root)
-├── backend/                    → Laravel 11
+├── backend/                      → Laravel 11
 │   ├── app/
-│   │   ├── Domain/             → Business rules, domain logic (NO framework dependency)
-│   │   │   ├── Employee/
-│   │   │   ├── Recruitment/
-│   │   │   ├── Asset/
-│   │   │   └── Shared/
-│   │   ├── Application/        → Use cases, services
-│   │   │   ├── Employee/
-│   │   │   │   ├── CreateEmployeeService.php
-│   │   │   │   ├── ArchiveEmployeeService.php
-│   │   │   │   └── ApproveEmployeeService.php
-│   │   │   ├── Recruitment/
-│   │   │   ├── Asset/
-│   │   │   └── Shared/
-│   │   ├── Infrastructure/     → External adapters (MinIO, SMTP, Fingerprint, AI)
+│   │   ├── Core/                 → Core platform logic
+│   │   │   ├── Company/
+│   │   │   ├── Auth/
+│   │   │   ├── Permission/
+│   │   │   ├── ModuleRegistry/
+│   │   │   ├── Settings/
+│   │   │   ├── I18n/
+│   │   │   ├── AuditLog/
+│   │   │   ├── Notification/
+│   │   │   ├── FileStorage/
+│   │   │   └── Archive/
+│   │   ├── Modules/              → Semua modul (mandatory + optional)
+│   │   │   ├── Karyawan/         → MANDATORY
+│   │   │   │   ├── module.json
+│   │   │   │   ├── Domain/
+│   │   │   │   ├── Application/
+│   │   │   │   ├── Infrastructure/
+│   │   │   │   ├── Http/
+│   │   │   │   ├── Models/
+│   │   │   │   ├── Repositories/
+│   │   │   │   ├── Database/
+│   │   │   │   │   ├── migrations/
+│   │   │   │   │   └── seeders/
+│   │   │   │   └── Tests/
+│   │   │   ├── Kalender/         → MANDATORY
+│   │   │   │   └── [struktur sama]
+│   │   │   ├── Recruitment/      → OPTIONAL
+│   │   │   │   └── [struktur sama]
+│   │   │   ├── Aset/             → OPTIONAL
+│   │   │   │   └── [struktur sama]
+│   │   │   └── Website/          → OPTIONAL
+│   │   │       └── [struktur sama]
+│   │   ├── Domain/               → Shared domain (lintas modul)
+│   │   ├── Application/          → Shared use cases
+│   │   ├── Infrastructure/       → External adapters
 │   │   │   ├── Storage/
 │   │   │   │   └── MinIOStorageAdapter.php
-│   │   │   ├── Notification/
-│   │   │   │   └── SmtpMailAdapter.php
-│   │   │   └── Biometric/      → Placeholder untuk fingerprint (future)
-│   │   │       └── FingerprintAdapterInterface.php
+│   │   │   └── Notification/
+│   │   │       └── SmtpMailAdapter.php
 │   │   ├── Http/
-│   │   │   ├── Controllers/    → Thin controllers — terima request, panggil service, return response
+│   │   │   ├── Controllers/
 │   │   │   │   ├── Api/V1/
-│   │   │   │   │   ├── Employee/
-│   │   │   │   │   ├── Recruitment/
-│   │   │   │   │   ├── Asset/
-│   │   │   │   │   ├── Auth/
+│   │   │   │   │   ├── Core/
 │   │   │   │   │   └── Public/
 │   │   │   ├── Middleware/
-│   │   │   │   ├── IPWhitelist.php
-│   │   │   │   ├── FieldPermission.php
-│   │   │   │   └── ForcePasswordReset.php
-│   │   │   └── Requests/       → FormRequest validation
-│   │   ├── Models/             → Eloquent models + casts + global scopes
-│   │   ├── Repositories/       → DB access layer (dipanggil dari Application)
-│   │   │   ├── Contracts/      → Repository interfaces
-│   │   │   └── Eloquent/       → Eloquent implementations
-│   │   ├── Jobs/               → Queue jobs (email, notification, export)
-│   │   ├── Notifications/      → Laravel Notifications (in-app + email)
-│   │   ├── Policies/           → Laravel Policies (Gate authorization)
+│   │   │   └── Requests/
+│   │   ├── Models/
+│   │   ├── Repositories/
+│   │   ├── Jobs/
+│   │   ├── Notifications/
 │   │   └── Providers/
+│   │       └── ModuleServiceProvider.php  → Register modul aktif
 │   ├── database/
-│   │   ├── migrations/
-│   │   └── seeders/
+│   │   ├── migrations/           → Core migrations only
+│   │   └── seeders/              → Core seeders only
 │   ├── lang/
-│   │   ├── id/                 → Bahasa Indonesia (namespace per modul)
-│   │   └── en/                 → English
-│   ├── tests/
-│   │   ├── Unit/               → Test fungsi/class terisolasi
-│   │   └── Feature/            → HTTP integration test
-│   └── config/
+│   │   ├── id/
+│   │   └── en/
+│   └── tests/
+│       ├── Unit/
+│       └── Feature/
 │
-├── frontend-hris/              → Next.js 14 (internal portal)
+├── frontend/                     → Next.js 14
 │   └── src/
-│       ├── components/         → UI components + shadcn/ui
-│       │   ├── ui/             → shadcn/ui base components
-│       │   ├── shared/         → Shared business components
-│       │   └── [module]/       → Module-specific components
-│       ├── pages/              → Next.js pages
-│       ├── hooks/              → Custom React hooks
-│       ├── services/           → API call layer
-│       ├── stores/             → State management (jika pakai Zustand/Context)
-│       ├── types/              → TypeScript interfaces
-│       └── locales/            → i18n namespace per modul
+│       ├── app/
+│       │   ├── dashboard/        → Surface 1
+│       │   │   ├── layout.tsx
+│       │   │   └── [module]/
+│       │   └── [company]/        → Surface 2 + 3
+│       │       ├── layout.tsx    → Load company theme
+│       │       ├── page.tsx      → Company homepage
+│       │       ├── karir/
+│       │       └── kandidat/     → Candidate portal
+│       ├── components/
+│       │   ├── ui/               → shadcn/ui base
+│       │   ├── core/             → Core shared components
+│       │   └── modules/          → Per-module components
+│       ├── hooks/
+│       ├── services/             → API call layer
+│       ├── stores/
+│       ├── types/
+│       └── locales/
 │           ├── id/
 │           └── en/
 │
-├── frontend-web/               → Next.js 14 (website publik)
-│   └── src/
-│       ├── components/
-│       ├── pages/
-│       │   ├── index.tsx       → Home
-│       │   ├── about.tsx
-│       │   ├── services.tsx
-│       │   ├── contact.tsx
-│       │   └── karir/
-│       │       └── index.tsx   → Fetch dari /api/v1/public/jobs
-│       └── locales/
-│
+├── docker/
+│   ├── nginx/
+│   ├── php/
+│   └── ...
+├── docker-compose.yml
+├── docker-compose.prod.yml
 ├── docs/
 │   ├── 00_PROJECT_BRIEF.md
-│   ├── 02_ARCHITECTURE.md      ← file ini
-│   └── adr/
-│       └── ALL_ADR.md
-│
+│   ├── 02_ARCHITECTURE.md
+│   └── ALL_ADR.md
 ├── AGENTS.md
 ├── CLAUDE.md
 ├── README.md
@@ -156,9 +189,9 @@ via REST API. Tidak ada microservices. Semua berjalan di satu VPS Linux.
 
 ---
 
-## 3. Backend Layered Architecture
+## 4. Backend Layered Architecture
 
-### 3.1 Layer Overview
+### 4.1 Layer Overview
 
 ```
 ┌──────────────────────────────────────────────────────────┐
@@ -166,13 +199,12 @@ via REST API. Tidak ada microservices. Semua berjalan di satu VPS Linux.
 │  HTTP Controllers · FormRequests · Middleware · Routes   │
 │  TIDAK boleh memuat business logic                       │
 └──────────────────────────┬───────────────────────────────┘
-                           │ memanggil
+                           │
 ┌──────────────────────────▼───────────────────────────────┐
 │                   Application Layer                       │
 │  Use Cases · Services · Orchestration                    │
-│  EvaluateApproval · CreateEmployee · ProcessApplication  │
 └──────────────────────────┬───────────────────────────────┘
-                           │ memanggil
+                           │
 ┌──────────────────────────▼───────────────────────────────┐
 │                     Domain Layer                          │
 │  Business Rules · Validations · State Machines           │
@@ -181,12 +213,12 @@ via REST API. Tidak ada microservices. Semua berjalan di satu VPS Linux.
                            │ interface (dependency inversion)
 ┌──────────────────────────▼───────────────────────────────┐
 │                 Infrastructure Layer                      │
-│  Adapters: MinIO · SMTP · Fingerprint (future) · AI      │
+│  Adapters: MinIO · SMTP · AI (future)                    │
 │  Repositories: PostgreSQL via Eloquent                   │
 └──────────────────────────────────────────────────────────┘
 ```
 
-### 3.2 Dependency Direction (Hukum Keras)
+### 4.2 Dependency Direction (Hukum Keras)
 
 ```
 Interface → Application → Domain
@@ -194,575 +226,391 @@ Interface → Application → Domain
 Infrastructure ───────────────┘ (via interface/contract)
 ```
 
-- **Domain** tidak boleh import class dari Laravel, Eloquent, atau package eksternal apapun.
-- **Infrastructure** mengimplementasikan interface yang didefinisikan di Domain/Application.
+- **Domain** tidak boleh import class dari Laravel, Eloquent, atau package eksternal.
 - **Controller** hanya boleh memanggil satu Application Service per endpoint.
+- **DB access** hanya melalui Repository.
 
-### 3.3 Contoh Alur Request
+---
+
+## 5. Module System Architecture
+
+### 5.1 Module Manifest (module.json)
+
+Setiap modul wajib punya file `module.json`:
+
+```json
+{
+  "code": "recruitment",
+  "name": "Modul Recruitment",
+  "version": "1.0.0",
+  "description": "Pipeline rekrutmen end-to-end",
+  "is_mandatory": false,
+  "dependencies": ["karyawan"],
+  "min_core_version": "1.0.0"
+}
+```
+
+### 5.2 Module Registry (Database)
+
+```sql
+-- Instance level: modul apa saja yang terinstall
+module_registry
+  id, code, name, version, is_mandatory
+  dependencies (JSON)
+  is_installed (boolean)
+  installed_at, installed_by
+
+-- Company level: modul mana yang aktif per company
+company_module_settings
+  id, company_id, module_code
+  is_enabled (boolean)
+  settings (JSON)   → konfigurasi spesifik modul per company
+  enabled_at, enabled_by
+```
+
+### 5.3 Module Lifecycle
 
 ```
-POST /api/v1/employees
+INSTALL (Instance Level — oleh Instance Admin):
+  Cek dependencies tersedia
+  → Jalankan migration modul
+  → Jalankan seeder default modul
+  → Update module_registry: is_installed = true
+  → Modul tersedia untuk di-enable per company
 
-1. Middleware: IPWhitelist → cek IP
-2. Middleware: Auth (Sanctum) → validasi token
-3. FormRequest: CreateEmployeeRequest → validasi input
-4. Controller: EmployeeController@store → panggil CreateEmployeeService
-5. Application: CreateEmployeeService
-   ├── cek permission via Gate
-   ├── validasi business rule via Domain
-   ├── panggil EmployeeRepository untuk simpan data
-   ├── panggil StorageAdapter untuk upload file (jika ada)
-   ├── dispatch NotifyApproverJob ke Queue
-   └── return Employee resource
-6. Controller: return EmployeeResource (JSON)
-7. ActivityLog: otomatis tercatat via model observer
+ENABLE (Company Level):
+  Modul sudah installed?
+  → Update company_module_settings: is_enabled = true
+  → Modul muncul di navigasi company
+
+DISABLE (Company Level):
+  → Update company_module_settings: is_enabled = false
+  → Modul hilang dari navigasi, data tetap ada
+
+UNINSTALL (Instance Level — oleh Instance Admin):
+  Sistem generate export data per company
+  → Instance Admin konfirmasi + warning UU PDP
+  → Hapus semua data modul di semua company
+  → Rollback migration modul
+  → Update module_registry: is_installed = false
+```
+
+### 5.4 Module Service Provider
+
+Core mendaftarkan modul aktif secara dinamis:
+
+```php
+// ModuleServiceProvider.php
+// Saat boot: baca module_registry yang is_installed = true
+// Register routes, services, dan bindings dari setiap modul aktif
+// Untuk request tertentu: filter hanya modul yang is_enabled untuk company tersebut
 ```
 
 ---
 
-## 4. Database Architecture
+## 6. Database Architecture
 
-### 4.1 Konvensi Kolom Wajib (Semua Tabel Utama)
+### 6.1 Strategi
+
+Single database PostgreSQL. Semua tabel utama punya `company_id` untuk isolasi data antar company. Isolasi dijaga di application layer — semua query wajib filter `company_id`.
+
+### 6.2 Core Tables
+
+```
+-- Instance level (tidak ada company_id)
+instance_settings       → konfigurasi platform global
+module_registry         → daftar modul terinstall
+companies               → daftar company dalam instance
+users                   → semua user (Instance Admin tidak punya company_id)
+  └── company_id (nullable) → null = Instance Admin
+
+-- Company level (semua punya company_id)
+company_settings        → konfigurasi per company (SMTP, password policy, dll)
+company_module_settings → modul apa yang aktif per company
+roles                   → RBAC roles per company
+permissions             → RBAC permissions (format: module.action)
+role_permissions        → many-to-many
+user_roles              → many-to-many
+field_permissions       → field-level permission
+notifications           → in-app notifications
+activity_log            → audit trail (via spatie/laravel-activitylog)
+```
+
+### 6.3 Konvensi Kolom Wajib (Semua Tabel Utama)
 
 ```sql
--- Setiap tabel utama WAJIB punya kolom berikut:
-company_id      BIGINT NOT NULL REFERENCES companies(id)
-archived_at     TIMESTAMP NULL DEFAULT NULL
-archived_by     BIGINT NULL REFERENCES users(id)
-created_by      BIGINT NULL REFERENCES users(id)
-updated_by      BIGINT NULL REFERENCES users(id)
-created_at      TIMESTAMP NOT NULL DEFAULT NOW()
-updated_at      TIMESTAMP NOT NULL DEFAULT NOW()
+company_id    BIGINT NOT NULL REFERENCES companies(id)
+archived_at   TIMESTAMP NULL DEFAULT NULL
+archived_by   BIGINT NULL REFERENCES users(id)
+created_by    BIGINT NULL REFERENCES users(id)
+updated_by    BIGINT NULL REFERENCES users(id)
+created_at    TIMESTAMP NOT NULL DEFAULT NOW()
+updated_at    TIMESTAMP NOT NULL DEFAULT NOW()
 ```
 
-### 4.2 Core Tables Overview
+**Pengecualian:** Tabel instance-level (`instance_settings`, `module_registry`, `companies`) tidak punya `company_id`.
 
-```
-companies                   → Single record untuk PT Saneng (future-proof multi-company)
-company_settings            → Settings per company (SMTP, password policy, retention, dll)
-
-users                       → Login credentials + role assignment
-  └── employee_id (nullable, unique) → link ke employees jika ada
-
-employees                   → Data karyawan (profil, posisi, kontrak)
-  ├── consent_at / consent_by  → UU PDP compliance
-  ├── approver_id (FK users)   → Siapa yang approve perubahan data karyawan ini
-  └── status / approved_by     → Approval workflow guard
-
-employee_documents          → Dokumen karyawan (path MinIO + metadata)
-employee_photos             → Foto karyawan (path MinIO)
-
-roles                       → Dynamic RBAC — roles sebagai master data
-permissions                 → Dynamic RBAC — permissions sebagai master data (format: module.action)
-role_permissions            → Many-to-many roles ↔ permissions
-user_roles                  → Many-to-many users ↔ roles
-field_permissions           → Field-level permission untuk field sensitif
-
-departments                 → Struktur organisasi level 1
-divisions                   → Struktur organisasi level 2 (sub Department)
-units                       → Struktur organisasi level 3 (sub Division, optional)
-
-job_positions               → Jabatan (dengan code stabil)
-job_levels                  → Level (Staff, Supervisor, Manager, GM, Director)
-employee_types              → Jenis karyawan (Tetap, PKWT, Outsourcing, Magang, Freelance)
-contract_types              → Jenis kontrak
-work_locations              → Lokasi kerja
-
-ref_types                   → Generic lookup: type registry (bank_list, education_level, dll)
-ref_values                  → Generic lookup: values per type
-
-notifications               → In-app notification (Soketi)
-activity_log                → Audit trail (via spatie/laravel-activitylog)
-incident_logs               → Kebocoran data (Pasal 46 UU PDP)
-failed_jobs                 → Laravel default queue failure table
-
-job_postings                → Lowongan kerja (published → muncul di website)
-applicants                  → Pelamar (dari form publik website)
-
-assets                      → Inventaris aset perusahaan
-asset_assignments           → Assign aset ke karyawan
-```
-
-### 4.3 Archive Policy Implementation
+### 6.4 Archive Policy
 
 ```php
-// Semua model utama WAJIB pakai:
+// Semua model utama WAJIB:
 
-// 1. Global Scope — exclude archived records dari semua query
-protected static function booted(): void
-{
-    static::addGlobalScope('not_archived', function (Builder $query) {
-        $query->whereNull('archived_at');
-    });
-}
+// 1. Global Scope — exclude archived records
+static::addGlobalScope('not_archived', fn($q) => $q->whereNull('archived_at'));
 
 // 2. Archive method — satu-satunya cara "delete"
-public function archive(int $archivedByUserId): void
-{
-    $this->update([
-        'archived_at' => now(),
-        'archived_by' => $archivedByUserId,
-    ]);
+public function archive(int $userId): void {
+    $this->update(['archived_at' => now(), 'archived_by' => $userId]);
 }
 ```
 
-### 4.4 Encrypted Fields
+### 6.5 Encrypted Fields
 
-Field berikut menggunakan Laravel `encrypted` cast di Model:
+Field berikut wajib pakai Laravel `encrypted` cast:
 
-| Model | Field |
+| Modul | Field |
 |---|---|
-| Employee | `nik`, `npwp`, `bank_account_number`, `salary`, `allowances`, `deductions` |
+| Karyawan | `nik`, `npwp`, `bank_account_number`, `salary`, `allowances`, `deductions` |
 
-```php
-protected $casts = [
-    'nik'                 => 'encrypted',
-    'npwp'                => 'encrypted',
-    'bank_account_number' => 'encrypted',
-    'salary'              => 'encrypted',
-];
-```
+### 6.6 Approval Guard
 
-### 4.5 Status & Approval Guard
+Tabel dengan workflow approval wajib punya:
 
-Tabel yang punya workflow approval menyimpan:
 ```sql
-status       VARCHAR NOT NULL DEFAULT 'draft'  -- draft | active | pending | approved | rejected
+status       VARCHAR NOT NULL DEFAULT 'draft'
 approved_by  BIGINT NULL REFERENCES users(id)
 approved_at  TIMESTAMP NULL
 ```
 
-Transisi status via state machine — tidak boleh langsung mass-assign `status` field.
-
 ---
 
-## 5. API Architecture
+## 7. API Architecture
 
-### 5.1 Endpoint Groups
+### 7.1 Endpoint Groups
 
 ```
-/api/v1/public/*        → Tanpa auth, rate limited, sanitasi ketat
-  GET  /jobs            → Daftar lowongan aktif (untuk website)
-  POST /applications    → Submit lamaran (rate limit: 5/10mnt per IP)
+/api/v1/public/*          → Tanpa auth, rate limited
+  GET  /[company]/jobs    → Daftar lowongan aktif (untuk website karir)
+  POST /[company]/apply   → Submit lamaran (rate limit: 5/10mnt per IP)
+  GET  /quiz/{token}      → Ambil soal tes
+  POST /quiz/{token}      → Submit jawaban
+  GET  /interview/{token} → Konfirmasi jadwal interview
+  GET  /pemberkasan/{token} → Portal upload dokumen
 
-/api/v1/*               → Sanctum token required + IP whitelist
-  /auth/*               → Login, logout, forgot-password, reset-password
-  /employees/*          → CRUD karyawan + approval
-  /recruitment/*        → Kelola lowongan + proses pelamar
-  /assets/*             → CRUD aset + assignment
-  /master/*             → Department, position, level, dll
-  /settings/*           → Company settings (System Admin only)
-  /audit/*              → Activity log viewer
-  /archive/*            → Archive management
-  /notifications/*      → In-app notifications
-  /health               → Health check (no auth)
+/api/v1/*                 → Sanctum token required
+  /auth/*                 → Login, logout, forgot-password
+  /instance/*             → Instance Admin only
+    /companies            → CRUD company
+    /modules              → Install/uninstall modul
+    /users                → Manage Instance Admin users
+  /[company]/*            → Company-scoped endpoints
+    /modules              → Enable/disable modul per company
+    /settings             → Company settings
+    /employees/*          → Modul Karyawan
+    /recruitment/*        → Modul Recruitment
+    /assets/*             → Modul Aset
+    /calendar/*           → Modul Kalender
+    /audit/*              → Audit log viewer
+    /notifications/*      → In-app notifications
 ```
 
-### 5.2 Response Format Standard
+### 7.2 Response Format Standard
 
 ```json
 // Success
 {
   "success": true,
-  "data": { ... },
-  "message": "employee.created",    // i18n key, bukan string
-  "meta": {                          // untuk paginated response
-    "current_page": 1,
-    "per_page": 20,
-    "total": 150
-  }
+  "data": {},
+  "message": "module.action.success",
+  "meta": { "current_page": 1, "per_page": 20, "total": 150 }
 }
 
 // Error
 {
   "success": false,
-  "message": "error.validation_failed",   // i18n key
-  "errors": {
-    "field_name": ["error.field.required"]
-  }
-}
-
-// Forbidden (permission)
-{
-  "success": false,
-  "message": "error.forbidden"
-}
-
-// IP Blocked
-{
-  "success": false,
-  "message": "error.ip_not_allowed"    // "Akses hanya dari jaringan perusahaan"
+  "message": "error.validation_failed",
+  "errors": { "field": ["error.field.required"] }
 }
 ```
 
-### 5.3 Versioning
+### 7.3 Company Context di Request
 
-- Prefix: `/api/v1/`
-- Jika breaking change di masa depan: `/api/v2/` berjalan paralel
-- v1 tidak pernah di-break tanpa migration path
+Setiap request ke `/api/v1/[company]/*` harus resolve company dari slug/subdomain. Middleware `ResolveCompany` menjalankan ini dan inject `company_id` ke semua query berikutnya.
 
 ---
 
-## 6. Authentication & Authorization
+## 8. Authentication & Authorization
 
-### 6.1 Auth Flow
+### 8.1 Auth Flow
 
 ```
 User → POST /api/v1/auth/login
-  → IPWhitelist middleware (cek IP kantor / VPN)
   → Rate limiter: 5 req/mnt per IP
   → Validate credentials
-  → Cek lockout (max 5 failed attempts → lockout 15 menit)
+  → Cek lockout (3 gagal → lockout sesuai setting)
   → Issue Sanctum token
   → Return token + user info + permissions list
-  → Frontend simpan token (httpOnly cookie via Sanctum SPA mode)
 ```
 
-### 6.2 Dynamic RBAC
+### 8.2 Dynamic RBAC
 
 ```
-User memiliki → Roles
-Roles memiliki → Permissions (format: module.action)
+User → Roles → Permissions (format: module.action)
 
 Contoh permissions:
-  employee.view          employee.create        employee.update
-  employee.archive       employee.export        employee.view_salary
-  recruitment.view       recruitment.create     recruitment.publish
-  asset.view             asset.assign
+  karyawan.view          karyawan.create        karyawan.update
+  karyawan.archive       karyawan.export
+  recruitment.view       recruitment.manage
+  aset.view              aset.assign
   settings.view          settings.update
-  audit.view             archive.manage
+  audit.view
 
-Field-level permission (tabel field_permissions):
-  Mengontrol field mana yang dikembalikan di API response
-  Contoh: user tanpa `employee.view_salary` tidak dapat field salary di response
-
-Employee API response enforcement:
-  salary, allowances, deductions → hanya muncul jika user punya `employee.view_salary`
-  nik, npwp, bank_account_number → hanya muncul jika user punya `employee.view`
-    dan user karyawan tidak sedang melihat record karyawan lain
-  Field yang tidak boleh diakses di-exclude dari response, bukan null/masked
+Field-level permission → tabel field_permissions
+  Contoh: user tanpa karyawan.view_salary tidak dapat field salary di response
 ```
 
-### 6.3 Gate Check Pattern
+### 8.3 Default Roles per Company
 
-```php
-// Di Application Service — SELALU cek permission di backend
-Gate::authorize('employee.view_salary');
+Saat company baru dibuat, dua role default otomatis tersedia:
 
-// Atau via Policy
-$this->authorize('viewSalary', $employee);
+| Role | Default Permissions |
+|---|---|
+| Manager | Read + approve semua modul aktif |
+| Staff | Input data, tidak bisa delete/archive |
 
-// Frontend hanya sembunyikan UI (bukan security)
-// <PermissionGate permission="employee.view_salary">
-//   <SalaryField />
-// </PermissionGate>
+Role tambahan (termasuk Super Admin) dibuat manual oleh Instance Admin jika dibutuhkan.
+
+### 8.4 Instance Admin vs Company User
+
+| | Instance Admin | Company User |
+|---|---|---|
+| company_id | NULL | NOT NULL |
+| Akses | Semua company | Hanya company sendiri |
+| Manage modules | Ya (install/uninstall) | Ya (enable/disable) |
+| Lihat data HR | Ya (semua company) | Ya (company sendiri) |
+| Semua akses dicatat | Ya | Ya |
+
+---
+
+## 9. Notification Architecture
+
+```
+Event terjadi
+  │
+  ├── In-App Notification
+  │   ├── Tulis ke tabel notifications
+  │   └── Broadcast via Soketi (WebSocket)
+  │
+  └── Email Notification
+      ├── Dispatch job ke Redis Queue
+      ├── Retry: 3x exponential backoff
+      └── Gagal 3x → failed_jobs → alert Instance Admin
 ```
 
 ---
 
-## 7. File Storage Architecture
+## 10. File Storage Architecture
 
-### 7.1 MinIO Bucket Structure
+### 10.1 MinIO Bucket Structure
 
 ```
-bucket: hris-saneng/
-├── employees/
-│   └── {employee_id}/
-│       ├── photo/
-│       │   ├── original.jpg
-│       │   ├── medium.jpg      (auto-resize)
-│       │   └── thumbnail.jpg   (auto-resize)
-│       └── documents/
-│           └── {doc_type}/     (ktp, npwp, ijazah, kontrak, bpjs, dll)
-├── recruitment/
-│   └── {job_id}/
-│       └── applicants/
-│           └── {applicant_id}/
-├── assets/
-│   └── {asset_id}/
+bucket: dictive-hr/
+├── companies/
+│   └── {company_id}/
+│       ├── logo/
+│       └── modules/
+│           ├── karyawan/
+│           │   └── {employee_id}/
+│           │       ├── photo/
+│           │       └── documents/
+│           ├── recruitment/
+│           │   └── {job_id}/
+│           │       └── applicants/{applicant_id}/
+│           └── aset/
+│               └── {asset_id}/
 ├── exports/
-│   └── {YYYY-MM-DD}/
+│   └── {company_id}/{YYYY-MM-DD}/
 └── backups/
     └── {YYYY-MM-DD}/
 ```
 
-### 7.2 Storage Abstraction
+### 10.2 File Access Security
 
-```php
-// Semua akses file via Storage facade — tidak pernah langsung ke MinIO
-Storage::disk('documents')->put($path, $content);
-Storage::disk('documents')->get($path);
-Storage::disk('documents')->url($path);    // Signed URL untuk akses
-Storage::disk('documents')->delete($path);
-```
-
-### 7.3 File Access Security
-
-- Semua file dokumen karyawan: akses via **signed URL** (time-limited, bukan public URL)
-- File publik (website assets): disk terpisah yang memang public
+- Dokumen sensitif: akses via **signed URL** (time-limited)
+- File publik (logo, website assets): disk public terpisah
 - Tidak ada public URL permanen untuk dokumen sensitif
 
 ---
 
-## 8. Notification Architecture
-
-```
-Event terjadi (misal: approval request dibuat)
-  │
-  ├── In-App Notification
-  │   ├── Tulis ke tabel `notifications`
-  │   └── Broadcast via Soketi (WebSocket)
-  │       └── Frontend terima event → bell icon update tanpa refresh
-  │
-  └── Email Notification
-      ├── Dispatch NotificationJob ke Redis Queue
-      │   └── Queue worker proses di background (tidak blocking)
-      ├── Template: HTML branded (logo PT Saneng + tombol aksi)
-      ├── Kirim via SMTP @saneng.co.id
-      ├── Retry: 3x dengan exponential backoff
-      └── Gagal 3x → masuk failed_jobs → alert System Admin
-```
-
----
-
-## 9. Security Architecture
-
-### 9.1 Network Security
-
-```
-Internet
-  │
-  ├── saneng.co.id (publik, OK dari mana saja)
-  │   └── Rate limit pada form lamaran: 5/10mnt per IP
-  │
-  └── hris.saneng.co.id (LOCKED)
-      └── IPWhitelist Middleware
-          ├── IP range jaringan kantor PT Saneng → ALLOW
-          ├── IP WireGuard VPN → ALLOW
-          └── Semua IP lain → 403
-```
-
-### 9.2 Data Security Layers
+## 11. Security Architecture
 
 | Layer | Implementasi |
 |---|---|
-| Transport | HTTPS/TLS (Let's Encrypt, force HTTPS) |
+| Transport | HTTPS/TLS (Let's Encrypt) |
 | Auth | Laravel Sanctum SPA token |
-| Network | IP whitelist + WireGuard VPN |
-| Application | Dynamic RBAC + Field-level permission |
+| Application | Dynamic RBAC + field-level permission |
 | Data at rest | Laravel encrypted cast untuk field sensitif |
 | File | Signed URL, bukan public URL permanent |
 | Secrets | .env only, tidak pernah di-commit |
 | Input | FormRequest validation + XSS sanitasi |
-| SQL | Eloquent ORM + Query Builder (raw SQL hanya via binding) |
-| Login | Rate limit 5/mnt + lockout 15 menit setelah 5 gagal |
+| SQL | Eloquent ORM + Query Builder (raw SQL via binding only) |
+| Login | Rate limit + lockout setelah 3 gagal |
+| Audit | Semua aksi tercatat, tidak bisa dihapus |
 
-### 9.3 Audit Trail
+---
+
+## 12. Audit Trail
 
 ```
-Semua CRUD pada data pribadi → spatie/laravel-activitylog
+Semua CRUD pada data → spatie/laravel-activitylog
   ├── Siapa (user_id)
   ├── Kapan (timestamp)
-  ├── Apa yang diubah (old_values → new_values)
-  ├── Dari mana (IP address)
-  └── Field sensitif → [REDACTED] di log untuk user tanpa permission
+  ├── Company mana (company_id)
+  ├── Apa yang diubah (old → new values)
+  └── Field sensitif → [REDACTED] untuk user tanpa permission
 
-Export data → tabel export_logs
-  ├── Siapa export
-  ├── Modul apa
-  ├── Kapan
-  └── Berapa record
-
-Kebocoran data → tabel incident_logs (Pasal 46 UU PDP)
+Instance Admin akses data HR company lain → tercatat sama seperti aksi user biasa
 ```
 
 ---
 
-## 10. Frontend Architecture
-
-### 10.1 frontend-hris (Internal Portal)
+## 13. Deployment Architecture
 
 ```
-Next.js 14 (App Router atau Pages Router — diputuskan di Sprint 0)
-  ├── Styling: Tailwind CSS + shadcn/ui
-  ├── Auth: Sanctum SPA mode (httpOnly cookie)
-  ├── i18n: next-i18next (namespace per modul)
-  ├── State: React Context / Zustand (minimal, hanya auth + UI state)
-  └── API: services/ layer (axios/fetch) — tidak fetch langsung dari component
-
-Komponen Kunci:
-  PermissionGate    → Sembunyikan UI berdasarkan permission (bukan security)
-  LanguageSwitcher  → Switch ID/EN, simpan preferensi ke DB
-  NotificationBell  → Real-time via Soketi WebSocket
-  DataTable         → Reusable table dengan pagination + filter + sort
-  FileUploader      → Upload dengan validasi MIME, size, progress
-  AuditTrailViewer  → Lihat history perubahan data
+docker-compose.yml services:
+  app         → Laravel 11 (PHP-FPM)
+  frontend    → Next.js 14
+  postgres    → PostgreSQL
+  redis       → Cache + Queue
+  minio       → File storage
+  soketi      → WebSocket server
+  nginx       → Reverse proxy + SSL termination
+  mailpit     → Email testing (dev only)
 ```
 
-### 10.2 frontend-web (Website Publik)
+**Installer wizard** dijalankan saat pertama kali setup — tidak bisa skip.
+
+**Update platform:** Vendor (Dictive-HR) yang push update. Migration harus backward-safe — tidak boleh breaking data existing.
+
+---
+
+## 14. Module Dependency Map
 
 ```
-Next.js 14
-  ├── Static pages: Home, About, Services, Contact (hardcoded, tidak perlu CMS)
-  ├── Dynamic page: /karir → SSR/ISR fetch dari /api/v1/public/jobs
-  ├── Form lamaran: client-side fetch ke /api/v1/public/applications
-  └── i18n: next-i18next (ID/EN)
-
-Tidak ada auth di frontend-web.
-Tidak ada akses ke data internal — hanya endpoint /api/v1/public/*.
-```
-
-### 10.3 API Service Layer Pattern
-
-```typescript
-// services/employee.service.ts
-export const employeeService = {
-  getAll: (params) => api.get('/employees', { params }),
-  getById: (id) => api.get(`/employees/${id}`),
-  create: (data) => api.post('/employees', data),
-  update: (id, data) => api.put(`/employees/${id}`, data),
-  archive: (id) => api.post(`/employees/${id}/archive`),
-};
-
-// Tidak pernah fetch langsung dari component:
-// ❌ const res = await axios.get('/api/v1/employees');
-// ✅ const res = await employeeService.getAll();
+Core Platform (Foundation)
+  └── Mandatory Modules
+      ├── Karyawan    [root dependency semua modul HR]
+      └── Kalender    [root dependency absensi, cuti, payroll]
+          └── Optional Modules
+              ├── Recruitment  depends on → Karyawan
+              ├── Aset         depends on → Karyawan
+              ├── Website      depends on → (none)
+              ├── Absensi      depends on → Karyawan, Kalender  [future]
+              ├── Cuti         depends on → Karyawan, Kalender  [future]
+              └── Payroll      depends on → Karyawan, Kalender  [future]
 ```
 
 ---
 
-## 11. Staging & Deployment
-
-### 11.1 Environments
-
-| Environment | URL | Branch | DB | Port |
-|---|---|---|---|---|
-| Production | hris.saneng.co.id / saneng.co.id | main | hris_production | 443 |
-| Staging | staging.hris.saneng.co.id | staging | hris_staging | custom |
-| Local Dev | localhost | feature/* | hris_local (Docker) | 3000/8000 |
-
-### 11.2 CI/CD Flow
-
-```
-Developer buat branch → push → GitHub Actions CI
-  ├── Lint (PHP + TypeScript)
-  ├── Typecheck (TypeScript)
-  ├── Tests (Pest PHP)
-  └── Pass semua → bisa merge ke staging
-
-Merge ke staging → manual deploy ke staging environment
-Manual testing di staging → jika OK → merge ke main
-Merge ke main → manual deploy ke production
-```
-
-### 11.3 Backup
-
-```
-Harian (cron job otomatis):
-  ├── pg_dump → enkripsi → simpan di MinIO /backups/{YYYY-MM-DD}/
-  └── MinIO snapshot
-
-Retensi backup: 30 hari rolling
-
-Mingguan (manual oleh owner):
-  └── rsync VPS → hard disk eksternal owner
-
-Restore drill: owner verifikasi berkala, catat di log sederhana
-```
-
-### 11.4 Health Check
-
-```
-GET /health → return:
-{
-  "status": "ok",
-  "services": {
-    "database":      "ok",
-    "redis":         "ok",
-    "storage":       "ok",
-    "queue_worker":  "ok"
-  },
-  "timestamp": "2024-01-01T00:00:00Z"
-}
-
-UptimeRobot: cek endpoint ini setiap 5 menit → email alert jika down
-```
-
----
-
-## 12. i18n Architecture
-
-```
-Backend (Laravel):
-  lang/
-  ├── id/
-  │   ├── employee.php
-  │   ├── recruitment.php
-  │   ├── auth.php
-  │   ├── common.php
-  │   └── errors.php
-  └── en/
-      ├── employee.php
-      ├── recruitment.php
-      ├── auth.php
-      ├── common.php
-      └── errors.php
-
-Frontend (next-i18next):
-  locales/
-  ├── id/
-  │   ├── employee.json
-  │   ├── recruitment.json
-  │   ├── common.json
-  │   └── ...
-  └── en/
-      └── ... (mirror struktur id/)
-
-Konvensi key: {namespace}.{context}.{label}
-Contoh: employee.form.name | recruitment.status.pending | common.button.save
-
-ZERO hardcoded string — baik di PHP maupun TypeScript/TSX.
-Preferensi bahasa user disimpan di DB (tabel users.language_preference).
-```
-
----
-
-## 13. Queue Architecture
-
-```
-Redis sebagai Queue Driver
-
-Jobs yang berjalan via Queue:
-  ├── SendApprovalRequestEmail       → notify approver
-  ├── SendApprovalResultEmail        → notify HR setelah approve/reject
-  ├── SendSystemAlertEmail           → alert admin (failed jobs, retensi data)
-  ├── SendRetentionNotificationEmail → notifikasi data melewati batas retensi
-  ├── ProcessFileUpload              → resize foto karyawan
-  └── GenerateExportFile             → generate Excel/CSV export
-
-Retry policy: 3x dengan exponential backoff
-Failed jobs: tabel failed_jobs → visible di dashboard admin
-Queue workers: Laravel Horizon atau artisan queue:work dengan supervisor
-```
-
----
-
-## 14. Module Dependencies Map
-
-```
-Sprint 0: Companies, CompanySettings                    [FOUNDATION]
-Sprint 1: i18n                                          [FOUNDATION]
-Sprint 2: MasterData (Dept, Position, Level, RefData)  [FOUNDATION]
-Sprint 3: Auth, Users                  depends on → Sprint 0,1,2
-Sprint 4: RBAC (Roles, Permissions)    depends on → Sprint 3
-Sprint 5: AuditLog, Archive, Settings  depends on → Sprint 3,4
-Sprint 6: Employees                    depends on → Sprint 2,3,4,5
-Sprint 7: Recruitment, WebsiteIntegration  depends on → Sprint 3,4,5
-Sprint 8: Assets                       depends on → Sprint 3,4,5,6
-```
-
----
-
-*Document owner: Principal (owner sistem PT Saneng)*
-*Perubahan arsitektur harus melalui ADR baru. Lihat docs/adr/ALL_ADR.md untuk keputusan arsitektur yang sudah terkunci.*
-*Update dokumen ini jika ada perubahan komponen, layer, atau flow yang signifikan.*
+*Document owner: Dictive-HR Vendor*
+*Perubahan arsitektur harus melalui ADR baru. Lihat ALL_ADR.md.*

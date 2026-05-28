@@ -2,6 +2,38 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## Alignment 1
+
+- Menjadikan blueprint Dictive-HR sebagai authority repository melalui pembaruan AGENTS.md, CLAUDE.md, project brief, architecture, dan ADR.
+- Menambahkan docs/ALL_ADR.md sesuai lokasi blueprint baru dan menyelaraskan salinan legacy docs/adr/ALL_ADR.md agar tidak konflik.
+- Mencatat bahwa sprint-0-tasks.md dan HRIS_MASTER_DECISION_LOG.md di Downloads masih versi PT Saneng lama sehingga tidak dijadikan authority baru.
+
+## Alignment 2
+
+- Menambahkan skeleton `backend/app/Core` untuk area core platform Dictive-HR tanpa memindahkan runtime code.
+- Memverifikasi skeleton modul Karyawan, Kalender, Recruitment, Aset, dan Website tetap tersedia dengan manifest dan folder utama.
+- Menambahkan dokumen mapping struktur legacy menuju struktur Dictive-HR untuk milestone refactor berikutnya.
+
+## Alignment 3
+
+- Menambahkan boundary backend `CompanyContext` dan middleware `ResolveCompany` untuk request company-scoped.
+- Mendaftarkan alias middleware `company.resolve` tanpa rebase route API existing.
+- Menyelaraskan global scope `HasCompany` agar memakai resolved company context saat tersedia.
+- Menambahkan dokumen alignment Company Context / ResolveCompany beserta test feature boundary.
+
+## Alignment 4
+
+- Membersihkan dokumen planning lama yang sudah bentrok dengan blueprint Dictive-HR aktif.
+- Mengganti README root dan backend dari konteks lama/template default menjadi entrypoint Dictive-HR.
+- Menambahkan `docs/alignment/GAP_REGISTER.md` sebagai memory sementara untuk gap alignment yang masih terbuka.
+- Menambahkan translation key company context di backend bahasa Indonesia dan Inggris.
+
+## Alignment 5
+
+- Menambahkan `docs/alignment/OPERATING_PLAN.md` sebagai protokol resume lintas session.
+- Menetapkan urutan milestone alignment berikutnya agar perintah "selanjutnya" bisa dilanjutkan secara reliable di session baru.
+- Memperbarui `GAP_REGISTER.md` dengan next milestone dan aturan lifecycle gap sementara.
+
 ## Sprint 0
 
 - Menyiapkan scaffold monorepo Laravel 11 + dua frontend Next.js 14.

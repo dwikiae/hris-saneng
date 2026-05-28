@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Core\Company\Application\CompanyContext;
 use App\Domain\Storage\StorageAdapterInterface;
 use App\Infrastructure\Storage\MinIOStorageAdapter;
 use App\Repositories\Contracts\CompanyRepositoryInterface;
@@ -41,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->scoped(CompanyContext::class, fn (): CompanyContext => new CompanyContext);
         $this->app->bind(EmployeeRepositoryInterface::class, EmployeeRepository::class);
         $this->app->bind(StorageAdapterInterface::class, MinIOStorageAdapter::class);
         $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);

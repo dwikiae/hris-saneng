@@ -1,235 +1,208 @@
 # 00_PROJECT_BRIEF.md
-## HRIS — PT Saneng
-### Human Resource Information System
-
-**Status:** Foundation Document v1.0 — Locked  
-**Last Updated:** 2025  
-**Owner:** PT Saneng — IT / Solo Developer  
-**Audience:** AI coder, developer, stakeholder
+## Dictive-HR — Platform HRIS Self-Hosted
+### Version: 1.0 | Status: FINAL | Phase: Foundation
 
 ---
 
-## 1. OBJECTIVE
+## 1. Objective
 
-> **Sistem ini dibuat untuk membantu tim HR PT Saneng mengelola seluruh siklus data karyawan — dari rekrutmen, onboarding, kontrak, aset, hingga kepatuhan hukum — secara terpusat, teraudit, dan aman, sehingga operasional HR menjadi efisien, compliance-ready, dan dapat dipertanggungjawabkan.**
-
----
-
-## 2. PROBLEM STATEMENT
-
-### Gejala
-- Data karyawan tersebar di spreadsheet, email, dan folder fisik yang tidak terpusat
-- Tidak ada audit trail yang reliable — siapa mengubah apa dan kapan tidak terekam
-- Proses rekrutmen dilakukan manual tanpa sistem terpadu
-- Tidak ada enforcement compliance UU PDP No. 27/2022 dan UU KUP
-
-### Masalah Akar
-- Tidak ada sistem digital HR yang didesain khusus untuk kebutuhan PT Saneng (~700 karyawan)
-- Sistem yang ada saat ini (spreadsheet) tidak memiliki access control, enkripsi, atau audit log
-
-### Dampak
-- Risiko kebocoran data pribadi karyawan (NIK, gaji, rekening)
-- Risiko sanksi hukum karena pelanggaran UU PDP
-- Inefisiensi operasional HR (manual, error-prone, duplikasi)
-- Tidak ada visibilitas manajemen terhadap data karyawan secara real-time
-
-### Urgensi
-- UU PDP No. 27/2022 sudah berlaku dan mensyaratkan sistem pengelolaan data pribadi yang terdokumentasi
-- Jumlah karyawan (~700) sudah melampaui kapasitas efektif spreadsheet
-- Proses rekrutmen yang tidak terstruktur menyebabkan kehilangan kandidat potensial
+> **Dictive-HR adalah platform HRIS self-hosted yang memungkinkan perusahaan men-deploy sistem HR mereka sendiri di server mereka, mengaktifkan modul yang dibutuhkan, dan mengelola data HR secara mandiri, terpusat, dan aman — sesuai regulasi ketenagakerjaan Indonesia.**
 
 ---
 
-## 3. ACTORS & USER FLOW
+## 2. Problem Statement
 
-### Actors
+**Gejala:**
+- Sistem HRIS yang ada di pasar adalah SaaS (data di server vendor) atau terlalu generik
+- Perusahaan Indonesia yang butuh kontrol penuh atas data karyawan tidak punya pilihan self-hosted yang baik
+- UU PDP No. 27/2022 mendorong perusahaan untuk lebih bertanggung jawab atas pengelolaan data pribadi
+
+**Masalah Akar:**
+- Tidak ada platform HRIS modular self-hosted yang didesain khusus untuk konteks regulasi Indonesia
+- SaaS HRIS berarti data karyawan (NIK, gaji, rekening) ada di server pihak ketiga
+
+**Dampak:**
+- Risiko compliance UU PDP jika data bocor dari server vendor
+- Ketergantungan pada vendor untuk fitur dan harga
+- Tidak ada fleksibilitas untuk customize sesuai kebutuhan spesifik perusahaan
+
+---
+
+## 3. Target Pengguna Platform
+
+Dictive-HR ditargetkan untuk tiga tipe installer:
+
+| Tipe | Deskripsi |
+|---|---|
+| Perusahaan dengan IT internal | Punya server dan tim IT sendiri, install dan manage mandiri |
+| HR Profesional / Konsultan | Install dan manage untuk klien mereka |
+| Developer | Install, customize, dan kembangkan di atas platform |
+
+**End user di dalam platform:**
 
 | Role | Deskripsi |
 |---|---|
-| System Admin | Full access semua modul + settings sistem |
-| HR Manager | Full access modul HR — kelola data, approve proses |
-| HR Staff | Limited access — input data, tidak bisa delete, tidak lihat gaji |
-| Dept Manager | Approval only — lihat karyawan di departemennya saja |
-| Kandidat (publik) | Submit lamaran via website tanpa login |
+| Instance Admin | Administrator platform — manage company, modules, users lintas company |
+| HR Manager | Manage data HR, approve proses, akses penuh modul aktif |
+| HR Staff | Input data, akses terbatas sesuai permission |
+| Manager/Atasan | Approval only, lihat data relevan departemennya |
+| Kandidat (publik) | Apply lamaran via website karir, kerjakan tes, upload dokumen pemberkasan |
 
-### User Flow Utama
+---
 
-**Flow 1 — Rekrutmen:**
+## 4. Model Bisnis
+
+- **Core subscription**: Akses platform + semua modul standar
+- **Custom development**: Penambahan atau modifikasi modul, berbayar terpisah, bukan bagian arsitektur platform
+- **Open source**: Roadmap ke depan setelah platform stabil
+
+---
+
+## 5. Scope v1 — Core Platform
+
+### Foundation Layer (Core)
+- Company Management — create, manage, delete company dalam instance
+- User & Authentication — login, session, password policy, lockout
+- Permission System — RBAC dynamic, field-level permission
+- Module Registry — install/uninstall modul di level instance, enable/disable per company
+- Settings Engine — platform settings + company settings
+- i18n Engine — ID/EN, extensible untuk bahasa lain
+- Audit Log Engine — semua aksi tercatat, tidak bisa dihapus
+- Notification Engine — in-app + email via queue
+- File Storage Engine — abstraction layer (MinIO)
+- Archive Engine — soft-delete policy berlaku untuk semua data semua modul
+
+### Mandatory Modules (sepaket dengan core, tidak bisa uninstall)
+- **Modul Karyawan** — root dependency semua modul HR. Data karyawan, struktur organisasi (department, jabatan, level), tipe kontrak, dokumen karyawan
+- **Modul Kalender** — root dependency absensi, cuti, payroll. Kalender kerja, hari libur nasional, shift
+
+### Optional Modules v1 (bisa install & uninstall)
+- **Recruitment** — job posting, pipeline kandidat, tes tulis, pemberkasan, integrasi website karir
+- **Aset** — pencatatan dan assignment aset ke karyawan
+- **Website** — company website publik, halaman karir, candidate portal
+
+### Defer (bukan scope v1)
+- Payroll & PPh 21
+- Absensi & fingerprint integration
+- Cuti online
+- Self-service portal karyawan
+- Mobile app
+- Multi-country / multi-language regulasi
+- WhatsApp / SMS notification
+- Module marketplace (third-party modules)
+
+---
+
+## 6. Non-Goals v1
+
+- Bukan SaaS — tidak ada hosted version yang dikelola vendor
+- Bukan multi-country — regulasi Indonesia-specific
+- Bukan platform terbuka untuk third-party module developer (belum)
+- Tidak ada automatic data deletion — hanya notifikasi, admin yang approve
+- Tidak ada offline mode
+
+---
+
+## 7. Key Business Flows
+
+### Flow 1 — Wizard Install (First Time Setup)
 ```
-HR publish lowongan di HRIS
-  → Otomatis muncul di saneng.co.id/karir
-  → Kandidat isi form lamaran di website (tanpa login)
-  → Data kandidat masuk ke HRIS sebagai applicant record
-  → HR review, proses seleksi, update status
-  → Kandidat lolos → proses onboarding → buat data karyawan
+Step 1: Database connection setup
+Step 2: Instance Admin account creation
+Step 3: Company pertama — nama, logo, timezone
+Step 4: Mandatory modules auto-install (Karyawan + Kalender)
+Step 5: Redirect ke dashboard
 ```
 
-**Flow 2 — Manajemen Karyawan:**
+### Flow 2 — Tambah Company Baru
 ```
-HR input data karyawan baru (dengan consent checkbox mandatory)
-  → HR submit untuk approval
-  → Notifikasi ke Dept Manager (in-app + email)
-  → Manager approve/reject
-  → Status berubah, notifikasi ke HR
-  → Data aktif, HR buatkan akun user jika diperlukan
-```
-
-**Flow 3 — Akses Sistem:**
-```
-User akses hris.saneng.co.id
-  → Jika bukan dari IP kantor/VPN → 403 Forbidden
-  → Login dengan email @saneng.co.id
-  → Session timeout 60 menit tidak aktif
-  → Fitur yang tersedia sesuai role & permission
+Step 1: Instance Admin buat company (nama, logo, timezone)
+Step 2: Pilih modul yang di-enable untuk company ini
+Step 3: Buat user pertama untuk company ini
+Step 4: Default roles otomatis tersedia (Manager, Staff)
+Step 5: Done
 ```
 
-**Flow 4 — File & Dokumen:**
+### Flow 3 — Install Optional Module
 ```
-HR upload dokumen karyawan (KTP scan, kontrak, BPJS, dll)
-  → File tersimpan di MinIO (self-hosted, tidak keluar VPS)
-  → Preview tersedia di browser (PDF/gambar)
-  → Akses file via presigned URL — tidak exposed langsung
+Step 1: Instance Admin pilih modul dari registry
+Step 2: Sistem cek dependencies
+Step 3: Jalankan migration modul
+Step 4: Modul tersedia untuk di-enable per company
+```
+
+### Flow 4 — Enable Module per Company
+```
+Step 1: User dengan akses settings company pilih modul yang tersedia
+Step 2: Enable → modul muncul di navigasi company
+```
+
+### Flow 5 — Uninstall Optional Module
+```
+Step 1: Instance Admin pilih modul untuk di-uninstall
+Step 2: Sistem generate export data per company yang punya data modul ini
+Step 3: Instance Admin konfirmasi + warning UU PDP
+Step 4: Data dihapus, migration di-rollback
+Step 5: Modul tidak tersedia di semua company
+```
+
+### Flow 6 — Kandidat Apply via Website Karir
+```
+Step 1: Kandidat buka halaman karir company (public website)
+Step 2: Isi form lamaran di halaman karir
+Step 3: Data langsung masuk modul Recruitment di dashboard HR
+Step 4: HR proses via pipeline recruitment
+Step 5: Link tes tulis / pemberkasan dikirim via email ke kandidat
+Step 6: Kandidat kerjakan tes / upload dokumen via candidate portal
+        (same theme dengan company website, akses via token)
 ```
 
 ---
 
-## 4. SCOPE v1 (YANG DIBANGUN)
+## 8. Compliance & Regulasi
 
-### Sprint 0 — Project Skeleton & Infrastructure
-- Monorepo setup: `/backend` + `/frontend-hris` + `/frontend-web`
-- Docker Compose untuk local dev
-- PostgreSQL, Redis, MinIO, Soketi, Nginx, PHP-FPM
-- SSL Let's Encrypt, WireGuard VPN
-- GitHub Actions CI, Git flow & branch protection
-- AGENTS.md, CLAUDE.md, docs structure
-- Health check endpoint, UptimeRobot
-- Backup script otomatis (cron, daily, 30-hari rolling)
-
-### Sprint 1 — i18n System
-- Backend: `lang/id/` + `lang/en/`
-- Frontend: `next-i18next` namespace per modul
-- Language switcher, preferensi disimpan per user
-- Zero hardcoded string di seluruh UI
-
-### Sprint 2 — Master Data Engine
-- Department / Division / Unit CRUD + UI
-- Job Position, Job Level, Employee Type, Contract Type, Work Location
-- Reference data (Bank List, Education Level, Relationship Type, Document Type)
-- Seeder master data awal
-
-### Sprint 3 — Auth + User Management
-- Login, logout, force reset password pertama
-- Forgot password via email, Session timeout middleware
-- IP whitelist middleware (hanya jaringan kantor + VPN)
-- Login lockout (5 gagal → 15 menit), rate limiting
-- HR/Admin create user dan link ke employee
-
-### Sprint 4 — Dynamic RBAC
-- Roles & permissions sebagai master data (bisa edit dari UI)
-- Field-level permission untuk field sensitif
-- Default roles (System Admin, HR Manager, HR Staff, Dept Manager)
-- Frontend PermissionGate component
-
-### Sprint 5 — Audit Log + Archive + Settings + Compliance
-- spatie/laravel-activitylog
-- Archive system (soft delete via `archived_at`)
-- Sensitive field masking di log
-- Log export tracking, Incident log tabel
-- Retention notification system
-- Settings UI (SMTP, password policy, session, retention, dll)
-- Consent checkbox infrastructure (UU PDP Pasal 22)
-
-### Sprint 6 — Employee Data
-- Data karyawan lengkap (identitas, pendidikan, keluarga, kontak darurat, rekening bank)
-- Upload & preview dokumen karyawan
-- Foto profil karyawan (resize otomatis)
-- Approver assignment per karyawan
-
-### Sprint 7 — Recruitment Module + Website Integration
-- Manajemen lowongan (job posting)
-- Halaman karir dinamis di `saneng.co.id`
-- Form lamaran publik dengan rate limiting
-- Alur seleksi kandidat
-
-### Sprint 8 — Asset Management
-- Pencatatan dan assignment aset ke karyawan
+| Regulasi | Implementasi |
+|---|---|
+| UU PDP No. 27/2022 | Audit log wajib, enkripsi field sensitif, archive policy, notifikasi retensi, warning saat uninstall modul |
+| UU Ketenagakerjaan No. 13/2003 | Data model accommodate PKWT/PKWTT di modul Karyawan |
+| BPJS | Field data di profil karyawan, kalkulasi defer ke modul Payroll |
+| PPh 21 | Defer ke modul Payroll |
+| Wajib Lapor Ketenagakerjaan | Export data karyawan wajib tersedia |
 
 ---
 
-## 5. NON-GOALS (TIDAK DIBANGUN di v1)
-
-- **Payroll / Penggajian otomatis** — bukan scope v1
-- **Absensi / Fingerprint integration** — infrastructure adapter sudah disiapkan, modul menyusul
-- **Leave management (cuti online)** — modul tersendiri, menyusul setelah v1
-- **Self-service portal karyawan** — karyawan tidak login sendiri di v1
-- **Mobile app** — pure web responsive
-- **Multi-company / multi-tenant** — single-tenant (PT Saneng), tapi `company_id` sudah di semua tabel untuk future-proof
-- **Per-device session revocation** — logout semua device sekaligus sudah cukup
-- **Automatic data deletion** — hanya notifikasi; admin yang approve
-- **Data Subject Request modul** — ditangani manual oleh HR di luar sistem
-- **E2E / Cypress test** — menyusul setelah core stabil
-- **CMS untuk website static** — Home, About, Services, Contact hardcoded
-
----
-
-## 6. SUCCESS METRICS
+## 9. Success Metrics v1
 
 | Metrik | Target |
 |---|---|
-| Semua data karyawan (~700) tersimpan digital | Sprint 6 selesai |
-| Zero data karyawan bocor (audit log membuktikan) | Ongoing |
-| Rekrutmen end-to-end via sistem | Sprint 7 selesai |
-| Compliance UU PDP terdokumentasi | Sprint 5 selesai |
-| Health check 99%+ uptime | Sejak Sprint 0 |
-| Seluruh action sensitif terekam di audit log | Sprint 5 selesai |
+| Core platform + mandatory modules berjalan stabil | Phase Core selesai |
+| Minimal satu optional module berfungsi penuh (Recruitment) | Phase Module 1 selesai |
+| Company website + candidate portal terintegrasi | Modul Website selesai |
+| Semua aksi sensitif terekam di audit log | Ongoing sejak core |
+| Export data karyawan tersedia | Modul Karyawan selesai |
 
 ---
 
-## 7. TECHNICAL IDENTITY
+## 10. Technical Identity
 
 | Parameter | Keputusan |
 |---|---|
-| Domain HRIS | `hris.saneng.co.id` |
-| Domain Website | `saneng.co.id` |
+| Platform | Dictive-HR |
+| Model | Self-hosted, single instance multi-company |
+| Target pasar | Indonesia |
 | Backend | Laravel 11 (PHP) |
+| Frontend | Next.js 14 (App Router) |
 | Database | PostgreSQL |
 | Cache & Queue | Redis |
-| Auth | Laravel Sanctum (SPA token) |
-| WebSocket | Soketi (self-hosted) |
-| File Storage | MinIO (self-hosted, S3-compatible) |
-| Frontend HRIS | Next.js 14 + TypeScript + Tailwind + shadcn/ui |
-| Frontend Website | Next.js 14 (static + dynamic `/karir`) |
-| i18n | next-i18next, bilingual ID/EN |
-| Server | VPS Linux single-server |
-| Deployment | Nginx + PHP-FPM + Let's Encrypt |
-| VPN | WireGuard (self-hosted) |
-| Error Monitoring | Flare by Spatie |
-| Activity Log | spatie/laravel-activitylog |
-| Permission | spatie/laravel-permission + custom field-level |
-| CI | GitHub Actions |
-| Local Dev | Docker Compose |
-| Timezone | WIB (Asia/Jakarta) |
-| Target Karyawan | ~700 |
-| Maintainer | Solo developer (owner sistem) |
+| File Storage | MinIO (self-hosted) |
+| WebSocket | Soketi |
+| Auth | Laravel Sanctum |
+| Deployment | Docker Compose |
+| Bahasa | ID + EN (extensible) |
+| Maintainer | Solo developer (vendor) |
 
 ---
 
-## 8. RISIKO & MITIGASI AWAL
-
-| Risiko | Mitigasi |
-|---|---|
-| Data karyawan bocor | Enkripsi at-rest (NIK, gaji, rekening), IP whitelist, audit log, MinIO self-hosted |
-| Pelanggaran UU PDP | Retention enforcement, consent checkbox, incident log, field masking di audit log |
-| Sistem down | UptimeRobot, health check, daily backup, staging environment |
-| Solo developer bottleneck | AGENTS.md + docs lengkap → AI-assisted development disiplin, semua keputusan terdokumentasi |
-| Scope creep | Non-goals eksplisit, SPARC loop per sprint, task packet per task |
-| Silent bug merusak data | Approval workflow, archive-only (tidak ada hard delete), audit trail wajib |
-| Duplicate order / race condition | Idempotency key, database transaction, optimistic locking untuk approval |
-
----
-
-*Document ini adalah ringkasan eksekutif. Detail teknis ada di:*
-- *`01_PRD.md` — requirement lengkap per modul*
-- *`02_ARCHITECTURE.md` — system design dan data flow*
-- *`03_TECH_SPEC.md` — API contract, DB schema, error handling*
-- *`04_TASK_BREAKDOWN.md` — sprint plan dan task detail*
+*Document owner: Dictive-HR Vendor*
+*Perubahan scope harus didiskusikan dan dicatat di CHANGELOG.md*
+*Detail teknis ada di 02_ARCHITECTURE.md dan ALL_ADR.md*
