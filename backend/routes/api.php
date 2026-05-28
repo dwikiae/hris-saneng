@@ -29,6 +29,7 @@ use App\Http\Controllers\Api\V1\Recruitment\BlacklistController;
 use App\Http\Controllers\Api\V1\Recruitment\JobPostingController;
 use App\Http\Controllers\Api\V1\Recruitment\TestController;
 use App\Http\Controllers\Api\V1\Settings\SettingsController;
+use App\Http\Controllers\Api\V1\Setup\SetupController;
 use App\Http\Middleware\ForcePasswordReset;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,11 @@ Route::prefix('v1/public')->group(function () {
     Route::post('interview/{token}/confirm', [PublicInterviewController::class, 'confirm']);
     Route::get('pemberkasan/{token}', [PublicPemberkasanController::class, 'show']);
     Route::post('pemberkasan/{token}/upload', [PublicPemberkasanController::class, 'upload']);
+});
+
+Route::prefix('v1/setup')->group(function () {
+    Route::get('status', [SetupController::class, 'status']);
+    Route::post('complete', [SetupController::class, 'complete']);
 });
 
 Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(function () {
@@ -136,6 +142,8 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(functio
     });
 
     Route::get('permissions', [PermissionController::class, 'index']);
+    Route::get('settings/instance', [SettingsController::class, 'instanceIndex']);
+    Route::put('settings/instance', [SettingsController::class, 'instanceUpdate']);
     Route::get('settings', [SettingsController::class, 'index']);
     Route::put('settings', [SettingsController::class, 'update']);
     Route::get('audit', [AuditController::class, 'index']);

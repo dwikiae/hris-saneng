@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Repositories\Contracts\CompanyRepositoryInterface;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
+use App\Repositories\Contracts\InstanceSettingsRepositoryInterface;
 use App\Repositories\Contracts\Recruitment\ApplicantBlacklistRepositoryInterface;
 use App\Repositories\Contracts\Recruitment\ApplicantDocumentRepositoryInterface;
 use App\Repositories\Contracts\Recruitment\ApplicantNoteRepositoryInterface;
@@ -16,6 +17,7 @@ use App\Repositories\Contracts\Recruitment\TestRepositoryInterface;
 use App\Repositories\Contracts\SettingsRepositoryInterface;
 use App\Repositories\Eloquent\CompanyRepository;
 use App\Repositories\Eloquent\EmployeeRepository;
+use App\Repositories\Eloquent\InstanceSettingsRepository;
 use App\Repositories\Eloquent\Recruitment\ApplicantBlacklistRepository;
 use App\Repositories\Eloquent\Recruitment\ApplicantDocumentRepository;
 use App\Repositories\Eloquent\Recruitment\ApplicantNoteRepository;
@@ -37,6 +39,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(EmployeeRepositoryInterface::class, EmployeeRepository::class);
         $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
+        $this->app->bind(InstanceSettingsRepositoryInterface::class, InstanceSettingsRepository::class);
         $this->app->bind(SettingsRepositoryInterface::class, SettingsRepository::class);
         $this->app->bind(JobPostingRepositoryInterface::class, JobPostingRepository::class);
         $this->app->bind(ApplicantRepositoryInterface::class, ApplicantRepository::class);

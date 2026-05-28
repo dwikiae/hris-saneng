@@ -3,8 +3,10 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\CompanySetting;
+use App\Models\User;
 use App\Repositories\Contracts\SettingsRepositoryInterface;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 
 class SettingsRepository implements SettingsRepositoryInterface
@@ -30,13 +32,22 @@ class SettingsRepository implements SettingsRepositoryInterface
         'smtp_password' => null,
         'smtp_from_address' => null,
         'smtp_from_name' => null,
+        'storage_disk' => 'documents',
+        'storage_max_upload_mb' => 10,
     ];
 
     public function __construct(private readonly CompanySetting $model) {}
 
     public function get(string $key): mixed
     {
+        return $this->getForCompany($key, $this->currentCompanyId());
+    }
+
+    public function getForCompany(string $key, int $companyId): mixed
+    {
         $setting = $this->model->newQuery()
+            ->withoutGlobalScope('company')
+            ->where('company_id', $companyId)
             ->where('key', $key)
             ->first();
 
@@ -52,7 +63,17 @@ class SettingsRepository implements SettingsRepositoryInterface
      */
     public function getAll(): Collection
     {
+        return $this->getAllForCompany($this->currentCompanyId());
+    }
+
+    /**
+     * @return Collection<string, mixed>
+     */
+    public function getAllForCompany(int $companyId): Collection
+    {
         $stored = $this->model->newQuery()
+            ->withoutGlobalScope('company')
+            ->where('company_id', $companyId)
             ->whereIn('key', array_keys(self::DEFAULTS))
             ->pluck('value', 'key');
 
@@ -64,13 +85,18 @@ class SettingsRepository implements SettingsRepositoryInterface
 
     public function set(string $key, mixed $value): void
     {
+        $this->setForCompany($key, $value, $this->currentCompanyId());
+    }
+
+    public function setForCompany(string $key, mixed $value, int $companyId): void
+    {
         if (! array_key_exists($key, self::DEFAULTS)) {
             return;
         }
 
-        $this->model->newQuery()->updateOrCreate(
+        $this->model->newQuery()->withoutGlobalScope('company')->updateOrCreate(
             [
-                'company_id' => (int) config('company.default_id', 1),
+                'company_id' => $companyId,
                 'key' => $key,
             ],
             ['value' => $this->serializeValue($key, $value)]
@@ -82,8 +108,16 @@ class SettingsRepository implements SettingsRepositoryInterface
      */
     public function setMany(array $data): void
     {
+        $this->setManyForCompany($data, $this->currentCompanyId());
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public function setManyForCompany(array $data, int $companyId): void
+    {
         foreach ($data as $key => $value) {
-            $this->set((string) $key, $value);
+            $this->setForCompany((string) $key, $value, $companyId);
         }
     }
 
@@ -119,5 +153,16 @@ class SettingsRepository implements SettingsRepositoryInterface
         }
 
         return $serialized;
+    }
+
+    private function currentCompanyId(): int
+    {
+        $user = Auth::user();
+
+        if ($user instanceof User && $user->company_id !== null) {
+            return (int) $user->company_id;
+        }
+
+        return (int) config('company.default_id', 1);
     }
 }

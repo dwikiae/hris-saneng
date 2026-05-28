@@ -34,6 +34,8 @@ class UpdateSettingsRequest extends FormRequest
             'smtp_password' => ['sometimes', 'nullable', 'string', 'max:255'],
             'smtp_from_address' => ['sometimes', 'nullable', 'email', 'max:255'],
             'smtp_from_name' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'storage_disk' => ['sometimes', 'string', 'max:50'],
+            'storage_max_upload_mb' => ['sometimes', 'integer', 'min:1', 'max:100'],
         ];
     }
 }

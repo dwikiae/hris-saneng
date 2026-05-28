@@ -40,6 +40,12 @@ Semua perubahan penting project dicatat di file ini.
 - Menambahkan deklarasi dependency optional module: Recruitment dan Aset bergantung pada Karyawan, Website tanpa dependency.
 - Menambahkan test manifest untuk memastikan optional module valid dan migration path tetap di dalam folder module.
 
+## Milestone 10
+
+- Menambahkan baseline instance settings, setup status, dan first-time setup backend tanpa integrasi SMTP/MinIO nyata.
+- Menyelaraskan company settings agar tetap company-scoped dan menambahkan placeholder storage/password/lockout.
+- Menambahkan test setup guard dan settings isolation untuk boundary instance versus company.
+
 ## Sprint 7
 
 - Menambahkan migration, model Eloquent, enum, company settings, dan smoke test dasar untuk fondasi modul Recruitment.
