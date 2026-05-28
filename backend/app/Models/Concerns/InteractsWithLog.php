@@ -6,6 +6,31 @@ use Spatie\Activitylog\LogOptions;
 
 trait InteractsWithLog
 {
+    /**
+     * @return array<int, string>
+     */
+    public static function sensitiveAuditFields(): array
+    {
+        return [
+            'password',
+            'password_confirmation',
+            'remember_token',
+            'token',
+            'api_token',
+            'access_token',
+            'refresh_token',
+            'smtp_password',
+            'secret',
+            'nik',
+            'npwp',
+            'bank_account_number',
+            'account_number',
+            'salary',
+            'allowances',
+            'deductions',
+        ];
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         $table = $this->getTable();
@@ -32,13 +57,6 @@ trait InteractsWithLog
      */
     protected function sensitiveActivityLogAttributes(): array
     {
-        return [
-            'password',
-            'remember_token',
-            'nik',
-            'npwp',
-            'bank_account_number',
-            'salary',
-        ];
+        return self::sensitiveAuditFields();
     }
 }

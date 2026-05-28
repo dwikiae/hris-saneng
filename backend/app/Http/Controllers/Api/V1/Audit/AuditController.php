@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Audit;
 
 use App\Http\Controllers\Controller;
+use App\Models\Concerns\InteractsWithLog;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -10,16 +11,15 @@ use Spatie\Activitylog\Models\Activity;
 
 class AuditController extends Controller
 {
+    private const REDACTED = '[REDACTED]';
+
     /**
      * @var array<int, string>
      */
-    private array $sensitiveFields = [
+    private array $permissionedSensitiveFields = [
         'salary',
         'allowances',
         'deductions',
-        'nik',
-        'npwp',
-        'bank_account_number',
     ];
 
     public function index(Request $request): JsonResponse
@@ -44,10 +44,8 @@ class AuditController extends Controller
             $query->whereDate('created_at', '<=', $request->date('date_to'));
         }
 
-        $canViewSensitive = Gate::allows('employee.view_salary');
-
         $records = $query->paginate(20)->through(
-            fn (Activity $activity): array => $this->transformActivity($activity, $canViewSensitive)
+            fn (Activity $activity): array => $this->transformActivity($activity)
         );
 
         return response()->json([
@@ -60,7 +58,7 @@ class AuditController extends Controller
     /**
      * @return array<string, mixed>
      */
-    private function transformActivity(Activity $activity, bool $canViewSensitive): array
+    private function transformActivity(Activity $activity): array
     {
         return [
             'id' => $activity->id,
@@ -75,7 +73,7 @@ class AuditController extends Controller
             ],
             'event' => $activity->event,
             'description' => $activity->description,
-            'changes' => $this->redactChanges($activity->properties?->toArray() ?? [], $canViewSensitive),
+            'changes' => $this->redactChanges($activity->properties?->toArray() ?? []),
             'ip_address' => $activity->getExtraProperty('ip_address'),
         ];
     }
@@ -84,24 +82,35 @@ class AuditController extends Controller
      * @param  array<string, mixed>  $changes
      * @return array<string, mixed>
      */
-    private function redactChanges(array $changes, bool $canViewSensitive): array
+    private function redactChanges(array $changes): array
     {
-        if ($canViewSensitive) {
-            return $changes;
-        }
-
         foreach (['attributes', 'old'] as $bucket) {
             if (! is_array($changes[$bucket] ?? null)) {
                 continue;
             }
 
-            foreach ($this->sensitiveFields as $field) {
-                if (array_key_exists($field, $changes[$bucket])) {
-                    $changes[$bucket][$field] = '[REDACTED]';
+            foreach (InteractsWithLog::sensitiveAuditFields() as $field) {
+                if (! array_key_exists($field, $changes[$bucket])) {
+                    continue;
                 }
+
+                if ($this->canViewSensitiveField($field)) {
+                    continue;
+                }
+
+                $changes[$bucket][$field] = self::REDACTED;
             }
         }
 
         return $changes;
+    }
+
+    private function canViewSensitiveField(string $field): bool
+    {
+        if (! in_array($field, $this->permissionedSensitiveFields, true)) {
+            return false;
+        }
+
+        return Gate::allows('employee.view_salary');
     }
 }

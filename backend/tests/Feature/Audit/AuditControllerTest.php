@@ -67,11 +67,15 @@ function createAuditActivity(User $causer): Activity
                 'name' => 'Updated User',
                 'salary' => 10000000,
                 'nik' => '1234567890',
+                'bank_account_number' => '123456789',
+                'remember_token' => 'plain-token',
             ],
             'old' => [
                 'name' => 'Old User',
                 'salary' => 9000000,
                 'nik' => '0987654321',
+                'bank_account_number' => '987654321',
+                'remember_token' => 'old-token',
             ],
             'ip_address' => '10.0.0.1',
         ],
@@ -109,11 +113,13 @@ it('returns paginated audit logs with redacted sensitive fields', function () {
         ->assertJsonPath('data.data.0.subject.type', User::class)
         ->assertJsonPath('data.data.0.changes.attributes.name', 'Updated User')
         ->assertJsonPath('data.data.0.changes.attributes.salary', '[REDACTED]')
+        ->assertJsonPath('data.data.0.changes.attributes.bank_account_number', '[REDACTED]')
+        ->assertJsonPath('data.data.0.changes.attributes.remember_token', '[REDACTED]')
         ->assertJsonPath('data.data.0.changes.old.nik', '[REDACTED]')
         ->assertJsonPath('data.data.0.ip_address', '10.0.0.1');
 });
 
-it('does not redact sensitive fields for users with salary permission', function () {
+it('only reveals permissioned compensation fields for users with salary permission', function () {
     grantAuditPermission($this->user, withSensitive: true);
     createAuditActivity($this->user);
 
@@ -121,7 +127,9 @@ it('does not redact sensitive fields for users with salary permission', function
         ->getJson('/api/v1/audit?subject_type='.urlencode(User::class))
         ->assertOk()
         ->assertJsonPath('data.data.0.changes.attributes.salary', 10000000)
-        ->assertJsonPath('data.data.0.changes.old.nik', '0987654321');
+        ->assertJsonPath('data.data.0.changes.old.nik', '[REDACTED]')
+        ->assertJsonPath('data.data.0.changes.old.bank_account_number', '[REDACTED]')
+        ->assertJsonPath('data.data.0.changes.old.remember_token', '[REDACTED]');
 });
 
 it('filters audit logs by subject type causer and date range', function () {
