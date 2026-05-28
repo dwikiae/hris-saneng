@@ -34,6 +34,12 @@ Semua perubahan penting project dicatat di file ini.
 - Menambahkan dukungan Instance Admin `company_id` nullable, role Manager/Staff baseline, dan permission company/user.
 - Menambahkan test company management, company-scoped user isolation, dan proteksi role lintas company.
 
+## Milestone 9
+
+- Menambahkan skeleton backend optional module Recruitment, Aset, dan Website beserta manifest `module.json`.
+- Menambahkan deklarasi dependency optional module: Recruitment dan Aset bergantung pada Karyawan, Website tanpa dependency.
+- Menambahkan test manifest untuk memastikan optional module valid dan migration path tetap di dalam folder module.
+
 ## Sprint 7
 
 - Menambahkan migration, model Eloquent, enum, company settings, dan smoke test dasar untuk fondasi modul Recruitment.

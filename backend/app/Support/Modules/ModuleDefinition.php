@@ -8,6 +8,7 @@ final readonly class ModuleDefinition
 {
     /**
      * @param  array<int, string>  $translations
+     * @param  array<int, string>  $dependencies
      */
     private function __construct(
         public string $code,
@@ -21,6 +22,7 @@ final readonly class ModuleDefinition
         public bool $toggleable,
         public string $migrationsPath,
         public array $translations,
+        public array $dependencies,
         public string $basePath,
     ) {}
 
@@ -47,6 +49,7 @@ final readonly class ModuleDefinition
             toggleable: self::boolValue($manifest, 'toggleable'),
             migrationsPath: self::stringValue($manifest, 'migrations_path'),
             translations: self::translations($manifest),
+            dependencies: self::dependencies($manifest),
             basePath: $basePath,
         );
 
@@ -133,5 +136,28 @@ final readonly class ModuleDefinition
         }
 
         return array_values($manifest['translations']);
+    }
+
+    /**
+     * @param  array<string, mixed>  $manifest
+     * @return array<int, string>
+     */
+    private static function dependencies(array $manifest): array
+    {
+        if (! array_key_exists('dependencies', $manifest)) {
+            return [];
+        }
+
+        if (! is_array($manifest['dependencies'])) {
+            throw new InvalidArgumentException('module.manifest_invalid_dependencies');
+        }
+
+        foreach ($manifest['dependencies'] as $dependency) {
+            if (! is_string($dependency) || $dependency === '') {
+                throw new InvalidArgumentException('module.manifest_invalid_dependencies');
+            }
+        }
+
+        return array_values($manifest['dependencies']);
     }
 }

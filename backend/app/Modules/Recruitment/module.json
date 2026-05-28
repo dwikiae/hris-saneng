@@ -1,0 +1,19 @@
+{
+    "code": "recruitment",
+    "name": "Recruitment",
+    "description": "Optional recruitment module skeleton.",
+    "version": "1.0.0",
+    "namespace": "App\\Modules\\Recruitment",
+    "is_mandatory": false,
+    "installed": false,
+    "uninstallable": true,
+    "toggleable": true,
+    "migrations_path": "Database/Migrations",
+    "translations": [
+        "id",
+        "en"
+    ],
+    "dependencies": [
+        "karyawan"
+    ]
+}

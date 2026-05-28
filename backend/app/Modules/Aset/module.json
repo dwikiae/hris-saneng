@@ -1,0 +1,19 @@
+{
+    "code": "aset",
+    "name": "Aset",
+    "description": "Optional asset module skeleton.",
+    "version": "1.0.0",
+    "namespace": "App\\Modules\\Aset",
+    "is_mandatory": false,
+    "installed": false,
+    "uninstallable": true,
+    "toggleable": true,
+    "migrations_path": "Database/Migrations",
+    "translations": [
+        "id",
+        "en"
+    ],
+    "dependencies": [
+        "karyawan"
+    ]
+}
