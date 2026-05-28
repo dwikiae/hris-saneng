@@ -22,6 +22,12 @@ Semua perubahan penting project dicatat di file ini.
 - Menambahkan guardrail test agar production backend code tidak memakai hard delete.
 - Menambahkan test konvensi activity log agar field sensitif tidak disimpan ke audit properties.
 
+## Milestone 7
+
+- Menambahkan skeleton backend mandatory module Karyawan dan Kalender beserta manifest `module.json`.
+- Menambahkan registry ringan untuk validasi manifest module wajib tanpa install/uninstall execution.
+- Menambahkan test manifest untuk memastikan module wajib tidak bisa di-uninstall atau di-toggle.
+
 ## Sprint 7
 
 - Menambahkan migration, model Eloquent, enum, company settings, dan smoke test dasar untuk fondasi modul Recruitment.

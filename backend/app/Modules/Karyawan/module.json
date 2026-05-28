@@ -1,0 +1,16 @@
+{
+    "code": "karyawan",
+    "name": "Karyawan",
+    "description": "Mandatory employee module skeleton.",
+    "version": "1.0.0",
+    "namespace": "App\\Modules\\Karyawan",
+    "is_mandatory": true,
+    "installed": true,
+    "uninstallable": false,
+    "toggleable": false,
+    "migrations_path": "Database/Migrations",
+    "translations": [
+        "id",
+        "en"
+    ]
+}

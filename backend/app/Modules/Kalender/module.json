@@ -1,0 +1,16 @@
+{
+    "code": "kalender",
+    "name": "Kalender",
+    "description": "Mandatory calendar module skeleton.",
+    "version": "1.0.0",
+    "namespace": "App\\Modules\\Kalender",
+    "is_mandatory": true,
+    "installed": true,
+    "uninstallable": false,
+    "toggleable": false,
+    "migrations_path": "Database/Migrations",
+    "translations": [
+        "id",
+        "en"
+    ]
+}
