@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Domain\Storage\StorageAdapterInterface;
+use App\Infrastructure\Storage\MinIOStorageAdapter;
 use App\Repositories\Contracts\CompanyRepositoryInterface;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
 use App\Repositories\Contracts\InstanceSettingsRepositoryInterface;
@@ -40,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(EmployeeRepositoryInterface::class, EmployeeRepository::class);
+        $this->app->bind(StorageAdapterInterface::class, MinIOStorageAdapter::class);
         $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
         $this->app->bind(InstanceSettingsRepositoryInterface::class, InstanceSettingsRepository::class);
         $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);

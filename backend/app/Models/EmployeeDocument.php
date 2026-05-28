@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Application\Storage\FileStorageService;
 use App\Contracts\Archivable;
 use App\Models\Concerns\HasArchive;
 use App\Models\Concerns\HasCompany;
@@ -10,8 +11,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Filesystem\FilesystemAdapter;
-use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class EmployeeDocument extends Model implements Archivable
@@ -61,17 +60,12 @@ class EmployeeDocument extends Model implements Archivable
     private function temporaryDocumentUrl(): string
     {
         $path = $this->getAttribute('path');
-        $disk = Storage::disk('documents');
 
-        if (! is_string($path) || ! $disk instanceof FilesystemAdapter) {
+        if (! is_string($path)) {
             return '';
         }
 
-        if ($disk->providesTemporaryUrls()) {
-            return $disk->temporaryUrl($path, now()->addMinutes(15));
-        }
-
-        return $disk->url($path);
+        return app(FileStorageService::class)->signedPrivateUrl($path);
     }
 
     /**

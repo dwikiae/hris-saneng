@@ -2,28 +2,22 @@
 
 namespace App\Services\Employee;
 
+use App\Application\Storage\FileStorageService;
+use App\Domain\Storage\UploadProfile;
 use App\Models\EmployeePhoto;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
-use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 use InvalidArgumentException;
 
 class EmployeePhotoService
 {
-    /**
-     * @var array<string, string>
-     */
-    private array $extensionsByMimeType = [
-        'image/jpeg' => 'jpg',
-        'image/png' => 'png',
-    ];
-
-    public function __construct(private readonly EmployeeRepositoryInterface $employees) {}
+    public function __construct(
+        private readonly EmployeeRepositoryInterface $employees,
+        private readonly FileStorageService $storage
+    ) {}
 
     /**
      * @return array<string, string|null>
@@ -52,24 +46,21 @@ class EmployeePhotoService
 
         $employee = $this->employees->show($employeeId);
         $mimeType = (string) $file->getMimeType();
-        $extension = $this->extensionForMimeType($mimeType);
-        $basename = Str::uuid()->toString();
-        $directory = "employees/{$employee->getKey()}/photo";
-        $paths = [
-            'original' => "{$directory}/{$basename}.{$extension}",
-            'medium' => "{$directory}/{$basename}_medium.{$extension}",
-            'thumbnail' => "{$directory}/{$basename}_thumbnail.{$extension}",
-        ];
+        $storedFile = $this->storage->storePublicAsset(
+            $file,
+            $this->storage->employeePhotoDirectory((int) $employee->getKey()),
+            UploadProfile::EmployeePhoto
+        );
+        $paths = $this->variantPaths($storedFile->path);
 
-        Storage::disk('public')->put($paths['original'], $file->getContent());
         $this->storeResized($file, $paths['medium'], 800, $mimeType);
         $this->storeResized($file, $paths['thumbnail'], 150, $mimeType);
 
         return $this->employees->createPhoto($employee, [
-            'storage_disk' => 'public',
-            'path' => $paths['original'],
-            'mime_type' => $mimeType,
-            'size_bytes' => $file->getSize() ?: 0,
+            'storage_disk' => $storedFile->disk,
+            'path' => $storedFile->path,
+            'mime_type' => $storedFile->mimeType,
+            'size_bytes' => $storedFile->sizeBytes,
             'uploaded_by' => Auth::id(),
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
@@ -81,22 +72,12 @@ class EmployeePhotoService
      */
     public function urlsForPath(string $path): array
     {
-        $disk = Storage::disk('public');
-
-        if (! $disk instanceof FilesystemAdapter) {
-            return [
-                'original' => null,
-                'medium' => null,
-                'thumbnail' => null,
-            ];
-        }
-
         $variantPaths = $this->variantPaths($path);
 
         return [
-            'original' => $disk->exists($variantPaths['original']) ? $disk->url($variantPaths['original']) : null,
-            'medium' => $disk->exists($variantPaths['medium']) ? $disk->url($variantPaths['medium']) : null,
-            'thumbnail' => $disk->exists($variantPaths['thumbnail']) ? $disk->url($variantPaths['thumbnail']) : null,
+            'original' => $this->publicUrlIfExists($variantPaths['original']),
+            'medium' => $this->publicUrlIfExists($variantPaths['medium']),
+            'thumbnail' => $this->publicUrlIfExists($variantPaths['thumbnail']),
         ];
     }
 
@@ -108,7 +89,7 @@ class EmployeePhotoService
             ->coverDown($size, $size)
             ->encodeByMediaType($mimeType, quality: 85);
 
-        Storage::disk('public')->put($path, (string) $encoded);
+        $this->storage->putPublicContents($path, (string) $encoded);
     }
 
     /**
@@ -126,12 +107,12 @@ class EmployeePhotoService
         ];
     }
 
-    private function extensionForMimeType(string $mimeType): string
+    private function publicUrlIfExists(string $path): ?string
     {
-        if (! array_key_exists($mimeType, $this->extensionsByMimeType)) {
-            throw new InvalidArgumentException('employee.photo_invalid_mime');
+        if (! $this->storage->publicExists($path)) {
+            return null;
         }
 
-        return $this->extensionsByMimeType[$mimeType];
+        return $this->storage->publicUrl($path);
     }
 }

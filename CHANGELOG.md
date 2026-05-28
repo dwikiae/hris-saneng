@@ -52,6 +52,12 @@ Semua perubahan penting project dicatat di file ini.
 - Menetapkan retry/backoff notification email `[30, 60, 120]` dengan failed handler yang traceable.
 - Menambahkan permission dan i18n notification serta test baseline queue/in-app notification.
 
+## Milestone 12
+
+- Menambahkan baseline storage abstraction, MinIO/filesystem adapter boundary, dan path convention file.
+- Menyelaraskan upload dokumen/foto existing agar melalui storage service tanpa menambah fitur bisnis baru.
+- Menambahkan validasi file terpusat, signed URL private, public URL asset, dan test unit storage.
+
 ## Sprint 7
 
 - Menambahkan migration, model Eloquent, enum, company settings, dan smoke test dasar untuk fondasi modul Recruitment.
