@@ -46,6 +46,12 @@ Semua perubahan penting project dicatat di file ini.
 - Menyelaraskan company settings agar tetap company-scoped dan menambahkan placeholder storage/password/lockout.
 - Menambahkan test setup guard dan settings isolation untuk boundary instance versus company.
 
+## Milestone 11
+
+- Menambahkan baseline backend in-app notification, queued email notification job, dan API notifikasi.
+- Menetapkan retry/backoff notification email `[30, 60, 120]` dengan failed handler yang traceable.
+- Menambahkan permission dan i18n notification serta test baseline queue/in-app notification.
+
 ## Sprint 7
 
 - Menambahkan migration, model Eloquent, enum, company settings, dan smoke test dasar untuk fondasi modul Recruitment.

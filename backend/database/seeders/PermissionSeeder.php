@@ -37,6 +37,8 @@ class PermissionSeeder extends Seeder
         ['code' => 'user.update', 'name' => 'Update User', 'description' => 'Update company users'],
         ['code' => 'user.archive', 'name' => 'Archive User', 'description' => 'Archive company users'],
         ['code' => 'user.assign_role', 'name' => 'Assign User Role', 'description' => 'Assign roles to company users'],
+        ['code' => 'notification.view', 'name' => 'View Notification', 'description' => 'View in-app notifications'],
+        ['code' => 'notification.update', 'name' => 'Update Notification', 'description' => 'Mark notifications as read'],
     ];
 
     public function run(): void

@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\V1\MasterData\EmploymentTypeController;
 use App\Http\Controllers\Api\V1\MasterData\MaritalStatusController;
 use App\Http\Controllers\Api\V1\MasterData\PositionController;
 use App\Http\Controllers\Api\V1\MasterData\ReligionController;
+use App\Http\Controllers\Api\V1\Notification\NotificationController;
 use App\Http\Controllers\Api\V1\Public\PublicApplicationController;
 use App\Http\Controllers\Api\V1\Public\PublicInterviewController;
 use App\Http\Controllers\Api\V1\Public\PublicJobController;
@@ -149,6 +150,12 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(functio
     Route::get('audit', [AuditController::class, 'index']);
     Route::get('archive', [ArchiveController::class, 'index']);
     Route::post('archive/{model}/{id}/restore', [ArchiveController::class, 'restore']);
+
+    Route::prefix('notifications')->group(function () {
+        Route::get('/', [NotificationController::class, 'index']);
+        Route::post('read-all', [NotificationController::class, 'markAllRead']);
+        Route::post('{notification}/read', [NotificationController::class, 'markRead']);
+    });
 
     Route::prefix('master-data')->group(function () {
 
