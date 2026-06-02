@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\Audit\AuditController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\UserController;
 use App\Http\Controllers\Api\V1\Company\CompanyController;
+use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\Employee\EmployeeController;
 use App\Http\Controllers\Api\V1\Employee\EmployeeDocumentController;
 use App\Http\Controllers\Api\V1\Employee\EmployeePhotoController;
@@ -71,6 +72,8 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(functio
     Route::put('settings/instance', [SettingsController::class, 'instanceUpdate']);
 
     Route::middleware('company.resolve')->group(function () {
+        Route::get('dashboard/stats', [DashboardController::class, 'stats']);
+
         Route::prefix('job-postings')->group(function () {
             Route::get('/', [JobPostingController::class, 'index']);
             Route::post('/', [JobPostingController::class, 'store']);

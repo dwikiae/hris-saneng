@@ -2,6 +2,12 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-02 — Tahap 1 Step 3
+
+- Menambahkan endpoint backend dashboard stats agar halaman `/dashboard` bisa membaca data nyata dari Laravel.
+- Menjaga data dashboard tetap company-scoped, termasuk employee count, pending approvals, dan recent activity berbasis employee activity.
+- Mencatat bahwa attendance dan leave belum punya tabel sendiri, sehingga angka hadir, tidak hadir, dan cuti masih 0 sampai sumber datanya dibuat.
+
 ## 2026-06-02 — Tahap 1 Step 2
 
 - Membuat halaman `/dashboard` memakai data contract API, bukan data contoh permanen.
