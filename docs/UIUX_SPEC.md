@@ -343,15 +343,20 @@ Mengacu referensi Decathlon HRIS untuk halaman detail karyawan:
 | Responsive penuh (bukan desktop-only) | HR Staff dan HR Manager perlu akses dari HP |
 | Konfirmasi dialog untuk aksi destruktif | Mencegah kesalahan di data karyawan yang kritis |
 | 4 state konsisten (loading/empty/error/populated) | Konsistensi UX lintas modul |
+| Dark mode tidak didukung | Platform light mode only agar scope retrofit tetap fokus dan konsisten |
+| Onboarding wizard first login | Administrator perlu setup nama platform, upload logo, dan buat role pertama |
+| Multi-bahasa ID/EN | Language switcher tersedia di topbar atau Settings |
+| Notifikasi in-app real-time | Menggunakan WebSocket via Soketi yang sudah tersedia di docker-compose |
+| Company branding | Setiap perusahaan bisa upload logo sendiri |
 
 ---
 
-## 10. Yang Belum Diputuskan (Perlu Diskusi Sebelum Implementasi)
+## 10. Keputusan Tambahan (Settled 2 Juni 2026)
 
-| Item | Catatan |
+| Item | Keputusan |
 |---|---|
-| Dark mode | Belum diputuskan — apakah platform mendukung dark mode toggle? |
-| Onboarding flow | Apa yang dilihat Administrator saat pertama kali login ke platform baru? |
-| Notifikasi in-app | Apakah ada notifikasi real-time (WebSocket) atau hanya polling? |
-| Multi-bahasa | Sistem sudah punya i18n (en/id) — apakah UI perlu language switcher? |
-| Company branding | Apakah tiap perusahaan bisa upload logo mereka sendiri di platform? |
+| Dark mode | Tidak didukung — light mode only |
+| Onboarding flow | Wizard saat pertama login: setup nama platform → upload logo → buat role pertama |
+| Multi-bahasa | Ya — language switcher tersedia di topbar atau Settings (ID/EN) |
+| Notifikasi in-app | Real-time via WebSocket menggunakan Soketi (sudah ada di docker-compose) |
+| Company branding | Ya — setiap perusahaan bisa upload logo mereka sendiri |

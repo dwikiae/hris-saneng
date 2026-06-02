@@ -2,6 +2,12 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-02 — Keputusan Tambahan UI/UX
+
+- Menetapkan dark mode tidak masuk scope sehingga platform berjalan light mode only.
+- Menetapkan onboarding first login sebagai wizard untuk nama platform, logo, dan role pertama.
+- Menetapkan language switcher ID/EN, notifikasi real-time via Soketi, dan company branding per company sebagai keputusan final UI/UX.
+
 ## 2026-06-02 — Tahap 1 Step 1
 
 - Menyiapkan foundation frontend unified agar `/frontend` mulai punya design system yang konsisten dengan UIUX_SPEC.
