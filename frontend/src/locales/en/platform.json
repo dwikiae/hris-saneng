@@ -6,9 +6,30 @@
   "nav": {
     "dashboard": "Dashboard",
     "employees": "Employees",
+    "calendar": "Calendar",
     "recruitment": "Recruitment",
+    "assets": "Assets",
+    "website": "Website",
     "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Logout",
     "candidatePortal": "Candidate portal"
+  },
+  "actions": {
+    "openNavigation": "Open navigation",
+    "closeNavigation": "Close navigation"
+  },
+  "navigation": {
+    "title": "Navigation",
+    "description": "Platform dashboard navigation"
+  },
+  "topbar": {
+    "searchPlaceholder": "Search employees, menus, or features...",
+    "notifications": "Notifications"
+  },
+  "account": {
+    "name": "Dictive Admin",
+    "initials": "DA"
   },
   "dashboard": {
     "title": "Platform dashboard",
@@ -19,7 +40,18 @@
       "documents": { "label": "Documents", "value": "16", "helper": "Waiting for review" },
       "settings": { "label": "Companies", "value": "3", "helper": "Managed in this instance" }
     },
-    "activityTitle": "Recent activity"
+    "activityTitle": "Recent activity",
+    "activityColumns": {
+      "area": "Area",
+      "summary": "Summary"
+    },
+    "status": {
+      "ready": "Ready"
+    },
+    "empty": {
+      "title": "No activity yet",
+      "description": "Platform activity will appear after operational data is available."
+    }
   },
   "employees": {
     "title": "Employees",
@@ -35,6 +67,31 @@
     "title": "Settings",
     "description": "Surface for company and instance settings.",
     "body": "Settings stay separated between company-scoped and instance-level boundaries."
+  },
+  "calendar": {
+    "title": "Calendar",
+    "description": "Surface for the mandatory calendar module.",
+    "body": "Work calendars, holidays, and operational schedules will be managed from this page."
+  },
+  "assets": {
+    "title": "Assets",
+    "description": "Surface for the optional assets module.",
+    "body": "Company asset data will be available after the Assets module is enabled."
+  },
+  "website": {
+    "title": "Website",
+    "description": "Surface for the optional company website module.",
+    "body": "Public company website content will be managed from this page."
+  },
+  "profile": {
+    "title": "Profile",
+    "description": "Surface for the platform user account.",
+    "body": "User profile and account preferences will be available in a later step."
+  },
+  "logout": {
+    "title": "Logout",
+    "description": "Surface for the platform user session.",
+    "body": "The logout flow will connect to frontend authentication once auth is fully active."
   },
   "portal": {
     "title": "Candidate portal",

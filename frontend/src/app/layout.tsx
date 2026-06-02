@@ -1,6 +1,14 @@
 import type { ReactNode } from "react";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import { LocaleProvider } from "@/i18n/LocaleProvider";
+import { AppProviders } from "@/app/providers";
+import { cn } from "@/lib/utils";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap"
+});
 
 interface RootLayoutProps {
   children: ReactNode;
@@ -9,8 +17,8 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="id">
-      <body>
-        <LocaleProvider>{children}</LocaleProvider>
+      <body className={cn(inter.variable, "font-sans")}>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );

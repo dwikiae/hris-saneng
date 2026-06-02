@@ -5,6 +5,9 @@
     "body": "Gunakan kanal resmi company untuk pertanyaan HR, rekrutmen, atau akses kandidat.",
     "email": "Email",
     "phone": "Telepon",
-    "address": "Alamat"
+    "address": "Alamat",
+    "emailValue": "Belum dikonfigurasi",
+    "phoneValue": "Belum dikonfigurasi",
+    "addressValue": "Belum dikonfigurasi"
   }
 }

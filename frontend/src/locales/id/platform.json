@@ -6,9 +6,30 @@
   "nav": {
     "dashboard": "Dashboard",
     "employees": "Karyawan",
+    "calendar": "Kalender",
     "recruitment": "Recruitment",
+    "assets": "Aset",
+    "website": "Website",
     "settings": "Settings",
+    "profile": "Profil",
+    "logout": "Keluar",
     "candidatePortal": "Portal kandidat"
+  },
+  "actions": {
+    "openNavigation": "Buka navigasi",
+    "closeNavigation": "Tutup navigasi"
+  },
+  "navigation": {
+    "title": "Navigasi",
+    "description": "Navigasi dashboard platform"
+  },
+  "topbar": {
+    "searchPlaceholder": "Cari karyawan, menu, atau fitur...",
+    "notifications": "Notifikasi"
+  },
+  "account": {
+    "name": "Admin Dictive",
+    "initials": "AD"
   },
   "dashboard": {
     "title": "Dashboard platform",
@@ -19,7 +40,18 @@
       "documents": { "label": "Dokumen", "value": "16", "helper": "Menunggu review" },
       "settings": { "label": "Company", "value": "3", "helper": "Terkelola dalam instance" }
     },
-    "activityTitle": "Aktivitas terbaru"
+    "activityTitle": "Aktivitas terbaru",
+    "activityColumns": {
+      "area": "Area",
+      "summary": "Ringkasan"
+    },
+    "status": {
+      "ready": "Siap"
+    },
+    "empty": {
+      "title": "Belum ada aktivitas",
+      "description": "Aktivitas platform akan muncul setelah data operasional tersedia."
+    }
   },
   "employees": {
     "title": "Karyawan",
@@ -35,6 +67,31 @@
     "title": "Settings",
     "description": "Surface untuk pengaturan company dan instance.",
     "body": "Pengaturan akan tetap dipisah antara company-scoped dan instance-level."
+  },
+  "calendar": {
+    "title": "Kalender",
+    "description": "Surface untuk modul kalender mandatory.",
+    "body": "Kalender kerja, hari libur, dan jadwal operasional akan dikelola dari halaman ini."
+  },
+  "assets": {
+    "title": "Aset",
+    "description": "Surface untuk optional module aset.",
+    "body": "Data aset company akan tersedia setelah modul Aset diaktifkan."
+  },
+  "website": {
+    "title": "Website",
+    "description": "Surface untuk optional module website company.",
+    "body": "Konten website publik company akan dikelola dari halaman ini."
+  },
+  "profile": {
+    "title": "Profil",
+    "description": "Surface akun pengguna platform.",
+    "body": "Profil pengguna dan preferensi akun akan tersedia pada tahap berikutnya."
+  },
+  "logout": {
+    "title": "Keluar",
+    "description": "Surface sesi pengguna platform.",
+    "body": "Flow logout akan dihubungkan ke sistem autentikasi saat auth frontend berjalan penuh."
   },
   "portal": {
     "title": "Portal kandidat",

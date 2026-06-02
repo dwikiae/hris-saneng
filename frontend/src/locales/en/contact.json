@@ -5,6 +5,9 @@
     "body": "Use official company channels for HR, recruitment, or candidate access questions.",
     "email": "Email",
     "phone": "Phone",
-    "address": "Address"
+    "address": "Address",
+    "emailValue": "Not configured yet",
+    "phoneValue": "Not configured yet",
+    "addressValue": "Not configured yet"
   }
 }

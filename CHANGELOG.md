@@ -2,6 +2,14 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-02 — Tahap 1 Step 1
+
+- Menyiapkan foundation frontend unified agar `/frontend` mulai punya design system yang konsisten dengan UIUX_SPEC.
+- Menambahkan shadcn/ui, React Query, dan Zustand karena dashboard butuh komponen UI, data fetching state, dan state shell yang rapi.
+- Membagi App Router menjadi route groups dashboard, public website, dan candidate portal supaya URL tetap sama tetapi struktur kerja lebih jelas.
+- Membuat AppShell dashboard dengan sidebar, topbar, token warna, typography Inter, dan komponen shared dasar untuk langkah UI berikutnya.
+- Mencatat risiko dependency audit npm supaya sesi berikutnya tahu ada temuan keamanan package tree yang belum ditindaklanjuti.
+
 ## Alignment 1
 
 - Menjadikan blueprint Dictive-HR sebagai authority repository melalui pembaruan AGENTS.md, CLAUDE.md, project brief, architecture, dan ADR.

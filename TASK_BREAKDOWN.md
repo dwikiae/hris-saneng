@@ -48,8 +48,8 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [x] `/frontend/src/services` — service layer menjadi jalur API call frontend.
 - [x] `/frontend/src/locales/id` dan `/frontend/src/locales/en` — locale bilingual tersedia.
 - [x] `docs/UIUX_SPEC.md` — spesifikasi UI/UX retrofit tersedia.
-- [ ] `/frontend` — install `shadcn/ui`.
-- [ ] `/frontend` — implementasikan UI foundation sesuai `docs/UIUX_SPEC.md`.
+- [x] `/frontend` — install `shadcn/ui`.
+- [x] `/frontend` — implementasikan UI foundation sesuai `docs/UIUX_SPEC.md`.
 - [ ] `/frontend` — lanjutkan surface dashboard platform.
 - [ ] `/frontend` — lanjutkan surface public company website.
 - [ ] `/frontend` — lanjutkan surface candidate portal.
