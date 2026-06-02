@@ -37,5 +37,31 @@
     "switch": "Switch Language",
     "id": "Indonesia",
     "en": "English"
+  },
+  "home": {
+    "meta": {
+      "title": "HRIS Recruitment Portal"
+    },
+    "hero": {
+      "eyebrow": "PT Saneng HRIS",
+      "title": "Candidate and recruitment portal",
+      "body": "Use the official token from HRD to open the quiz or complete candidate document submission."
+    },
+    "portal": {
+      "quiz": {
+        "title": "Candidate Quiz",
+        "body": "Open the candidate written test page using the token sent by HRD.",
+        "action": "Open Quiz"
+      },
+      "pemberkasan": {
+        "title": "Candidate Documents",
+        "body": "Upload onboarding documents through the document submission link provided by HRD.",
+        "action": "Open Documents"
+      }
+    },
+    "form": {
+      "token": "Access token",
+      "placeholder": "Enter token"
+    }
   }
 }

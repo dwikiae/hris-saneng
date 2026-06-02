@@ -1,0 +1,192 @@
+{
+  "platform": {
+    "brand": {
+      "eyebrow": "HRIS Internal",
+      "name": "PT Saneng"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "employees": "Data Karyawan",
+      "recruitment": "Recruitment",
+      "settings": "Setting",
+      "candidatePortal": "Portal Kandidat"
+    },
+    "dashboard": {
+      "meta": "Dashboard HRIS",
+      "title": "Dashboard HRIS",
+      "description": "Ringkasan operasional HR untuk data karyawan, recruitment, pemberkasan, dan konfigurasi sistem.",
+      "metrics": {
+        "employees": {
+          "label": "Karyawan aktif",
+          "value": "700",
+          "helper": "Data dummy untuk tampilan awal"
+        },
+        "candidates": {
+          "label": "Kandidat berjalan",
+          "value": "18",
+          "helper": "Dalam pipeline recruitment"
+        },
+        "documents": {
+          "label": "Pemberkasan pending",
+          "value": "7",
+          "helper": "Menunggu dokumen kandidat"
+        },
+        "settings": {
+          "label": "Role terkonfigurasi",
+          "value": "5",
+          "helper": "Permission awal siap ditinjau"
+        }
+      },
+      "modules": {
+        "title": "Modul utama",
+        "employees": {
+          "title": "Data Karyawan",
+          "body": "Kelola profil karyawan, departemen, posisi, status kerja, dan consent PDP."
+        },
+        "recruitment": {
+          "title": "Recruitment",
+          "body": "Pantau lowongan, kandidat, quiz, interview, dan pemberkasan onboarding."
+        },
+        "settings": {
+          "title": "Setting",
+          "body": "Atur company profile, role permission, retensi data, dan integrasi sistem."
+        }
+      },
+      "activity": {
+        "title": "Aktivitas terbaru",
+        "consent": {
+          "title": "Consent karyawan baru dicatat",
+          "time": "Hari ini"
+        },
+        "document": {
+          "title": "Dokumen kandidat menunggu review",
+          "time": "Hari ini"
+        },
+        "recruitment": {
+          "title": "Lowongan operator produksi aktif",
+          "time": "Kemarin"
+        },
+        "setting": {
+          "title": "Permission HR Admin ditinjau",
+          "time": "Minggu ini"
+        }
+      }
+    },
+    "employees": {
+      "meta": "Data Karyawan",
+      "title": "Data Karyawan",
+      "description": "Tampilan awal master karyawan internal. Data pada layar ini masih contoh sampai API backend dihubungkan.",
+      "actions": {
+        "add": "Tambah Karyawan"
+      },
+      "table": {
+        "title": "Daftar karyawan",
+        "description": "Kolom disiapkan untuk profil inti dan status kerja."
+      },
+      "columns": {
+        "name": "Nama",
+        "department": "Departemen",
+        "position": "Posisi",
+        "status": "Status"
+      },
+      "rows": {
+        "asep": {
+          "name": "Asep Hidayat",
+          "department": "Produksi",
+          "position": "Operator Coating",
+          "status": "Aktif"
+        },
+        "rina": {
+          "name": "Rina Kartika",
+          "department": "HRD",
+          "position": "HR Officer",
+          "status": "Aktif"
+        },
+        "budi": {
+          "name": "Budi Santoso",
+          "department": "Warehouse",
+          "position": "Staff Gudang",
+          "status": "Aktif"
+        },
+        "siti": {
+          "name": "Siti Aminah",
+          "department": "Finance",
+          "position": "Admin Finance",
+          "status": "Aktif"
+        }
+      }
+    },
+    "recruitment": {
+      "meta": "Recruitment",
+      "title": "Recruitment",
+      "description": "Pantau funnel kandidat dari screening sampai pemberkasan onboarding.",
+      "actions": {
+        "add": "Buat Lowongan"
+      },
+      "pipeline": {
+        "title": "Pipeline kandidat",
+        "screening": {
+          "label": "Screening",
+          "count": "12",
+          "helper": "Lamaran baru menunggu validasi HR"
+        },
+        "quiz": {
+          "label": "Quiz",
+          "count": "5",
+          "helper": "Kandidat sudah menerima token quiz"
+        },
+        "interview": {
+          "label": "Interview",
+          "count": "3",
+          "helper": "Jadwal wawancara perlu dikonfirmasi"
+        },
+        "documents": {
+          "label": "Pemberkasan",
+          "count": "7",
+          "helper": "Dokumen kandidat menunggu upload atau review"
+        }
+      },
+      "requisitions": {
+        "title": "Lowongan aktif",
+        "operator": {
+          "title": "Operator Coating",
+          "body": "Kebutuhan produksi untuk proyek coating industri."
+        },
+        "welder": {
+          "title": "Welder",
+          "body": "Prioritas kandidat dengan pengalaman las elektroda."
+        },
+        "admin": {
+          "title": "Admin HR",
+          "body": "Mendukung administrasi rekrutmen dan pemberkasan."
+        }
+      }
+    },
+    "settings": {
+      "meta": "Setting",
+      "title": "Setting",
+      "description": "Konfigurasi awal sistem HRIS untuk company profile, permission, retensi, dan integrasi.",
+      "actions": {
+        "open": "Buka Setting"
+      },
+      "cards": {
+        "company": {
+          "title": "Company Profile",
+          "body": "Kelola identitas PT Saneng, pengaturan company default, dan preferensi tenant."
+        },
+        "permissions": {
+          "title": "Role & Permission",
+          "body": "Atur akses modul dan field sensitif untuk operator HR."
+        },
+        "retention": {
+          "title": "Retensi Data",
+          "body": "Konfigurasi masa simpan data karyawan, kandidat, audit log, dan log teknis."
+        },
+        "integrations": {
+          "title": "Integrasi",
+          "body": "Siapkan koneksi storage, SMTP, fingerprint, dan layanan eksternal lain."
+        }
+      }
+    }
+  }
+}

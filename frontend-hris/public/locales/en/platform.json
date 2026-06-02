@@ -1,0 +1,192 @@
+{
+  "platform": {
+    "brand": {
+      "eyebrow": "Internal HRIS",
+      "name": "PT Saneng"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "employees": "Employee Data",
+      "recruitment": "Recruitment",
+      "settings": "Settings",
+      "candidatePortal": "Candidate Portal"
+    },
+    "dashboard": {
+      "meta": "HRIS Dashboard",
+      "title": "HRIS Dashboard",
+      "description": "HR operations summary for employee data, recruitment, document collection, and system configuration.",
+      "metrics": {
+        "employees": {
+          "label": "Active employees",
+          "value": "700",
+          "helper": "Placeholder data for the first UI pass"
+        },
+        "candidates": {
+          "label": "Candidates in progress",
+          "value": "18",
+          "helper": "Inside the recruitment pipeline"
+        },
+        "documents": {
+          "label": "Pending documents",
+          "value": "7",
+          "helper": "Waiting for candidate documents"
+        },
+        "settings": {
+          "label": "Configured roles",
+          "value": "5",
+          "helper": "Initial permissions ready for review"
+        }
+      },
+      "modules": {
+        "title": "Main modules",
+        "employees": {
+          "title": "Employee Data",
+          "body": "Manage employee profiles, departments, positions, work status, and PDP consent."
+        },
+        "recruitment": {
+          "title": "Recruitment",
+          "body": "Track job postings, candidates, quizzes, interviews, and onboarding documents."
+        },
+        "settings": {
+          "title": "Settings",
+          "body": "Configure company profile, role permissions, data retention, and integrations."
+        }
+      },
+      "activity": {
+        "title": "Recent activity",
+        "consent": {
+          "title": "New employee consent recorded",
+          "time": "Today"
+        },
+        "document": {
+          "title": "Candidate document waiting for review",
+          "time": "Today"
+        },
+        "recruitment": {
+          "title": "Production operator opening is active",
+          "time": "Yesterday"
+        },
+        "setting": {
+          "title": "HR Admin permission reviewed",
+          "time": "This week"
+        }
+      }
+    },
+    "employees": {
+      "meta": "Employee Data",
+      "title": "Employee Data",
+      "description": "Initial internal employee master view. The data on this screen is sample data until the backend API is connected.",
+      "actions": {
+        "add": "Add Employee"
+      },
+      "table": {
+        "title": "Employee list",
+        "description": "Columns are prepared for core profile and work status."
+      },
+      "columns": {
+        "name": "Name",
+        "department": "Department",
+        "position": "Position",
+        "status": "Status"
+      },
+      "rows": {
+        "asep": {
+          "name": "Asep Hidayat",
+          "department": "Production",
+          "position": "Coating Operator",
+          "status": "Active"
+        },
+        "rina": {
+          "name": "Rina Kartika",
+          "department": "HRD",
+          "position": "HR Officer",
+          "status": "Active"
+        },
+        "budi": {
+          "name": "Budi Santoso",
+          "department": "Warehouse",
+          "position": "Warehouse Staff",
+          "status": "Active"
+        },
+        "siti": {
+          "name": "Siti Aminah",
+          "department": "Finance",
+          "position": "Finance Admin",
+          "status": "Active"
+        }
+      }
+    },
+    "recruitment": {
+      "meta": "Recruitment",
+      "title": "Recruitment",
+      "description": "Track the candidate funnel from screening to onboarding document collection.",
+      "actions": {
+        "add": "Create Opening"
+      },
+      "pipeline": {
+        "title": "Candidate pipeline",
+        "screening": {
+          "label": "Screening",
+          "count": "12",
+          "helper": "New applications waiting for HR validation"
+        },
+        "quiz": {
+          "label": "Quiz",
+          "count": "5",
+          "helper": "Candidates have received quiz tokens"
+        },
+        "interview": {
+          "label": "Interview",
+          "count": "3",
+          "helper": "Interview schedules need confirmation"
+        },
+        "documents": {
+          "label": "Documents",
+          "count": "7",
+          "helper": "Candidate documents waiting for upload or review"
+        }
+      },
+      "requisitions": {
+        "title": "Active openings",
+        "operator": {
+          "title": "Coating Operator",
+          "body": "Production need for industrial coating projects."
+        },
+        "welder": {
+          "title": "Welder",
+          "body": "Priority for candidates with electrode welding experience."
+        },
+        "admin": {
+          "title": "HR Admin",
+          "body": "Supports recruitment administration and document collection."
+        }
+      }
+    },
+    "settings": {
+      "meta": "Settings",
+      "title": "Settings",
+      "description": "Initial HRIS system configuration for company profile, permissions, retention, and integrations.",
+      "actions": {
+        "open": "Open Settings"
+      },
+      "cards": {
+        "company": {
+          "title": "Company Profile",
+          "body": "Manage PT Saneng identity, default company settings, and tenant preferences."
+        },
+        "permissions": {
+          "title": "Role & Permission",
+          "body": "Configure module access and sensitive field access for HR operators."
+        },
+        "retention": {
+          "title": "Data Retention",
+          "body": "Configure retention periods for employees, candidates, audit logs, and technical logs."
+        },
+        "integrations": {
+          "title": "Integrations",
+          "body": "Prepare storage, SMTP, fingerprint, and other external service connections."
+        }
+      }
+    }
+  }
+}

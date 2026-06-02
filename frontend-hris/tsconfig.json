@@ -13,6 +13,10 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
+      "next-i18next/pages": ["./src/lib/next-i18next-pages.ts"],
+      "next-i18next/pages/serverSideTranslations": [
+        "./src/lib/next-i18next-pages-serverSideTranslations.ts"
+      ],
       "@/*": ["./src/*"]
     }
   },

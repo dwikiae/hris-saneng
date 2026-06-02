@@ -308,3 +308,17 @@ COMP-5: Export data karyawan WAJIB tersedia dan dicatat di audit log.
 
 *AGENTS.md adalah living document — update ketika ada aturan baru yang berlaku lintas sesi.*
 *Setiap perubahan harus di-commit dengan message jelas dan dicatat di CHANGELOG.md.*
+
+---
+
+## Context Files
+
+Sebelum memulai task baru, baca file berikut secara berurutan:
+
+1. `START_HERE.md` — entry-point status retrofit dan task berikutnya.
+2. `AGENTS.md` — aturan tertinggi repository.
+3. `VIBE_CODING_CONTEXT.md` — framework kerja, workflow Git, dan protokol task.
+4. `TASK_BREAKDOWN.md` — checklist milestone dan status pekerjaan.
+5. `docs/UIUX_SPEC.md` — spesifikasi UI/UX untuk retrofit frontend.
+6. `docs/alignment/OPERATING_PLAN.md` — protokol resume lintas sesi.
+7. `docs/alignment/AUDIT_REPORT_2026-06-02.md` — audit alignment terakhir dan risiko residual.

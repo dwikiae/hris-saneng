@@ -37,5 +37,31 @@
     "switch": "Ganti Bahasa",
     "id": "Indonesia",
     "en": "English"
+  },
+  "home": {
+    "meta": {
+      "title": "Portal Rekrutmen HRIS"
+    },
+    "hero": {
+      "eyebrow": "HRIS PT Saneng",
+      "title": "Portal kandidat dan rekrutmen",
+      "body": "Gunakan token resmi dari HRD untuk membuka quiz atau melengkapi pemberkasan kandidat."
+    },
+    "portal": {
+      "quiz": {
+        "title": "Quiz Kandidat",
+        "body": "Buka halaman tes tulis kandidat sesuai token yang dikirim oleh HRD.",
+        "action": "Buka Quiz"
+      },
+      "pemberkasan": {
+        "title": "Pemberkasan Kandidat",
+        "body": "Unggah dokumen onboarding melalui link pemberkasan yang sudah diberikan.",
+        "action": "Buka Pemberkasan"
+      }
+    },
+    "form": {
+      "token": "Token akses",
+      "placeholder": "Masukkan token"
+    }
   }
 }
