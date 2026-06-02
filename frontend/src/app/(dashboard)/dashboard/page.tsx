@@ -1,69 +1,96 @@
 "use client";
 
-import { BriefcaseBusiness, FileText, Users, Building2 } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { PageHeader } from "@/components/layout/PageHeader";
-import { DataTable } from "@/components/shared/DataTable";
-import { EmptyState } from "@/components/shared/EmptyState";
-import { StatCard } from "@/components/shared/StatCard";
-import { StatusBadge } from "@/components/shared/StatusBadge";
+import { DashboardGreeting } from "@/components/dashboard/DashboardGreeting";
+import { DashboardStatsRow } from "@/components/dashboard/DashboardStatsRow";
+import { PendingApprovalsWidget } from "@/components/dashboard/PendingApprovalsWidget";
+import { RecentActivityList } from "@/components/dashboard/RecentActivityList";
+import { authService } from "@/services/auth.service";
+import { dashboardService } from "@/services/dashboard.service";
 
-const metricKeys = ["employees", "candidates", "documents", "settings"] as const;
-const metricIcons = {
-  employees: Users,
-  candidates: BriefcaseBusiness,
-  documents: FileText,
-  settings: Building2
-};
-
-const activityKeys = ["employees", "recruitment", "settings"] as const;
+const APPROVAL_PERMISSION = "employee.approve";
+const RECENT_ACTIVITY_LIMIT = 5;
 
 export default function DashboardPage() {
   const { t } = useTranslation("platform");
+  const queryClient = useQueryClient();
+  const currentUserQuery = useQuery({
+    queryKey: ["auth", "me"],
+    queryFn: authService.currentUser,
+    retry: false
+  });
+  const dashboardQuery = useQuery({
+    queryKey: ["dashboard", "stats"],
+    queryFn: dashboardService.stats,
+    retry: false
+  });
+  const approveMutation = useMutation({
+    mutationFn: dashboardService.approveEmployee,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["dashboard", "stats"] });
+    }
+  });
+  const hasApprovalPermission =
+    currentUserQuery.data?.permissions.includes(APPROVAL_PERMISSION) ?? false;
+  const recentActivities =
+    dashboardQuery.data?.recent_activities.slice(0, RECENT_ACTIVITY_LIMIT) ?? [];
 
   return (
     <>
-      <PageHeader title={t("dashboard.title")} description={t("dashboard.description")} />
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {metricKeys.map((key) => {
-          const Icon = metricIcons[key];
-
-          return (
-            <StatCard
-              key={key}
-              label={t(`dashboard.metrics.${key}.label`)}
-              value={t(`dashboard.metrics.${key}.value`)}
-              helper={t(`dashboard.metrics.${key}.helper`)}
-              icon={<Icon className="h-5 w-5" aria-hidden="true" />}
-            />
-          );
-        })}
-      </section>
-
-      <section className="mt-6">
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <h2>{t("dashboard.activityTitle")}</h2>
-          <StatusBadge label={t("dashboard.status.ready")} tone="success" />
+      <DashboardGreeting
+        isLoading={currentUserQuery.isLoading}
+        isError={currentUserQuery.isError}
+        unavailableText={t("dashboard.greeting.unavailable")}
+        titleFor={(period) =>
+          t(`dashboard.greeting.${period}`, { name: currentUserQuery.data?.name })
+        }
+      />
+      <DashboardStatsRow
+        data={dashboardQuery.data?.stats}
+        isLoading={dashboardQuery.isLoading}
+        isError={dashboardQuery.isError}
+        labels={{
+          totalEmployees: t("dashboard.stats.totalEmployees"),
+          presentToday: t("dashboard.stats.presentToday"),
+          absentToday: t("dashboard.stats.absentToday"),
+          leaveToday: t("dashboard.stats.leaveToday")
+        }}
+        errorTitle={t("dashboard.apiError.title")}
+        errorDescription={t("dashboard.apiError.description")}
+        retryLabel={t("dashboard.actions.retry")}
+        onRetry={() => {
+          void dashboardQuery.refetch();
+        }}
+      />
+      {hasApprovalPermission ? (
+        <div className="mt-6">
+          <PendingApprovalsWidget
+            title={t("dashboard.approvals.title")}
+            emptyText={t("dashboard.approvals.empty")}
+            approveLabel={t("dashboard.actions.quickApprove")}
+            items={dashboardQuery.data?.pending_approvals}
+            isLoading={dashboardQuery.isLoading}
+            isError={dashboardQuery.isError}
+            errorTitle={t("dashboard.apiError.title")}
+            errorDescription={t("dashboard.apiError.description")}
+            isApproving={approveMutation.isPending}
+            onApproveEmployee={(employeeId) => approveMutation.mutate(employeeId)}
+          />
         </div>
-        <DataTable
-          columns={[
-            { key: "area", header: t("dashboard.activityColumns.area"), cell: (row) => t(`nav.${row}`) },
-            {
-              key: "summary",
-              header: t("dashboard.activityColumns.summary"),
-              cell: (row) => t(`${row}.description`)
-            }
-          ]}
-          rows={[...activityKeys]}
-          getRowKey={(row) => row}
-          emptyContent={
-            <EmptyState
-              title={t("dashboard.empty.title")}
-              description={t("dashboard.empty.description")}
-            />
-          }
+      ) : null}
+      <div className="mt-6">
+        <RecentActivityList
+          title={t("dashboard.activityTitle")}
+          items={recentActivities}
+          isLoading={dashboardQuery.isLoading}
+          isError={dashboardQuery.isError}
+          errorTitle={t("dashboard.apiError.title")}
+          errorDescription={t("dashboard.apiError.description")}
+          emptyTitle={t("dashboard.empty.title")}
+          emptyDescription={t("dashboard.empty.description")}
         />
-      </section>
+      </div>
     </>
   );
 }

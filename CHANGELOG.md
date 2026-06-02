@@ -2,6 +2,12 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-02 — Tahap 1 Step 2
+
+- Membuat halaman `/dashboard` memakai data contract API, bukan data contoh permanen.
+- Menambahkan greeting personal, stat cards HR, pending approvals khusus approver, dan recent activity dengan state loading, populated, dan error.
+- Mencatat bahwa endpoint Laravel `/api/v1/dashboard/stats` belum ada sehingga dashboard menunggu backend sebelum bisa menampilkan data nyata.
+
 ## 2026-06-02 — Keputusan Tambahan UI/UX
 
 - Menetapkan dark mode tidak masuk scope sehingga platform berjalan light mode only.

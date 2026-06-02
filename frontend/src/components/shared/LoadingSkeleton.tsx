@@ -1,14 +1,17 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 interface LoadingSkeletonProps {
   rows?: number;
+  className?: string;
+  itemClassName?: string;
 }
 
-export function LoadingSkeleton({ rows = 3 }: LoadingSkeletonProps) {
+export function LoadingSkeleton({ rows = 3, className, itemClassName }: LoadingSkeletonProps) {
   return (
-    <div className="space-y-3">
+    <div className={cn("space-y-3", className)}>
       {Array.from({ length: rows }).map((_, index) => (
-        <Skeleton key={index} className="h-16 w-full rounded-lg" />
+        <Skeleton key={index} className={cn("h-16 w-full rounded-lg", itemClassName)} />
       ))}
     </div>
   );

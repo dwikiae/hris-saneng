@@ -17,6 +17,26 @@ export function publicPath(path: string): string {
   return `${baseUrl}/api/v1/public${path}`;
 }
 
+export function privatePath(path: string): string {
+  const baseUrl = apiBaseUrl();
+
+  if (baseUrl.endsWith("/api/v1")) {
+    return `${baseUrl}${path}`;
+  }
+
+  return `${baseUrl}/api/v1${path}`;
+}
+
+function authHeaders(): HeadersInit {
+  if (typeof window === "undefined") {
+    return {};
+  }
+
+  const token = window.localStorage.getItem("dictive_hr_token");
+
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 export async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await fetch(url, {
     ...init,
@@ -33,6 +53,16 @@ export async function requestJson<T>(url: string, init?: RequestInit): Promise<T
   }
 
   return unwrapApiData(payload);
+}
+
+export async function requestPrivateJson<T>(path: string, init?: RequestInit): Promise<T> {
+  return requestJson<T>(privatePath(path), {
+    ...init,
+    headers: {
+      ...authHeaders(),
+      ...init?.headers
+    }
+  });
 }
 
 export async function requestMultipart<T>(url: string, formData: FormData): Promise<T> {

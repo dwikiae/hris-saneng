@@ -50,7 +50,8 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [x] `docs/UIUX_SPEC.md` — spesifikasi UI/UX retrofit tersedia.
 - [x] `/frontend` — install `shadcn/ui`.
 - [x] `/frontend` — implementasikan UI foundation sesuai `docs/UIUX_SPEC.md`.
-- [ ] `/frontend` — lanjutkan surface dashboard platform.
+- [x] `/frontend` — lanjutkan surface dashboard platform.
+- [ ] Backend — buat endpoint `GET /api/v1/dashboard/stats` untuk data dashboard nyata.
 - [ ] `/frontend` — lanjutkan surface public company website.
 - [ ] `/frontend` — lanjutkan surface candidate portal.
 

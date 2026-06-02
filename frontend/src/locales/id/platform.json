@@ -34,11 +34,30 @@
   "dashboard": {
     "title": "Dashboard platform",
     "description": "Ringkasan operasional instance, company, modul, dan aktivitas HR.",
-    "metrics": {
-      "employees": { "label": "Karyawan", "value": "128", "helper": "Contoh data dashboard" },
-      "candidates": { "label": "Kandidat", "value": "24", "helper": "Pipeline aktif" },
-      "documents": { "label": "Dokumen", "value": "16", "helper": "Menunggu review" },
-      "settings": { "label": "Company", "value": "3", "helper": "Terkelola dalam instance" }
+    "greeting": {
+      "morning": "Selamat pagi, {{name}}",
+      "afternoon": "Selamat siang, {{name}}",
+      "evening": "Selamat sore, {{name}}",
+      "night": "Selamat malam, {{name}}",
+      "unavailable": "Data user belum tersedia. Greeting personal akan muncul setelah auth frontend aktif."
+    },
+    "stats": {
+      "totalEmployees": "Total Karyawan",
+      "presentToday": "Hadir Hari Ini",
+      "absentToday": "Tidak Hadir",
+      "leaveToday": "Cuti Hari Ini"
+    },
+    "actions": {
+      "retry": "Coba lagi",
+      "quickApprove": "Approve"
+    },
+    "apiError": {
+      "title": "Data dashboard belum tersedia",
+      "description": "Endpoint /api/v1/dashboard/stats belum tersedia atau belum bisa diakses. Dashboard akan terisi setelah API siap."
+    },
+    "approvals": {
+      "title": "Pending Approvals",
+      "empty": "Tidak ada item yang perlu di-review saat ini."
     },
     "activityTitle": "Aktivitas terbaru",
     "activityColumns": {

@@ -34,11 +34,30 @@
   "dashboard": {
     "title": "Platform dashboard",
     "description": "Operational overview for instance, companies, modules, and HR activity.",
-    "metrics": {
-      "employees": { "label": "Employees", "value": "128", "helper": "Dashboard sample data" },
-      "candidates": { "label": "Candidates", "value": "24", "helper": "Active pipeline" },
-      "documents": { "label": "Documents", "value": "16", "helper": "Waiting for review" },
-      "settings": { "label": "Companies", "value": "3", "helper": "Managed in this instance" }
+    "greeting": {
+      "morning": "Good morning, {{name}}",
+      "afternoon": "Good afternoon, {{name}}",
+      "evening": "Good evening, {{name}}",
+      "night": "Good evening, {{name}}",
+      "unavailable": "User data is not available yet. The personal greeting will appear after frontend auth is active."
+    },
+    "stats": {
+      "totalEmployees": "Total Employees",
+      "presentToday": "Present Today",
+      "absentToday": "Absent",
+      "leaveToday": "On Leave Today"
+    },
+    "actions": {
+      "retry": "Try again",
+      "quickApprove": "Approve"
+    },
+    "apiError": {
+      "title": "Dashboard data is not available yet",
+      "description": "The /api/v1/dashboard/stats endpoint is missing or not reachable. The dashboard will populate after the API is ready."
+    },
+    "approvals": {
+      "title": "Pending Approvals",
+      "empty": "There are no items to review right now."
     },
     "activityTitle": "Recent activity",
     "activityColumns": {
