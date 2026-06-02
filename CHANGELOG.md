@@ -2,6 +2,13 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-02 - Step 3b
+
+- Memindahkan backend test environment dari SQLite in-memory ke PostgreSQL database `hris_local_test` karena PHP environment tidak punya `pdo_sqlite`.
+- Membuat test dashboard stats berjalan stabil di PostgreSQL, termasuk urutan recent activity yang deterministic.
+- Menyesuaikan beberapa test lama agar cocok dengan PostgreSQL, seeder terbaru, dan helper upload tanpa GD.
+- Mencatat bahwa PHP GD extension belum aktif, sehingga test varian foto karyawan di-skip sampai extension tersedia.
+
 ## 2026-06-02 — Tahap 1 Step 3
 
 - Menambahkan endpoint backend dashboard stats agar halaman `/dashboard` bisa membaca data nyata dari Laravel.

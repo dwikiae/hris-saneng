@@ -52,6 +52,7 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [x] `/frontend` — implementasikan UI foundation sesuai `docs/UIUX_SPEC.md`.
 - [x] `/frontend` — lanjutkan surface dashboard platform.
 - [x] Backend — buat endpoint `GET /api/v1/dashboard/stats` untuk data dashboard nyata.
+- [x] Backend — pindahkan test environment dari SQLite in-memory ke PostgreSQL test database.
 - [ ] Backend — buat tabel/data source attendance dan leave agar dashboard tidak lagi mengembalikan 0 untuk hadir, tidak hadir, dan cuti.
 - [ ] `/frontend` — lanjutkan surface public company website.
 - [ ] `/frontend` — lanjutkan surface candidate portal.

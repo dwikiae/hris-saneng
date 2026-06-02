@@ -12,6 +12,14 @@ use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
 
+function fakePngUpload(string $name): UploadedFile
+{
+    return UploadedFile::fake()->createWithContent(
+        $name,
+        base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=')
+    );
+}
+
 beforeEach(function () {
     $this->company = Company::create(['name' => 'PT Saneng', 'legal_name' => 'PT Saneng']);
     $this->user = User::create([
@@ -43,7 +51,7 @@ beforeEach(function () {
 it('uploads and lists employee documents with signed url field', function () {
     Storage::fake('documents');
 
-    $file = UploadedFile::fake()->image('ktp.jpg', 600, 400)->size(256);
+    $file = fakePngUpload('ktp.png');
 
     $this->postJson("/api/v1/employees/{$this->employee->id}/documents", [
         'doc_type' => 'ktp',
@@ -106,6 +114,10 @@ it('rejects unsupported employee document mime type', function () {
 });
 
 it('uploads employee photo variants and returns their urls', function () {
+    if (! extension_loaded('gd')) {
+        $this->markTestSkipped('GD extension is required to generate employee photo variants.');
+    }
+
     Storage::fake('public');
 
     $this->postJson("/api/v1/employees/{$this->employee->id}/photo", [

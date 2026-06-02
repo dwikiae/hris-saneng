@@ -18,15 +18,15 @@ it('seeds PT Saneng company record', function () {
 it('seeds default company settings with correct values', function () {
     $this->seed(DatabaseSeeder::class);
 
-    expect(CompanySetting::where('key', 'session_timeout_minutes')->value('value'))->toBe('60')
+    expect(CompanySetting::withoutCompanyScope()->where('key', 'session_lifetime_minutes')->value('value'))->toBe('120')
         ->and(CompanySetting::where('key', 'max_login_attempts')->value('value'))->toBe('5')
-        ->and(CompanySetting::where('key', 'ip_whitelist')->value('value'))->toBe('127.0.0.1');
+        ->and(CompanySetting::where('key', 'storage_max_upload_mb')->value('value'))->toBe('10');
 });
 
 it('seeds admin user with force_password_reset true', function () {
     $this->seed(DatabaseSeeder::class);
 
-    $user = User::where('email', 'admin@saneng.co.id')->firstOrFail();
+    $user = User::withoutCompanyScope()->where('email', 'admin@saneng.co.id')->firstOrFail();
 
     expect($user->force_password_reset)->toBeTrue();
 });
@@ -34,7 +34,7 @@ it('seeds admin user with force_password_reset true', function () {
 it('admin user password is correctly hashed', function () {
     $this->seed(DatabaseSeeder::class);
 
-    $user = User::where('email', 'admin@saneng.co.id')->firstOrFail();
+    $user = User::withoutCompanyScope()->where('email', 'admin@saneng.co.id')->firstOrFail();
 
     expect(Hash::check('Admin@12345', $user->password))->toBeTrue();
 });

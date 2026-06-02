@@ -26,6 +26,7 @@ class DashboardStatsRepository implements DashboardStatsRepositoryInterface
             ->forCompany($companyId)
             ->where('status', Employee::PENDING)
             ->orderByDesc('updated_at')
+            ->orderByDesc('id')
             ->limit($limit)
             ->get(['id', 'employee_number', 'name', 'created_by', 'updated_by', 'created_at'])
             ->map(function (Employee $employee): array {
@@ -62,6 +63,7 @@ class DashboardStatsRepository implements DashboardStatsRepositoryInterface
             ->where('subject_type', Employee::class)
             ->whereIn('subject_id', $employeeIds)
             ->orderByDesc('created_at')
+            ->orderByDesc('id')
             ->limit($limit)
             ->get(['id', 'log_name', 'description', 'causer_type', 'causer_id', 'created_at']);
 

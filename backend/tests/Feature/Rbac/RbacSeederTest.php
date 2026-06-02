@@ -17,8 +17,8 @@ it('seeds permissions and default role assignments idempotently', function () {
     $this->seed(PermissionSeeder::class);
     $this->seed(RoleSeeder::class);
 
-    expect(Permission::count())->toBe(16);
-    expect(Role::count())->toBe(5);
+    expect(Permission::count())->toBe(27);
+    expect(Role::count())->toBe(7);
 
     $allPermissionCount = Permission::count();
 

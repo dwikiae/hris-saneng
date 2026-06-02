@@ -127,13 +127,17 @@ function milestone11NotificationUser(Company $company, array $permissions): User
 
     foreach ($permissions as $code) {
         [$module, $action] = explode('.', $code, 2);
-        $permission = Permission::query()->create([
-            'company_id' => $company->id,
-            'code' => $code,
-            'module' => $module,
-            'action' => $action,
-            'name' => $code,
-        ]);
+        $permission = Permission::withoutCompanyScope()->firstOrCreate(
+            [
+                'company_id' => $company->id,
+                'code' => $code,
+            ],
+            [
+                'module' => $module,
+                'action' => $action,
+                'name' => $code,
+            ]
+        );
 
         $role->permissions()->attach($permission->id);
     }
