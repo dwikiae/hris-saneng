@@ -69,6 +69,7 @@ it('allows instance admin to manage companies', function () {
         ])
         ->assertCreated()
         ->assertJsonPath('message', 'company.created')
+        ->assertJsonPath('data.slug', 'pt-baru')
         ->json('data.id');
 
     $this->actingAs($admin)
@@ -78,7 +79,22 @@ it('allows instance admin to manage companies', function () {
             'language_default' => 'en',
         ])
         ->assertOk()
-        ->assertJsonPath('data.name', 'PT Baru Updated');
+        ->assertJsonPath('data.name', 'PT Baru Updated')
+        ->assertJsonPath('data.slug', 'pt-baru');
+});
+
+it('allows instance admin to set an explicit company slug', function () {
+    $admin = milestone8InstanceAdmin();
+
+    $this->actingAs($admin)
+        ->postJson('/api/v1/companies', [
+            'name' => 'PT Explicit Slug',
+            'legal_name' => 'PT Explicit Slug',
+            'slug' => 'explicit-company',
+            'language_default' => 'id',
+        ])
+        ->assertCreated()
+        ->assertJsonPath('data.slug', 'explicit-company');
 });
 
 it('keeps company users inside their own company boundary', function () {

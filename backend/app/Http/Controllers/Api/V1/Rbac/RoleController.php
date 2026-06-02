@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Rbac;
 
+use App\Core\Company\Application\CompanyContext;
 use App\Http\Controllers\Controller;
 use App\Repositories\Eloquent\RoleRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -12,7 +13,10 @@ use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
-    public function __construct(private readonly RoleRepository $repository) {}
+    public function __construct(
+        private readonly RoleRepository $repository,
+        private readonly CompanyContext $companyContext,
+    ) {}
 
     public function index(Request $request): JsonResponse
     {
@@ -42,7 +46,7 @@ class RoleController extends Controller
             'code' => [
                 'required', 'string', 'max:50',
                 Rule::unique('roles', 'code')
-                    ->where('company_id', config('company.default_id', 1)),
+                    ->where('company_id', $this->companyId()),
             ],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
@@ -50,7 +54,7 @@ class RoleController extends Controller
         ]);
 
         $data = array_merge($validated, [
-            'company_id' => (int) config('company.default_id', 1),
+            'company_id' => $this->companyId(),
             'created_by' => Auth::id(),
         ]);
 
@@ -81,7 +85,7 @@ class RoleController extends Controller
             'permission_ids.*' => [
                 'integer',
                 Rule::exists('permissions', 'id')
-                    ->where('company_id', config('company.default_id', 1)),
+                    ->where('company_id', $this->companyId()),
             ],
         ]);
 
@@ -102,5 +106,10 @@ class RoleController extends Controller
     private function notFound(): JsonResponse
     {
         return response()->json(['success' => false, 'message' => 'role.not_found'], 404);
+    }
+
+    private function companyId(): int
+    {
+        return $this->companyContext->companyId();
     }
 }

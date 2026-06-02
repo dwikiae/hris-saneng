@@ -1,0 +1,27 @@
+{
+  "hero": {
+    "imageAlt": "Aktivitas operasional perusahaan",
+    "headline": "Satu platform untuk HR, rekrutmen, website, dan kandidat.",
+    "sub": "Dictive-HR membantu instance admin dan company user mengelola proses HR dari dashboard internal sampai halaman karir publik.",
+    "cta": "Lihat lowongan"
+  },
+  "stats": {
+    "companies": { "value": "Multi", "label": "company dalam satu instance" },
+    "modules": { "value": "Modular", "label": "install global, enable per company" },
+    "candidate": { "value": "Terpadu", "label": "portal kandidat token-based" }
+  },
+  "sections": {
+    "aboutTitle": "Dibangun untuk HRIS self-hosted",
+    "serviceTitle": "Surface platform"
+  },
+  "services": {
+    "dashboard": { "title": "Dashboard platform", "body": "Kelola data internal, modul, role, dan proses operasional company." },
+    "website": { "title": "Website company", "body": "Tampilkan profil company dan halaman publik berbasis slug." },
+    "candidate": { "title": "Portal kandidat", "body": "Berikan akses tes dan pemberkasan melalui token tanpa login." }
+  },
+  "cta": {
+    "title": "Mulai dari satu frontend resmi",
+    "body": "Alignment 10 menyatukan frontend dashboard dan website publik dalam App Router.",
+    "button": "Buka dashboard"
+  }
+}

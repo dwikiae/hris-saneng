@@ -60,6 +60,7 @@ class SetupController extends Controller
 
         return $this->success([
             'company_id' => $company->getKey(),
+            'company_slug' => $company->getAttribute('slug'),
             'instance_admin_id' => $admin->getKey(),
             'mandatory_modules' => self::MANDATORY_MODULES,
         ], 'setup.completed', 201);
@@ -79,6 +80,7 @@ class SetupController extends Controller
         return $this->companies->create([
             'name' => $data['name'],
             'legal_name' => $data['legal_name'],
+            'slug' => $data['slug'] ?? null,
             'timezone' => $data['timezone'] ?? 'Asia/Jakarta',
             'date_format' => $data['date_format'] ?? 'DD/MM/YYYY',
             'language_default' => $data['language_default'] ?? 'id',

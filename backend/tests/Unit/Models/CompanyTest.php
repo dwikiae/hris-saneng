@@ -23,6 +23,7 @@ it('has the expected fillable fields', function () {
     expect((new Company)->getFillable())->toBe([
         'name',
         'legal_name',
+        'slug',
         'npwp',
         'address',
         'city',

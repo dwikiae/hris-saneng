@@ -2,7 +2,7 @@
 
 namespace App\Application\Recruitment;
 
-use App\Application\Storage\FileStorageService;
+use App\Core\FileStorage\Application\FileStorageService;
 use App\Models\Recruitment\Applicant;
 use App\Models\Recruitment\ApplicantStageAttachment;
 use App\Models\Recruitment\JobPosting;

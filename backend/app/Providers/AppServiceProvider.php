@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Core\Company\Application\CompanyContext;
-use App\Domain\Storage\StorageAdapterInterface;
-use App\Infrastructure\Storage\MinIOStorageAdapter;
+use App\Core\FileStorage\Domain\StorageAdapterInterface;
+use App\Core\FileStorage\Infrastructure\MinIOStorageAdapter;
 use App\Repositories\Contracts\CompanyRepositoryInterface;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
 use App\Repositories\Contracts\InstanceSettingsRepositoryInterface;

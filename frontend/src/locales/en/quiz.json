@@ -1,0 +1,34 @@
+{
+  "header": {
+    "eyebrow": "Candidate test",
+    "title": "Recruitment quiz"
+  },
+  "loading": {
+    "title": "Loading quiz",
+    "body": "Please wait while the system retrieves the questions."
+  },
+  "error": {
+    "title": "Quiz is not available",
+    "body": "The token is invalid or quiz data cannot be accessed yet."
+  },
+  "submitted": {
+    "title": "Answers submitted",
+    "body": "Thank you, your quiz answers have been received."
+  },
+  "timeout": {
+    "title": "Time is up",
+    "body": "Available answers have been submitted automatically."
+  },
+  "question": {
+    "number": "Question {{current}} of {{total}}",
+    "answer": "Answer"
+  },
+  "timer": {
+    "label": "Time left"
+  },
+  "actions": {
+    "previous": "Previous",
+    "next": "Next",
+    "submit": "Submit answers"
+  }
+}

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Core\Company\Application\CompanyContext;
 use App\Models\CompanySetting;
 use App\Models\User;
 use App\Repositories\Contracts\SettingsRepositoryInterface;
@@ -36,7 +37,10 @@ class SettingsRepository implements SettingsRepositoryInterface
         'storage_max_upload_mb' => 10,
     ];
 
-    public function __construct(private readonly CompanySetting $model) {}
+    public function __construct(
+        private readonly CompanySetting $model,
+        private readonly CompanyContext $companyContext,
+    ) {}
 
     public function get(string $key): mixed
     {
@@ -157,6 +161,10 @@ class SettingsRepository implements SettingsRepositoryInterface
 
     private function currentCompanyId(): int
     {
+        if ($this->companyContext->hasCompany()) {
+            return $this->companyContext->companyId();
+        }
+
         $user = Auth::user();
 
         if ($user instanceof User && $user->company_id !== null) {

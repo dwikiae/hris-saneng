@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Application\Health\HealthCheckService;
+use App\Core\Health\Application\HealthCheckService;
 use Illuminate\Http\JsonResponse;
 
 class HealthController extends Controller

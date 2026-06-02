@@ -1,0 +1,46 @@
+{
+  "hero": {
+    "eyebrow": "Karir",
+    "title": "Temukan posisi yang sesuai.",
+    "body": "Lihat lowongan aktif dan kirim lamaran melalui form kandidat."
+  },
+  "list": {
+    "title": "Lowongan aktif",
+    "count": "{{count}} lowongan tersedia"
+  },
+  "job": {
+    "department": "Departemen",
+    "deadline": "Batas akhir",
+    "requirements": "Persyaratan"
+  },
+  "empty": {
+    "title": "Belum ada lowongan",
+    "body": "Silakan cek kembali halaman karir ini secara berkala."
+  },
+  "form": {
+    "title": "Form lamaran",
+    "description": "Lengkapi data kandidat sesuai kebutuhan rekrutmen.",
+    "job": "Posisi",
+    "fullName": "Nama lengkap",
+    "birthPlace": "Tempat lahir",
+    "birthDate": "Tanggal lahir",
+    "gender": "Jenis kelamin",
+    "addressKtp": "Alamat KTP",
+    "addressDomicile": "Alamat domisili",
+    "height": "Tinggi badan",
+    "weight": "Berat badan",
+    "maritalStatus": "Status pernikahan",
+    "citizenship": "Kewarganegaraan",
+    "email": "Email",
+    "whatsapp": "Nomor WhatsApp",
+    "source": "Sumber informasi",
+    "hasGlasses": "Menggunakan kacamata",
+    "isColorBlind": "Buta warna",
+    "hasWeldingSkill": "Memiliki kemampuan welding",
+    "cv": "CV",
+    "certificate": "Sertifikat",
+    "submit": "Kirim lamaran",
+    "success": "Lamaran berhasil dikirim.",
+    "failed": "Lamaran gagal dikirim."
+  }
+}

@@ -1,8 +1,8 @@
 <?php
 
-use App\Application\Storage\FileStorageService;
-use App\Domain\Storage\StorageAdapterInterface;
-use App\Domain\Storage\StorageVisibility;
+use App\Core\FileStorage\Application\FileStorageService;
+use App\Core\FileStorage\Domain\StorageAdapterInterface;
+use App\Core\FileStorage\Domain\StorageVisibility;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase as BaseTestCase;
 

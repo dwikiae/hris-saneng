@@ -30,6 +30,7 @@ class CompleteSetupRequest extends FormRequest
             'company' => [$requiresCompany ? 'required' : 'sometimes', 'array'],
             'company.name' => [$requiresCompany ? 'required' : 'sometimes', 'string', 'max:255'],
             'company.legal_name' => [$requiresCompany ? 'required' : 'sometimes', 'string', 'max:255'],
+            'company.slug' => ['sometimes', 'nullable', 'string', 'max:255', 'regex:/^[a-z0-9-]+$/', 'unique:companies,slug'],
             'company.timezone' => ['sometimes', 'string', 'max:100'],
             'company.date_format' => ['sometimes', 'string', 'max:30'],
             'company.language_default' => ['sometimes', 'string', 'in:id,en'],

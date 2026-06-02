@@ -1,0 +1,44 @@
+{
+  "brand": {
+    "name": "Dictive-HR",
+    "eyebrow": "Platform"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "employees": "Karyawan",
+    "recruitment": "Recruitment",
+    "settings": "Settings",
+    "candidatePortal": "Portal kandidat"
+  },
+  "dashboard": {
+    "title": "Dashboard platform",
+    "description": "Ringkasan operasional instance, company, modul, dan aktivitas HR.",
+    "metrics": {
+      "employees": { "label": "Karyawan", "value": "128", "helper": "Contoh data dashboard" },
+      "candidates": { "label": "Kandidat", "value": "24", "helper": "Pipeline aktif" },
+      "documents": { "label": "Dokumen", "value": "16", "helper": "Menunggu review" },
+      "settings": { "label": "Company", "value": "3", "helper": "Terkelola dalam instance" }
+    },
+    "activityTitle": "Aktivitas terbaru"
+  },
+  "employees": {
+    "title": "Karyawan",
+    "description": "Surface untuk data karyawan mandatory module.",
+    "body": "Data karyawan akan terhubung ke API company-scoped ketika modul berjalan penuh."
+  },
+  "recruitment": {
+    "title": "Recruitment",
+    "description": "Surface untuk pipeline rekrutmen internal.",
+    "body": "Kelola lowongan, kandidat, quiz, dan pemberkasan dari satu dashboard."
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Surface untuk pengaturan company dan instance.",
+    "body": "Pengaturan akan tetap dipisah antara company-scoped dan instance-level."
+  },
+  "portal": {
+    "title": "Portal kandidat",
+    "description": "Entry untuk membuka token kandidat.",
+    "body": "Gunakan route /[company]/kandidat/quiz/[token] atau /[company]/kandidat/pemberkasan/[token]."
+  }
+}

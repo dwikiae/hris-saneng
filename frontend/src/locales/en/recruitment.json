@@ -1,0 +1,46 @@
+{
+  "hero": {
+    "eyebrow": "Careers",
+    "title": "Find the right position.",
+    "body": "Browse active job openings and submit an application through the candidate form."
+  },
+  "list": {
+    "title": "Active jobs",
+    "count": "{{count}} jobs available"
+  },
+  "job": {
+    "department": "Department",
+    "deadline": "Deadline",
+    "requirements": "Requirements"
+  },
+  "empty": {
+    "title": "No job openings yet",
+    "body": "Please check this career page again later."
+  },
+  "form": {
+    "title": "Application form",
+    "description": "Complete candidate data required by the recruitment process.",
+    "job": "Position",
+    "fullName": "Full name",
+    "birthPlace": "Birth place",
+    "birthDate": "Birth date",
+    "gender": "Gender",
+    "addressKtp": "Identity address",
+    "addressDomicile": "Domicile address",
+    "height": "Height",
+    "weight": "Weight",
+    "maritalStatus": "Marital status",
+    "citizenship": "Citizenship",
+    "email": "Email",
+    "whatsapp": "WhatsApp number",
+    "source": "Information source",
+    "hasGlasses": "Uses glasses",
+    "isColorBlind": "Color blind",
+    "hasWeldingSkill": "Has welding skill",
+    "cv": "CV",
+    "certificate": "Certificate",
+    "submit": "Submit application",
+    "success": "Application has been submitted.",
+    "failed": "Application submission failed."
+  }
+}

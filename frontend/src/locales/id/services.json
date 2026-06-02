@@ -1,0 +1,12 @@
+{
+  "page": {
+    "eyebrow": "Layanan",
+    "title": "Modul dan surface yang siap dikembangkan.",
+    "body": "Frontend unified ini menyiapkan tempat untuk dashboard, company website, rekrutmen publik, quiz, dan pemberkasan."
+  },
+  "items": {
+    "employee": { "title": "Karyawan", "body": "Fondasi data karyawan sebagai mandatory module." },
+    "recruitment": { "title": "Recruitment", "body": "Pipeline kandidat, lamaran, quiz, dan pemberkasan." },
+    "website": { "title": "Website", "body": "Halaman publik company dan karir berbasis slug." }
+  }
+}

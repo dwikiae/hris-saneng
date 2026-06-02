@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Settings;
 
+use App\Core\Company\Application\CompanyContext;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Settings\UpdateInstanceSettingsRequest;
 use App\Http\Requests\Settings\UpdateSettingsRequest;
@@ -18,6 +19,7 @@ class SettingsController extends Controller
     public function __construct(
         private readonly SettingsRepositoryInterface $settings,
         private readonly InstanceSettingsRepositoryInterface $instanceSettings,
+        private readonly CompanyContext $companyContext,
     ) {}
 
     public function index(Request $request): JsonResponse
@@ -81,6 +83,10 @@ class SettingsController extends Controller
 
     private function settingsCompanyId(Request $request): int
     {
+        if ($this->companyContext->hasCompany()) {
+            return $this->companyContext->companyId();
+        }
+
         $user = $request->user();
 
         if ($user instanceof User && ! $user->isInstanceAdmin()) {

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Application\Storage\FileStorageService;
+use App\Core\FileStorage\Application\FileStorageService;
 use App\Contracts\Archivable;
 use App\Models\Concerns\HasArchive;
 use App\Models\Concerns\HasCompany;

@@ -31,6 +31,7 @@ class UpdateCompanyRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255', Rule::unique('companies', 'name')->ignore($companyId)],
             'legal_name' => ['required', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255', 'regex:/^[a-z0-9-]+$/', Rule::unique('companies', 'slug')->ignore($companyId)],
             'npwp' => ['nullable', 'string', 'max:50'],
             'address' => ['nullable', 'string'],
             'city' => ['nullable', 'string', 'max:100'],

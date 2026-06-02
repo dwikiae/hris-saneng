@@ -1,0 +1,40 @@
+{
+  "header": {
+    "eyebrow": "Candidate documents",
+    "title": "Upload documents"
+  },
+  "loading": {
+    "title": "Loading session",
+    "body": "Please wait while the system retrieves document data."
+  },
+  "error": {
+    "title": "Session is not available",
+    "body": "The token is invalid or the session is no longer active."
+  },
+  "complete": {
+    "title": "Documents complete",
+    "body": "All required documents have been received."
+  },
+  "progress": {
+    "label": "{{uploaded}} of {{total}} required documents"
+  },
+  "document": {
+    "ktp": "Identity card",
+    "kk": "Family card",
+    "npwp": "Tax number",
+    "rekening": "Bank account",
+    "bpjs_kesehatan": "Health BPJS",
+    "bpjs_ketenagakerjaan": "Employment BPJS",
+    "pending": "Not uploaded",
+    "done": "Uploaded"
+  },
+  "upload": {
+    "title": "Upload document",
+    "choose": "Choose file",
+    "submit": "Upload",
+    "failed": "Upload failed."
+  },
+  "countdown": {
+    "unavailable": "Unavailable"
+  }
+}

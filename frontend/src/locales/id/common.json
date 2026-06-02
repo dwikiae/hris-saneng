@@ -1,0 +1,40 @@
+{
+  "brand": {
+    "name": "Dictive-HR",
+    "eyebrow": "Platform HRIS",
+    "tagline": "HRIS modular self-hosted",
+    "shortDescription": "Platform HRIS modular untuk mengelola company, karyawan, rekrutmen, website publik, dan portal kandidat dalam satu instance."
+  },
+  "language": {
+    "id": "ID",
+    "en": "EN"
+  },
+  "nav": {
+    "home": "Beranda",
+    "about": "Tentang",
+    "services": "Layanan",
+    "careers": "Karir",
+    "contact": "Kontak",
+    "dashboard": "Dashboard"
+  },
+  "actions": {
+    "apply": "Lamar",
+    "submit": "Kirim",
+    "cancel": "Batal",
+    "previous": "Sebelumnya",
+    "next": "Berikutnya",
+    "finish": "Selesai",
+    "upload": "Unggah",
+    "open": "Buka"
+  },
+  "state": {
+    "loading": "Memuat data",
+    "empty": "Belum ada data",
+    "error": "Data belum tersedia"
+  },
+  "form": {
+    "success": "Data berhasil dikirim.",
+    "failed": "Data gagal dikirim.",
+    "selectPlaceholder": "Pilih salah satu"
+  }
+}

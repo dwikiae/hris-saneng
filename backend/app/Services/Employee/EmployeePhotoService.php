@@ -2,8 +2,8 @@
 
 namespace App\Services\Employee;
 
-use App\Application\Storage\FileStorageService;
-use App\Domain\Storage\UploadProfile;
+use App\Core\FileStorage\Application\FileStorageService;
+use App\Core\FileStorage\Domain\UploadProfile;
 use App\Models\EmployeePhoto;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
 use Illuminate\Http\UploadedFile;

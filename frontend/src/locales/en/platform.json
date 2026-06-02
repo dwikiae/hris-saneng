@@ -1,0 +1,44 @@
+{
+  "brand": {
+    "name": "Dictive-HR",
+    "eyebrow": "Platform"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "employees": "Employees",
+    "recruitment": "Recruitment",
+    "settings": "Settings",
+    "candidatePortal": "Candidate portal"
+  },
+  "dashboard": {
+    "title": "Platform dashboard",
+    "description": "Operational overview for instance, companies, modules, and HR activity.",
+    "metrics": {
+      "employees": { "label": "Employees", "value": "128", "helper": "Dashboard sample data" },
+      "candidates": { "label": "Candidates", "value": "24", "helper": "Active pipeline" },
+      "documents": { "label": "Documents", "value": "16", "helper": "Waiting for review" },
+      "settings": { "label": "Companies", "value": "3", "helper": "Managed in this instance" }
+    },
+    "activityTitle": "Recent activity"
+  },
+  "employees": {
+    "title": "Employees",
+    "description": "Surface for the mandatory employee module.",
+    "body": "Employee data will connect to company-scoped APIs once the module is fully active."
+  },
+  "recruitment": {
+    "title": "Recruitment",
+    "description": "Surface for the internal recruitment pipeline.",
+    "body": "Manage jobs, candidates, quiz, and onboarding documents from one dashboard."
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Surface for company and instance settings.",
+    "body": "Settings stay separated between company-scoped and instance-level boundaries."
+  },
+  "portal": {
+    "title": "Candidate portal",
+    "description": "Entry point for candidate tokens.",
+    "body": "Use /[company]/kandidat/quiz/[token] or /[company]/kandidat/pemberkasan/[token]."
+  }
+}

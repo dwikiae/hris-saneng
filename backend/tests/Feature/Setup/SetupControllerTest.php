@@ -23,6 +23,7 @@ it('completes first-time setup with company, instance admin, and baseline settin
         ->assertCreated()
         ->assertJsonPath('success', true)
         ->assertJsonPath('message', 'setup.completed')
+        ->assertJsonPath('data.company_slug', 'pt-saneng')
         ->assertJsonPath('data.mandatory_modules.0', 'karyawan')
         ->assertJsonMissing(['StrongPass123']);
 
@@ -60,6 +61,7 @@ function milestone10SetupPayload(): array
         'company' => [
             'name' => 'PT Saneng',
             'legal_name' => 'PT Saneng',
+            'slug' => null,
             'timezone' => 'Asia/Jakarta',
             'date_format' => 'DD/MM/YYYY',
             'language_default' => 'id',

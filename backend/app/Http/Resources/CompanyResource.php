@@ -16,6 +16,7 @@ class CompanyResource extends JsonResource
             'id' => $this->resource->getAttribute('id'),
             'name' => $this->resource->getAttribute('name'),
             'legal_name' => $this->resource->getAttribute('legal_name'),
+            'slug' => $this->resource->getAttribute('slug'),
             'npwp' => $this->resource->getAttribute('npwp'),
             'address' => $this->resource->getAttribute('address'),
             'city' => $this->resource->getAttribute('city'),

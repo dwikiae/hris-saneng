@@ -1,0 +1,40 @@
+{
+  "brand": {
+    "name": "Dictive-HR",
+    "eyebrow": "HRIS Platform",
+    "tagline": "Self-hosted modular HRIS",
+    "shortDescription": "A modular HRIS platform for managing companies, employees, recruitment, public websites, and candidate portals in one instance."
+  },
+  "language": {
+    "id": "ID",
+    "en": "EN"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "careers": "Careers",
+    "contact": "Contact",
+    "dashboard": "Dashboard"
+  },
+  "actions": {
+    "apply": "Apply",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "previous": "Previous",
+    "next": "Next",
+    "finish": "Finish",
+    "upload": "Upload",
+    "open": "Open"
+  },
+  "state": {
+    "loading": "Loading data",
+    "empty": "No data yet",
+    "error": "Data is not available"
+  },
+  "form": {
+    "success": "Data has been submitted.",
+    "failed": "Data submission failed.",
+    "selectPlaceholder": "Select an option"
+  }
+}

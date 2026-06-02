@@ -1,7 +1,7 @@
 <?php
 
-use App\Support\Modules\ModuleDefinition;
-use App\Support\Modules\ModuleRegistry;
+use App\Core\ModuleRegistry\Application\ModuleRegistry;
+use App\Core\ModuleRegistry\Domain\ModuleDefinition;
 use Tests\TestCase;
 
 uses(TestCase::class);

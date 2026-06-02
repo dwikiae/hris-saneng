@@ -5,8 +5,9 @@ Self-hosted modular HRIS platform for Indonesian companies.
 ## Structure
 
 - `backend/` - Laravel 11 REST API and backend business logic.
-- `frontend-hris/` - Legacy Next.js HRIS frontend, pending future frontend rebase.
-- `frontend-web/` - Legacy Next.js public website frontend, pending future frontend rebase.
+- `frontend/` - Official unified Next.js 14 App Router frontend for dashboard, public website, careers, and candidate portal.
+- `frontend-hris/` - Legacy Next.js HRIS frontend kept as a migration reference.
+- `frontend-web/` - Legacy Next.js public website frontend kept as a migration reference.
 - `docs/` - Authority documents, architecture, ADR, and temporary alignment gap tracking.
 
 ## Authority

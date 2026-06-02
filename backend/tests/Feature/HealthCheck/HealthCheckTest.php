@@ -1,6 +1,6 @@
 <?php
 
-use App\Application\Health\HealthCheckService;
+use App\Core\Health\Application\HealthCheckService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

@@ -14,6 +14,8 @@ interface CompanyRepositoryInterface
 
     public function find(int $id, ?int $companyId = null): ?Company;
 
+    public function findByIdentifier(string $identifier): ?Company;
+
     /**
      * @param  array<string, mixed>  $data
      */

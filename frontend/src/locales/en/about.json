@@ -1,0 +1,8 @@
+{
+  "page": {
+    "eyebrow": "About the platform",
+    "title": "Designed for self-hosted multi-company operations.",
+    "body": "Dictive-HR keeps company, module, role, and candidate boundaries as part of a platform customers can run themselves.",
+    "compliance": "The architecture follows audit, archive-only, i18n, and API-first principles."
+  }
+}

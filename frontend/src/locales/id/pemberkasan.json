@@ -1,0 +1,40 @@
+{
+  "header": {
+    "eyebrow": "Pemberkasan kandidat",
+    "title": "Upload dokumen"
+  },
+  "loading": {
+    "title": "Memuat sesi",
+    "body": "Mohon tunggu, sistem sedang mengambil data pemberkasan."
+  },
+  "error": {
+    "title": "Sesi tidak tersedia",
+    "body": "Token tidak valid atau sesi sudah tidak aktif."
+  },
+  "complete": {
+    "title": "Pemberkasan lengkap",
+    "body": "Semua dokumen wajib sudah diterima."
+  },
+  "progress": {
+    "label": "{{uploaded}} dari {{total}} dokumen wajib"
+  },
+  "document": {
+    "ktp": "KTP",
+    "kk": "Kartu Keluarga",
+    "npwp": "NPWP",
+    "rekening": "Rekening",
+    "bpjs_kesehatan": "BPJS Kesehatan",
+    "bpjs_ketenagakerjaan": "BPJS Ketenagakerjaan",
+    "pending": "Belum diunggah",
+    "done": "Sudah diunggah"
+  },
+  "upload": {
+    "title": "Unggah dokumen",
+    "choose": "Pilih file",
+    "submit": "Unggah",
+    "failed": "Upload gagal."
+  },
+  "countdown": {
+    "unavailable": "Tidak tersedia"
+  }
+}

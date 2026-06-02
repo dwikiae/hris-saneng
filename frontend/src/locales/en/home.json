@@ -1,0 +1,27 @@
+{
+  "hero": {
+    "imageAlt": "Company operational activity",
+    "headline": "One platform for HR, recruitment, websites, and candidates.",
+    "sub": "Dictive-HR helps instance admins and company users manage HR work from the internal dashboard to public career pages.",
+    "cta": "View jobs"
+  },
+  "stats": {
+    "companies": { "value": "Multi", "label": "companies in one instance" },
+    "modules": { "value": "Modular", "label": "install globally, enable per company" },
+    "candidate": { "value": "Unified", "label": "token-based candidate portal" }
+  },
+  "sections": {
+    "aboutTitle": "Built for self-hosted HRIS",
+    "serviceTitle": "Platform surfaces"
+  },
+  "services": {
+    "dashboard": { "title": "Platform dashboard", "body": "Manage internal data, modules, roles, and company operations." },
+    "website": { "title": "Company website", "body": "Publish company profiles and public pages using company slugs." },
+    "candidate": { "title": "Candidate portal", "body": "Provide quiz and document access through tokens without login." }
+  },
+  "cta": {
+    "title": "Start from one official frontend",
+    "body": "Alignment 10 unifies dashboard and public website surfaces in App Router.",
+    "button": "Open dashboard"
+  }
+}

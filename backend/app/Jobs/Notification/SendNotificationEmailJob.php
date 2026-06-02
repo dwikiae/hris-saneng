@@ -2,7 +2,7 @@
 
 namespace App\Jobs\Notification;
 
-use App\Application\Notification\NotificationService;
+use App\Core\Notification\Application\NotificationService;
 use App\Mail\Notification\GenericNotificationMail;
 use App\Models\Notification;
 use App\Models\User;

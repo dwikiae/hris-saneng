@@ -1,0 +1,34 @@
+{
+  "header": {
+    "eyebrow": "Tes kandidat",
+    "title": "Quiz rekrutmen"
+  },
+  "loading": {
+    "title": "Memuat quiz",
+    "body": "Mohon tunggu, sistem sedang mengambil soal."
+  },
+  "error": {
+    "title": "Quiz tidak tersedia",
+    "body": "Token tidak valid atau data quiz belum bisa diakses."
+  },
+  "submitted": {
+    "title": "Jawaban terkirim",
+    "body": "Terima kasih, jawaban quiz sudah diterima."
+  },
+  "timeout": {
+    "title": "Waktu habis",
+    "body": "Jawaban yang tersedia sudah dikirim otomatis."
+  },
+  "question": {
+    "number": "Soal {{current}} dari {{total}}",
+    "answer": "Jawaban"
+  },
+  "timer": {
+    "label": "Sisa waktu"
+  },
+  "actions": {
+    "previous": "Sebelumnya",
+    "next": "Berikutnya",
+    "submit": "Kirim jawaban"
+  }
+}

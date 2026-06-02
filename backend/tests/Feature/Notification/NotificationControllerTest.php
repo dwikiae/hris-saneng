@@ -1,6 +1,6 @@
 <?php
 
-use App\Application\Notification\NotificationService;
+use App\Core\Notification\Application\NotificationService;
 use App\Jobs\Notification\SendNotificationEmailJob;
 use App\Models\Company;
 use App\Models\Notification;

@@ -4,13 +4,18 @@ namespace App\Http\Middleware;
 
 use App\Core\Company\Application\CompanyContext;
 use App\Models\Company;
+use App\Models\User;
+use App\Repositories\Contracts\CompanyRepositoryInterface;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ResolveCompany
 {
-    public function __construct(private readonly CompanyContext $companyContext) {}
+    public function __construct(
+        private readonly CompanyContext $companyContext,
+        private readonly CompanyRepositoryInterface $companies,
+    ) {}
 
     /**
      * @param  Closure(Request): Response  $next
@@ -20,6 +25,11 @@ class ResolveCompany
         $this->companyContext->clear();
 
         $identifier = $this->companyIdentifier($request);
+        $user = $request->user();
+
+        if ($identifier === null && $user instanceof User && $user->company_id !== null) {
+            $identifier = (string) $user->company_id;
+        }
 
         if ($identifier === null) {
             return $this->errorResponse('company.context.required', Response::HTTP_BAD_REQUEST);
@@ -28,6 +38,10 @@ class ResolveCompany
         $company = $this->resolveCompany($identifier);
 
         if (! $company instanceof Company) {
+            return $this->errorResponse('company.context.not_found', Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($user instanceof User && $user->company_id !== null && (int) $user->company_id !== (int) $company->getKey()) {
             return $this->errorResponse('company.context.not_found', Response::HTTP_BAD_REQUEST);
         }
 
@@ -61,14 +75,7 @@ class ResolveCompany
 
     private function resolveCompany(string $identifier): ?Company
     {
-        if (! ctype_digit($identifier)) {
-            return null;
-        }
-
-        /** @var Company|null $company */
-        $company = Company::query()->whereKey((int) $identifier)->first();
-
-        return $company;
+        return $this->companies->findByIdentifier($identifier);
     }
 
     private function errorResponse(string $message, int $status): Response

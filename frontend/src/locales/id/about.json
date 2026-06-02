@@ -1,0 +1,8 @@
+{
+  "page": {
+    "eyebrow": "Tentang platform",
+    "title": "Dirancang untuk multi-company self-hosted.",
+    "body": "Dictive-HR menyimpan boundary company, modul, role, dan kandidat sebagai bagian dari platform yang bisa dijalankan sendiri oleh customer.",
+    "compliance": "Arsitektur mengikuti prinsip audit, archive-only, i18n, dan API-first."
+  }
+}

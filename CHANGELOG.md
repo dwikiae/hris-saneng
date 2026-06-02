@@ -34,6 +34,44 @@ Semua perubahan penting project dicatat di file ini.
 - Menetapkan urutan milestone alignment berikutnya agar perintah "selanjutnya" bisa dilanjutkan secara reliable di session baru.
 - Memperbarui `GAP_REGISTER.md` dengan next milestone dan aturan lifecycle gap sementara.
 
+## Alignment 6
+
+- Memisahkan boundary route API backend menjadi public/setup/auth, instance-level, dan company-scoped tanpa rebase path endpoint existing.
+- Menerapkan middleware `company.resolve` pada endpoint private company-scoped dan menjaga route instance-level tetap terpisah.
+- Menambahkan fallback company context dari authenticated company user, dengan penolakan jika user meminta konteks company lain.
+- Menyelaraskan settings dan RBAC role agar memakai resolved company context pada route company-scoped.
+
+## Alignment 7
+
+- Memindahkan runtime manifest module registry dari `App\Support\Modules` ke `backend/app/Core/ModuleRegistry`.
+- Menempatkan `ModuleRegistry` di layer Application dan `ModuleDefinition` di layer Domain Core ModuleRegistry.
+- Memperbarui unit test manifest module agar memakai namespace Core baru tanpa mengubah behavior lifecycle module.
+
+## Alignment 8
+
+- Menambahkan guard lifecycle berbasis manifest untuk install, enable, disable, dan uninstall module di Core ModuleRegistry.
+- Memastikan mandatory module tidak bisa di-install ulang, di-toggle, atau di-uninstall melalui lifecycle guard.
+- Menambahkan validasi dependency optional module sebelum install/enable dan precondition export/konfirmasi sebelum uninstall.
+
+## Alignment 9
+
+- Menambahkan task packet `docs/alignment/FRONTEND_REBASE_TASK_PACKET.md` untuk eksekusi frontend rebase Alignment 10.
+- Mendefinisikan target satu aplikasi `/frontend` Next.js 14 App Router beserta mapping surface dashboard, website publik, karir, dan kandidat.
+- Menegaskan bahwa Alignment 9 hanya planning dan tidak mengubah frontend dirty files.
+
+## Alignment 10
+
+- Menambahkan aplikasi unified `/frontend` berbasis Next.js 14 App Router untuk dashboard, website publik company, halaman karir, quiz kandidat, dan pemberkasan.
+- Memindahkan API call frontend ke service layer `/frontend/src/services` dan locale bilingual ke `/frontend/src/locales/id` serta `/frontend/src/locales/en`.
+- Mengarahkan frontend CI/checks ke `/frontend` sambil mempertahankan `frontend-hris` dan `frontend-web` sebagai referensi legacy tanpa diedit atau dihapus.
+
+## Gap Closure
+
+- Menambahkan slug company secara additive pada tabel `companies`, termasuk backfill slug unik dan dukungan resolve company context via numeric id maupun slug.
+- Menyelaraskan flow company create/update/setup agar menghasilkan slug dan mengeksposnya di response company API.
+- Memindahkan runtime Core Health, Notification, dan FileStorage dari folder shared legacy ke `backend/app/Core`.
+- Menghapus `docs/alignment/GAP_REGISTER.md` karena seluruh gap alignment yang tercatat sudah terselesaikan atau dipindahkan ke batas modul non-Core eksplisit.
+
 ## Sprint 0
 
 - Menyiapkan scaffold monorepo Laravel 11 + dua frontend Next.js 14.

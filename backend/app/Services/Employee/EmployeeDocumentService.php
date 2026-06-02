@@ -2,7 +2,7 @@
 
 namespace App\Services\Employee;
 
-use App\Application\Storage\FileStorageService;
+use App\Core\FileStorage\Application\FileStorageService;
 use App\Models\EmployeeDocument;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
 use App\Services\ArchiveService;

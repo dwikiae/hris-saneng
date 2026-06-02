@@ -1,0 +1,12 @@
+{
+  "page": {
+    "eyebrow": "Services",
+    "title": "Modules and surfaces ready for development.",
+    "body": "This unified frontend prepares the home for dashboard, company website, public recruitment, quiz, and onboarding documents."
+  },
+  "items": {
+    "employee": { "title": "Employees", "body": "Employee data foundation as a mandatory module." },
+    "recruitment": { "title": "Recruitment", "body": "Candidate pipeline, applications, quiz, and onboarding documents." },
+    "website": { "title": "Website", "body": "Public company and career pages based on company slug." }
+  }
+}
