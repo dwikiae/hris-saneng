@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\Audit\AuditController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\UserController;
 use App\Http\Controllers\Api\V1\Company\CompanyController;
+use App\Http\Controllers\Api\V1\Core\InstanceCompanyController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\Employee\EmployeeController;
 use App\Http\Controllers\Api\V1\Employee\EmployeeDocumentController;
@@ -71,6 +72,14 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(functio
     Route::get('settings/instance', [SettingsController::class, 'instanceIndex']);
     Route::put('settings/instance', [SettingsController::class, 'instanceUpdate']);
     Route::patch('users/me/preferences', [LoginController::class, 'updatePreferences']);
+
+    Route::prefix('instance/companies')->group(function () {
+        Route::get('/', [InstanceCompanyController::class, 'index']);
+        Route::post('/', [InstanceCompanyController::class, 'store']);
+        Route::get('{company}', [InstanceCompanyController::class, 'show']);
+        Route::put('{company}', [InstanceCompanyController::class, 'update']);
+        Route::delete('{company}', [InstanceCompanyController::class, 'destroy']);
+    });
 
     Route::middleware('company.resolve')->group(function () {
         Route::get('dashboard/stats', [DashboardController::class, 'stats']);

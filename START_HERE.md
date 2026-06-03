@@ -2,10 +2,10 @@
 Fase: 1
 Status: Fase 1 - retrofit sedang berjalan
 Terakhir dikerjakan: 3 Juni 2026
-Task terakhir selesai: Phase D1 Sub-task 4 - Platform Config, Audit Log, dan Module Registry frontend dibuat di /frontend
-Task berikutnya: Phase D2 - Modul Karyawan memakai ListPageTemplate, DetailPageTemplate, dan FormPageTemplate
-Known issues: Tabel attendance/leave belum ada, sehingga present_today, absent_today, dan leave_today masih 0. npm audit di /frontend melaporkan 5 vulnerability dari dependency tree; belum diperbaiki karena npm audit fix --force berpotensi breaking. PHP GD extension belum aktif, sehingga test employee photo variant di-skip sampai extension tersedia. Backend PostgreSQL/Docker daemon lokal sedang tidak aktif pada verifikasi Phase C, sehingga UserPreferencesTest belum bisa dijalankan ulang. Backend auth endpoint `forgot-password`, `reset-password`, dan `set-password` invitation belum ada. Backend spec endpoint `/api/v1/instance/companies`, `/api/v1/instance/modules`, `/api/v1/instance/users`, `/api/v1/instance/roles`, `/api/v1/instance/permissions/structure`, `/api/v1/instance/config`, dan `/api/v1/instance/audit` belum ada; Settings Platform frontend sudah contract-ready dan menampilkan API-not-ready state.
-Instruksi sesi ini: Baca START_HERE.md -> Baca AGENTS.md -> Baca docs/UIUX_SPEC.md -> Baca docs/PLATFORM_UI_SPEC.md -> Lanjutkan Phase D2 Modul Karyawan setelah approval.
+Task terakhir selesai: Phase D1 Backend Grup 1 - Company Management instance-level endpoints dibuat
+Task berikutnya: Phase D1 Backend Grup 2 - Users & Access instance-level endpoints
+Known issues: Tabel attendance/leave belum ada, sehingga present_today, absent_today, dan leave_today masih 0. npm audit di /frontend melaporkan 5 vulnerability dari dependency tree; belum diperbaiki karena npm audit fix --force berpotensi breaking. PHP GD extension belum aktif, sehingga test employee photo variant di-skip sampai extension tersedia. Backend PostgreSQL/Docker daemon lokal sedang tidak aktif pada verifikasi Grup 1, sehingga `InstanceCompanyControllerTest`, `CompanyManagementTest`, `NoHardDeleteProductionCodeTest`, dan `CompanyTest` belum bisa dijalankan sampai assertion. Backend auth endpoint `forgot-password`, `reset-password`, dan `set-password` invitation belum ada. Backend spec endpoint `/api/v1/instance/modules`, `/api/v1/instance/users`, `/api/v1/instance/roles`, `/api/v1/instance/permissions/structure`, `/api/v1/instance/config`, dan `/api/v1/instance/audit` belum ada; Settings Platform frontend sudah contract-ready dan menampilkan API-not-ready state untuk endpoint yang belum tersedia.
+Instruksi sesi ini: Baca START_HERE.md -> Baca AGENTS.md -> Baca docs/UIUX_SPEC.md -> Baca docs/PLATFORM_UI_SPEC.md -> Lanjutkan Phase D1 Backend Grup 2 Users & Access setelah approval.
 ---
 
 # Start Here
@@ -26,4 +26,6 @@ Phase D1 Sub-task 3 selesai: Users & Access frontend tersedia di `/dashboard/set
 
 Phase D1 Sub-task 4 selesai: Platform Config, Audit Log, dan Module Registry frontend tersedia di `/dashboard/settings/config`, `/dashboard/settings/audit`, dan `/dashboard/settings/modules`. Frontend menarget endpoint spec `/api/v1/instance/*`, bukan endpoint legacy `/api/v1/settings/instance` atau `/api/v1/audit`.
 
-Mulai sesi berikutnya dari Phase D2 Modul Karyawan. Keputusan tambahan di `docs/UIUX_SPEC.md` sudah final: light mode only, onboarding wizard, language switcher ID/EN, notifikasi WebSocket via Soketi, dan company branding per company.
+Phase D1 Backend Grup 1 selesai secara implementasi: endpoint instance-level Company Management tersedia di `/api/v1/instance/companies`, hanya untuk Platform Administrator, dengan create/update/detail/list dan archive tanpa hard delete. Field extended frontend disimpan di `company_settings`, sedangkan tabel `companies` hanya ditambah kolom archive yang sudah disetujui.
+
+Mulai sesi berikutnya dari Phase D1 Backend Grup 2 Users & Access. Keputusan tambahan di `docs/UIUX_SPEC.md` sudah final: light mode only, onboarding wizard, language switcher ID/EN, notifikasi WebSocket via Soketi, dan company branding per company.

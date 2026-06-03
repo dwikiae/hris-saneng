@@ -34,5 +34,7 @@ it('has the expected fillable fields', function () {
         'timezone',
         'date_format',
         'language_default',
+        'archived_at',
+        'archived_by',
     ]);
 });

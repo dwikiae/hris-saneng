@@ -2,6 +2,15 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-03 - Phase D1 Backend Grup 1 Company Management
+
+- Menambahkan endpoint instance-level Company Management di `/api/v1/instance/companies` untuk list, create, detail, update, dan archive company.
+- Membatasi endpoint hanya untuk Platform Administrator, memakai FormRequest authorization dan guard private API existing.
+- Menambahkan layer controller, application service, repository contract/implementation, resource camelCase, dan feature test `InstanceCompanyControllerTest`.
+- Menambahkan kolom `archived_at` dan `archived_by` ke tabel `companies` agar archive company tidak memakai hard delete.
+- Menyimpan field company extended frontend di `company_settings`, sementara field inti tetap memakai tabel `companies`.
+- Mencatat bahwa verifikasi test backend Grup 1 masih terblokir karena PostgreSQL/Docker daemon lokal tidak berjalan saat sesi ini.
+
 ## 2026-06-03 - Phase D1 Sub-task 4 Platform Config, Audit Log, dan Module Registry
 
 - Menambahkan frontend Platform Config di `/dashboard/settings/config` dengan form lokalisasi, keamanan sesi, lockout login, SMTP, toggle password, test email, dan save langsung.
