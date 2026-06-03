@@ -2,6 +2,16 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-03 - Phase D1 Backend Grup 2 Users & Access
+
+- Menambahkan endpoint instance-level Users di `/api/v1/instance/users` untuk list, create, detail, update, archive, dan resend invitation khusus Platform Administrator.
+- Menambahkan endpoint instance-level Roles di `/api/v1/instance/roles` untuk list, create, detail, update, archive, dan replace permission role via `PATCH /permissions`.
+- Menambahkan endpoint `/api/v1/instance/permissions/structure` dengan tree modules, menus, dan actions dari module registry serta fallback permission database.
+- Menambahkan auth password recovery backend: `forgot-password`, `reset-password`, dan `set-password` invitation.
+- Menambahkan tabel `user_invitations`, model invitation, queued jobs, mailables, dan Blade email untuk invitation user serta reset password tanpa dependency baru.
+- Memperbaiki behavior sidebar Settings agar tidak hilang saat auth hydration masih berjalan dan membersihkan token frontend jika `/auth/me` gagal.
+- Menambahkan feature test untuk Users & Access dan auth password access, dengan catatan test runtime masih terblokir PostgreSQL lokal yang belum aktif.
+
 ## 2026-06-03 - Fix Frontend API Proxy
 
 - Menambahkan rewrite Next.js untuk meneruskan `/api/v1/*` dari frontend dev server ke Laravel API, sehingga `AuthHydrator` bisa membaca `/api/v1/auth/me` dari backend.

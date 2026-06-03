@@ -12,5 +12,20 @@
     "translations": [
         "id",
         "en"
+    ],
+    "permission_menus": [
+        {
+            "id": "employees",
+            "label": "Data Karyawan",
+            "actions": [
+                "employee.view",
+                "employee.create",
+                "employee.update",
+                "employee.archive",
+                "employee.export",
+                "employee.approve",
+                "employee.view_salary"
+            ]
+        }
     ]
 }

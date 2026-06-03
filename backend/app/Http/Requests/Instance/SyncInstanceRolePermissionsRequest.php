@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Http\Requests\Instance;
+
+use App\Models\User;
+use Illuminate\Foundation\Http\FormRequest;
+
+class SyncInstanceRolePermissionsRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        $user = $this->user();
+
+        return $user instanceof User && $user->isInstanceAdmin();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function rules(): array
+    {
+        return [
+            'permission_ids' => ['required', 'array'],
+            'permission_ids.*' => ['integer', 'exists:permissions,id'],
+        ];
+    }
+}

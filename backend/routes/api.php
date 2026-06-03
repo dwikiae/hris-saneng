@@ -3,9 +3,13 @@
 use App\Http\Controllers\Api\V1\Archive\ArchiveController;
 use App\Http\Controllers\Api\V1\Audit\AuditController;
 use App\Http\Controllers\Api\V1\Auth\LoginController;
+use App\Http\Controllers\Api\V1\Auth\PasswordAccessController;
 use App\Http\Controllers\Api\V1\Auth\UserController;
 use App\Http\Controllers\Api\V1\Company\CompanyController;
 use App\Http\Controllers\Api\V1\Core\InstanceCompanyController;
+use App\Http\Controllers\Api\V1\Core\InstancePermissionController;
+use App\Http\Controllers\Api\V1\Core\InstanceRoleController;
+use App\Http\Controllers\Api\V1\Core\InstanceUserController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\Employee\EmployeeController;
 use App\Http\Controllers\Api\V1\Employee\EmployeeDocumentController;
@@ -38,6 +42,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1/auth')->group(function () {
     Route::post('login', [LoginController::class, 'login'])->middleware('throttle:5,1');
+    Route::post('forgot-password', [PasswordAccessController::class, 'forgot']);
+    Route::post('reset-password', [PasswordAccessController::class, 'reset']);
+    Route::post('set-password', [PasswordAccessController::class, 'set']);
     Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
     Route::post('change-password', [LoginController::class, 'changePassword'])->middleware('auth:sanctum');
     Route::get('me', [LoginController::class, 'me'])->middleware(['auth:sanctum', ForcePasswordReset::class]);
@@ -80,6 +87,26 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(functio
         Route::put('{company}', [InstanceCompanyController::class, 'update']);
         Route::delete('{company}', [InstanceCompanyController::class, 'destroy']);
     });
+
+    Route::prefix('instance/users')->group(function () {
+        Route::get('/', [InstanceUserController::class, 'index']);
+        Route::post('/', [InstanceUserController::class, 'store']);
+        Route::get('{user}', [InstanceUserController::class, 'show']);
+        Route::put('{user}', [InstanceUserController::class, 'update']);
+        Route::delete('{user}', [InstanceUserController::class, 'destroy']);
+        Route::post('{user}/resend-invitation', [InstanceUserController::class, 'resendInvitation']);
+    });
+
+    Route::prefix('instance/roles')->group(function () {
+        Route::get('/', [InstanceRoleController::class, 'index']);
+        Route::post('/', [InstanceRoleController::class, 'store']);
+        Route::get('{role}', [InstanceRoleController::class, 'show']);
+        Route::put('{role}', [InstanceRoleController::class, 'update']);
+        Route::delete('{role}', [InstanceRoleController::class, 'destroy']);
+        Route::patch('{role}/permissions', [InstanceRoleController::class, 'permissions']);
+    });
+
+    Route::get('instance/permissions/structure', [InstancePermissionController::class, 'structure']);
 
     Route::middleware('company.resolve')->group(function () {
         Route::get('dashboard/stats', [DashboardController::class, 'stats']);

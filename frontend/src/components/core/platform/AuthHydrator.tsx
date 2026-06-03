@@ -27,5 +27,12 @@ export function AuthHydrator() {
     }
   }, [currentUserQuery.data, setUser]);
 
+  useEffect(() => {
+    if (currentUserQuery.isError) {
+      window.localStorage.removeItem("dictive_hr_token");
+      setUser(null);
+    }
+  }, [currentUserQuery.isError, setUser]);
+
   return null;
 }

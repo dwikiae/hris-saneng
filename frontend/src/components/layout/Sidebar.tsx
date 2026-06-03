@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import { PermissionGate } from "@/components/platform/PermissionGate";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/stores/auth.store";
 
 const mainNavItems = [
   { href: "/dashboard", labelKey: "nav.dashboard", icon: Gauge },
@@ -43,6 +44,9 @@ interface SidebarProps {
 export function Sidebar({ onNavigate }: SidebarProps) {
   const pathname = usePathname();
   const { t } = useTranslation("platform");
+  const isAuthHydrated = useAuthStore((state) => state.isHydrated);
+  const hasPlatformSettings = useAuthStore((state) => state.hasPermission("platform.settings"));
+  const hasToken = typeof window !== "undefined" && Boolean(window.localStorage.getItem("dictive_hr_token"));
 
   return (
     <div className="flex h-full w-[240px] flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
@@ -99,12 +103,18 @@ export function Sidebar({ onNavigate }: SidebarProps) {
               </Link>
             );
 
-            return item.href === "/dashboard/settings" ? (
+            if (item.href !== "/dashboard/settings") {
+              return link;
+            }
+
+            if (hasPlatformSettings || (hasToken && !isAuthHydrated)) {
+              return link;
+            }
+
+            return (
               <PermissionGate key={item.href} permission="platform.settings">
                 {link}
               </PermissionGate>
-            ) : (
-              link
             );
           })}
         </nav>

@@ -18,7 +18,12 @@ export function RoleDetailPage() {
   const params = useParams<{ id: string }>();
   const roleId = params.id;
   const roleQuery = useQuery({ queryKey: ["settings", "roles", roleId], queryFn: () => roleService.detail(roleId) });
-  const permissionQuery = useQuery({ queryKey: ["settings", "permissions", "structure"], queryFn: () => roleService.permissionsStructure() });
+  const roleCompanyId = roleQuery.data?.company?.id;
+  const permissionQuery = useQuery({
+    queryKey: ["settings", "permissions", "structure", roleCompanyId],
+    queryFn: () => roleService.permissionsStructure(roleCompanyId),
+    enabled: Boolean(roleCompanyId)
+  });
   const saveMutation = useMutation({
     mutationFn: (permissionIds: Array<string | number>) => roleService.updatePermissions(roleId, permissionIds),
     onSuccess: () => platformToast.success(t("settingsAccess.toast.permissionsSaved")),

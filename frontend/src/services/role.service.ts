@@ -48,8 +48,9 @@ export const roleService = {
   archive(roleId: string | number): Promise<null> {
     return requestPrivateJson<null>(`/instance/roles/${roleId}`, { method: "DELETE" });
   },
-  permissionsStructure(): Promise<PermissionModuleNode[]> {
-    return requestPrivateJson<PermissionModuleNode[]>("/instance/permissions/structure");
+  permissionsStructure(companyId?: string | number | null): Promise<PermissionModuleNode[]> {
+    const query = companyId ? `?company_id=${companyId}` : "";
+    return requestPrivateJson<PermissionModuleNode[]>(`/instance/permissions/structure${query}`);
   },
   updatePermissions(roleId: string | number, permissionIds: Array<string | number>): Promise<PlatformRole> {
     return requestPrivateJson<PlatformRole>(`/instance/roles/${roleId}/permissions`, {
