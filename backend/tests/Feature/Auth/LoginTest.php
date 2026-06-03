@@ -63,6 +63,25 @@ it('returns permission codes on valid login', function () {
         ->assertJsonPath('data.user.permissions', ['employee.view']);
 });
 
+it('returns platform settings permission for instance admin login', function () {
+    $admin = User::create([
+        'company_id' => null,
+        'name' => 'Instance Admin',
+        'email' => 'instance.admin@example.test',
+        'password' => 'Admin@1234',
+        'language_preference' => 'id',
+        'force_password_reset' => false,
+        'login_attempts' => 0,
+    ]);
+
+    $this->postJson('/api/v1/auth/login', [
+        'email' => $admin->email,
+        'password' => 'Admin@1234',
+    ])
+        ->assertOk()
+        ->assertJsonPath('data.user.permissions', ['platform.settings']);
+});
+
 it('returns 401 for unknown email', function () {
     $this->postJson('/api/v1/auth/login', [
         'email' => 'unknown@test.com',

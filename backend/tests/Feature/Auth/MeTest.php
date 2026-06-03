@@ -54,6 +54,23 @@ it('returns permission codes when authenticated', function () {
         ->assertJsonPath('data.permissions', ['employee.create']);
 });
 
+it('returns platform settings permission for instance admin', function () {
+    $admin = User::create([
+        'company_id' => null,
+        'name' => 'Instance Admin',
+        'email' => 'instance.admin@example.test',
+        'password' => 'Admin@1234',
+        'language_preference' => 'id',
+        'force_password_reset' => false,
+        'login_attempts' => 0,
+    ]);
+    $token = $admin->createToken('test')->plainTextToken;
+
+    $this->getJson('/api/v1/auth/me', ['Authorization' => "Bearer $token"])
+        ->assertOk()
+        ->assertJsonPath('data.permissions', ['platform.settings']);
+});
+
 it('returns 401 when unauthenticated', function () {
     $this->getJson('/api/v1/auth/me')->assertStatus(401);
 });

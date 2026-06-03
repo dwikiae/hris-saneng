@@ -2,6 +2,11 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-03 - Fix Settings Navigation Permission
+
+- Menambahkan permission virtual `platform.settings` pada response login dan `/auth/me` untuk Instance Admin (`company_id = null`), supaya menu Settings di sidebar tidak tersembunyi untuk Platform Administrator.
+- Menambahkan coverage auth untuk memastikan permission virtual tersebut tetap dikirim ke frontend.
+
 ## 2026-06-03 - Phase D1 Backend Grup 1 Company Management
 
 - Menambahkan endpoint instance-level Company Management di `/api/v1/instance/companies` untuk list, create, detail, update, dan archive company.

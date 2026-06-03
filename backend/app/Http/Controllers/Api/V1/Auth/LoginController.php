@@ -14,6 +14,8 @@ use Laravel\Sanctum\PersonalAccessToken;
 
 class LoginController extends Controller
 {
+    private const PLATFORM_SETTINGS_PERMISSION = 'platform.settings';
+
     public function login(Request $request): JsonResponse
     {
         $credentials = $request->validate([
@@ -159,6 +161,10 @@ class LoginController extends Controller
     {
         /** @var Collection<int, string> $codes */
         $codes = $user->permissions()->pluck('code');
+
+        if ($user->isInstanceAdmin() && ! $codes->contains(self::PLATFORM_SETTINGS_PERMISSION)) {
+            $codes->push(self::PLATFORM_SETTINGS_PERMISSION);
+        }
 
         return $codes->values()->all();
     }
