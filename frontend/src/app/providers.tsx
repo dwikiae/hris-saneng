@@ -3,6 +3,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import { useState } from "react";
+import { AuthHydrator } from "@/components/core/platform/AuthHydrator";
+import { ToastProvider } from "@/components/platform/ToastProvider";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
 
 interface AppProvidersProps {
@@ -23,7 +25,11 @@ export function AppProviders({ children }: AppProvidersProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <LocaleProvider>{children}</LocaleProvider>
+      <LocaleProvider>
+        <AuthHydrator />
+        {children}
+        <ToastProvider />
+      </LocaleProvider>
     </QueryClientProvider>
   );
 }

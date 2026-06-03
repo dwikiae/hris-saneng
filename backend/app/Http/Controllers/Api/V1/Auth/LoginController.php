@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
+use App\Application\Auth\UserPreferencesService;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\Auth\UpdateUserPreferencesRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -127,6 +129,26 @@ class LoginController extends Controller
                 'force_password_reset' => $user->force_password_reset,
                 'permissions' => $this->permissionCodes($user),
             ],
+        ]);
+    }
+
+    public function updatePreferences(
+        UpdateUserPreferencesRequest $request,
+        UserPreferencesService $userPreferences
+    ): JsonResponse {
+        /** @var User $user */
+        $user = $request->user();
+        $updatedUser = $userPreferences->updateLanguagePreference(
+            $user,
+            (string) $request->validated('language_preference')
+        );
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'language_preference' => $updatedUser->language_preference,
+            ],
+            'message' => 'user.preferences.updated',
         ]);
     }
 

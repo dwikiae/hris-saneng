@@ -143,5 +143,125 @@
     "title": "Candidate portal",
     "description": "Entry point for candidate tokens.",
     "body": "Use /[company]/kandidat/quiz/[token] or /[company]/kandidat/pemberkasan/[token]."
+  },
+  "platformBehavior": {
+    "confirm": {
+      "cancel": "Cancel",
+      "demoTitle": "Archive demo data",
+      "demoDescription": "This action will archive {{entity}}.",
+      "demoConfirm": "Archive",
+      "demoToast": "Confirmation dialog was triggered."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "empty": "No notifications yet.",
+      "viewAll": "View all",
+      "pageTitle": "Notifications",
+      "pageDescription": "Latest platform notifications.",
+      "emptyDescription": "Realtime notifications will appear after the endpoint and Soketi are active.",
+      "errorTitle": "Notifications are not available yet",
+      "errorDescription": "The notification endpoint is not reachable yet."
+    },
+    "export": {
+      "label": "Export",
+      "progress": "Exporting...",
+      "excel": "Export Excel",
+      "pdf": "Export PDF",
+      "csv": "Export CSV",
+      "success": "The export file is downloading.",
+      "failed": "The export failed."
+    },
+    "documents": {
+      "drop": "Drop documents here",
+      "limit": "Maximum {{size}}MB per file",
+      "browse": "Choose files",
+      "invalid": "Document format or size is invalid.",
+      "uploaded": "Document uploaded.",
+      "failed": "Document upload failed.",
+      "download": "Download",
+      "archive": "Archive"
+    },
+    "approval": {
+      "title": "Pending approval",
+      "description": "{{entity}} needs review before it can continue.",
+      "approve": "Approve",
+      "reject": "Reject",
+      "approved": "Item approved.",
+      "rejected": "Item rejected.",
+      "failed": "Approval action failed.",
+      "noteRequired": "Rejection note is required.",
+      "confirmTitle": "Approve item",
+      "confirmDescription": "Confirm approval for {{entity}}.",
+      "rejectTitle": "Reject item",
+      "notePlaceholder": "Write the rejection reason..."
+    },
+    "chat": {
+      "activityTab": "Activity Log",
+      "notesTab": "Manual Notes",
+      "loadMore": "Load more",
+      "notePlaceholder": "Write a note or @mention a teammate...",
+      "saveNote": "Save note",
+      "noteSaved": "Note saved.",
+      "noteFailed": "Note failed to save.",
+      "noteRequired": "Note cannot be empty.",
+      "justNow": "Just now"
+    }
+  },
+  "platformDemo": {
+    "title": "Platform demo",
+    "actions": {
+      "new": "Create data",
+      "save": "Save"
+    },
+    "list": {
+      "title": "List template",
+      "description": "Example ListPageTemplate with actions, summary, and status."
+    },
+    "columns": {
+      "name": "Name",
+      "owner": "Owner",
+      "status": "Status"
+    },
+    "summary": {
+      "total": "Total",
+      "pending": "Pending"
+    },
+    "empty": {
+      "title": "No data yet",
+      "description": "Demo data is empty."
+    },
+    "detail": {
+      "back": "Back to dashboard",
+      "title": "Detail template",
+      "subtitle": "Example detail with approval and notes",
+      "status": "Pending"
+    },
+    "tabs": {
+      "documents": "Documents"
+    },
+    "timeline": {
+      "requested": "Requested review",
+      "note": "Waiting for HR Manager approval."
+    },
+    "chat": {
+      "updated": "Updated a sensitive field",
+      "note": "@finance please review compensation data."
+    },
+    "form": {
+      "title": "Form template",
+      "description": "Example FormPageTemplate with sticky footer.",
+      "section": "Identity"
+    },
+    "wizard": {
+      "title": "Wizard shell",
+      "stepOne": "Platform setup",
+      "stepTwo": "Create role"
+    },
+    "behaviors": {
+      "title": "Behaviors",
+      "disabled": "Button without permission",
+      "secret": "Secret value",
+      "confirm": "Confirm"
+    }
   }
 }

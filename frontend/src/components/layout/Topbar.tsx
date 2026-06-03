@@ -1,7 +1,9 @@
 "use client";
 
-import { Bell, Menu, Search } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { NotificationBell } from "@/components/platform/NotificationBell";
+import { LanguageSwitcher } from "@/components/shared/LanguageSwitcher";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -47,12 +49,8 @@ export function Topbar({ onOpenSidebar }: TopbarProps) {
       </div>
 
       <div className="ml-auto flex items-center gap-2">
-        <Button type="button" variant="ghost" size="icon" aria-label={t("topbar.notifications")}>
-          <span className="relative">
-            <Bell className="h-5 w-5" aria-hidden="true" />
-            <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-destructive" />
-          </span>
-        </Button>
+        <LanguageSwitcher />
+        <NotificationBell />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

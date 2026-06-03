@@ -54,7 +54,10 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [x] Backend — buat endpoint `GET /api/v1/dashboard/stats` untuk data dashboard nyata.
 - [x] Backend — pindahkan test environment dari SQLite in-memory ke PostgreSQL test database.
 - [x] `/frontend` — Phase B Platform UI Templates selesai: ListPageTemplate, DetailPageTemplate, FormPageTemplate, dan WizardShell.
-- [ ] `/frontend` — Phase C Platform Behaviors: PermissionGate, ConfirmDialog, Toast, NotificationBell, LanguageSwitcher, ExportButton, DocumentUpload, Approval UI, dan ChatLog.
+- [x] `/frontend` — Phase C Platform Behaviors: PermissionGate, ConfirmDialog, Toast, NotificationBell, LanguageSwitcher, ExportButton, DocumentUpload, Approval UI, dan ChatLog.
+- [x] `/frontend` — halaman demo `/dashboard/platform-demo` dan halaman `/dashboard/notifications` untuk verifikasi platform behavior.
+- [x] Backend — endpoint `PATCH /api/v1/users/me/preferences` untuk preference bahasa ID/EN.
+- [ ] `/frontend` — Phase D Modul Karyawan memakai ListPageTemplate, DetailPageTemplate, dan FormPageTemplate.
 - [ ] Backend — buat tabel/data source attendance dan leave agar dashboard tidak lagi mengembalikan 0 untuk hadir, tidak hadir, dan cuti.
 - [ ] `/frontend` — lanjutkan surface public company website.
 - [ ] `/frontend` — lanjutkan surface candidate portal.

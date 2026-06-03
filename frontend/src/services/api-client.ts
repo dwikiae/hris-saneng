@@ -37,6 +37,10 @@ function authHeaders(): HeadersInit {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
+export function privateHeaders(): HeadersInit {
+  return authHeaders();
+}
+
 export async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await fetch(url, {
     ...init,
@@ -63,6 +67,40 @@ export async function requestPrivateJson<T>(path: string, init?: RequestInit): P
       ...init?.headers
     }
   });
+}
+
+export async function requestPrivateBlob(path: string, init?: RequestInit): Promise<Blob> {
+  const response = await fetch(privatePath(path), {
+    ...init,
+    headers: {
+      ...authHeaders(),
+      ...init?.headers
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  return response.blob();
+}
+
+export async function requestPrivateMultipart<T>(path: string, formData: FormData): Promise<T> {
+  const response = await fetch(privatePath(path), {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      ...authHeaders()
+    },
+    body: formData
+  });
+  const payload = (await response.json()) as ApiResponse<T>;
+
+  if (!response.ok || !payload.success) {
+    throw new Error(payload.message);
+  }
+
+  return unwrapApiData(payload);
 }
 
 export async function requestMultipart<T>(url: string, formData: FormData): Promise<T> {

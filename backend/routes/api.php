@@ -70,6 +70,7 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(functio
 
     Route::get('settings/instance', [SettingsController::class, 'instanceIndex']);
     Route::put('settings/instance', [SettingsController::class, 'instanceUpdate']);
+    Route::patch('users/me/preferences', [LoginController::class, 'updatePreferences']);
 
     Route::middleware('company.resolve')->group(function () {
         Route::get('dashboard/stats', [DashboardController::class, 'stats']);

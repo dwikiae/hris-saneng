@@ -2,6 +2,15 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-03 - Phase C Platform Behaviors
+
+- Menambahkan platform behaviors di `/frontend`: PermissionGate, ConfirmDialog, Toast system, NotificationBell, LanguageSwitcher, ExportButton, DocumentUpload, ApprovalPanel, ApprovalTimeline, dan ChatLog.
+- Menyambungkan NotificationBell dan LanguageSwitcher ke Topbar dashboard, dengan stub WebSocket Soketi yang no-op jika env realtime belum tersedia.
+- Menambahkan halaman `/dashboard/notifications` dan demo visual `/dashboard/platform-demo` untuk verifikasi templates Phase B dan behaviors Phase C dalam satu surface non-production.
+- Menambahkan dependency frontend `sonner` untuk toast dan `pusher-js` untuk client WebSocket Soketi/Pusher protocol.
+- Menambahkan endpoint backend `PATCH /api/v1/users/me/preferences` agar preference bahasa ID/EN bisa disimpan tanpa migration baru.
+- Mencatat bahwa verifikasi backend test Phase C masih terblokir karena PostgreSQL/Docker daemon lokal tidak berjalan saat sesi ini.
+
 ## 2026-06-03 - Phase B Platform UI Templates
 
 - Menambahkan `docs/PLATFORM_UI_SPEC.md` sebagai source of truth platform UI di repo.

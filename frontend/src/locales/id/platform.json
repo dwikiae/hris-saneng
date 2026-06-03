@@ -143,5 +143,125 @@
     "title": "Portal kandidat",
     "description": "Entry untuk membuka token kandidat.",
     "body": "Gunakan route /[company]/kandidat/quiz/[token] atau /[company]/kandidat/pemberkasan/[token]."
+  },
+  "platformBehavior": {
+    "confirm": {
+      "cancel": "Batal",
+      "demoTitle": "Arsipkan data demo",
+      "demoDescription": "Aksi ini akan mengarsipkan {{entity}}.",
+      "demoConfirm": "Arsipkan",
+      "demoToast": "Dialog konfirmasi berhasil dipicu."
+    },
+    "notifications": {
+      "title": "Notifikasi",
+      "empty": "Belum ada notifikasi.",
+      "viewAll": "Lihat semua",
+      "pageTitle": "Notifikasi",
+      "pageDescription": "Daftar notifikasi platform terbaru.",
+      "emptyDescription": "Notifikasi realtime akan muncul setelah endpoint dan Soketi aktif.",
+      "errorTitle": "Notifikasi belum tersedia",
+      "errorDescription": "Endpoint notifikasi belum dapat diakses."
+    },
+    "export": {
+      "label": "Export",
+      "progress": "Mengekspor...",
+      "excel": "Export Excel",
+      "pdf": "Export PDF",
+      "csv": "Export CSV",
+      "success": "File export mulai diunduh.",
+      "failed": "Export gagal diproses."
+    },
+    "documents": {
+      "drop": "Tarik dokumen ke sini",
+      "limit": "Maksimal {{size}}MB per file",
+      "browse": "Pilih file",
+      "invalid": "Format atau ukuran dokumen tidak valid.",
+      "uploaded": "Dokumen berhasil diunggah.",
+      "failed": "Dokumen gagal diunggah.",
+      "download": "Unduh",
+      "archive": "Arsipkan"
+    },
+    "approval": {
+      "title": "Menunggu persetujuan",
+      "description": "{{entity}} membutuhkan review sebelum bisa dilanjutkan.",
+      "approve": "Setujui",
+      "reject": "Tolak",
+      "approved": "Item berhasil disetujui.",
+      "rejected": "Item berhasil ditolak.",
+      "failed": "Aksi approval gagal.",
+      "noteRequired": "Catatan penolakan wajib diisi.",
+      "confirmTitle": "Setujui item",
+      "confirmDescription": "Konfirmasi persetujuan untuk {{entity}}.",
+      "rejectTitle": "Tolak item",
+      "notePlaceholder": "Tulis alasan penolakan..."
+    },
+    "chat": {
+      "activityTab": "Log Aktivitas",
+      "notesTab": "Catatan Manual",
+      "loadMore": "Muat lagi",
+      "notePlaceholder": "Tulis catatan atau @mention rekan kerja...",
+      "saveNote": "Simpan catatan",
+      "noteSaved": "Catatan berhasil disimpan.",
+      "noteFailed": "Catatan gagal disimpan.",
+      "noteRequired": "Catatan tidak boleh kosong.",
+      "justNow": "Baru saja"
+    }
+  },
+  "platformDemo": {
+    "title": "Demo platform",
+    "actions": {
+      "new": "Buat data",
+      "save": "Simpan"
+    },
+    "list": {
+      "title": "Template daftar",
+      "description": "Contoh ListPageTemplate dengan action, summary, dan status."
+    },
+    "columns": {
+      "name": "Nama",
+      "owner": "Pemilik",
+      "status": "Status"
+    },
+    "summary": {
+      "total": "Total",
+      "pending": "Pending"
+    },
+    "empty": {
+      "title": "Belum ada data",
+      "description": "Data demo kosong."
+    },
+    "detail": {
+      "back": "Kembali ke dashboard",
+      "title": "Detail template",
+      "subtitle": "Contoh detail dengan approval dan catatan",
+      "status": "Pending"
+    },
+    "tabs": {
+      "documents": "Dokumen"
+    },
+    "timeline": {
+      "requested": "Mengajukan review",
+      "note": "Menunggu approval HR Manager."
+    },
+    "chat": {
+      "updated": "Memperbarui field sensitif",
+      "note": "@finance mohon review data kompensasi."
+    },
+    "form": {
+      "title": "Template form",
+      "description": "Contoh FormPageTemplate dengan footer sticky.",
+      "section": "Identitas"
+    },
+    "wizard": {
+      "title": "Wizard shell",
+      "stepOne": "Setup platform",
+      "stepTwo": "Buat role"
+    },
+    "behaviors": {
+      "title": "Behaviors",
+      "disabled": "Tombol tanpa permission",
+      "secret": "Nilai rahasia",
+      "confirm": "Konfirmasi"
+    }
   }
 }
