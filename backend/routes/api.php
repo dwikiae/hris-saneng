@@ -37,7 +37,6 @@ use App\Http\Controllers\Api\V1\Recruitment\JobPostingController;
 use App\Http\Controllers\Api\V1\Recruitment\TestController;
 use App\Http\Controllers\Api\V1\Settings\SettingsController;
 use App\Http\Controllers\Api\V1\Setup\SetupController;
-use App\Http\Middleware\ForcePasswordReset;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1/auth')->group(function () {
@@ -47,7 +46,7 @@ Route::prefix('v1/auth')->group(function () {
     Route::post('set-password', [PasswordAccessController::class, 'set']);
     Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
     Route::post('change-password', [LoginController::class, 'changePassword'])->middleware('auth:sanctum');
-    Route::get('me', [LoginController::class, 'me'])->middleware(['auth:sanctum', ForcePasswordReset::class]);
+    Route::get('me', [LoginController::class, 'me'])->middleware('auth:sanctum');
 });
 
 Route::prefix('v1/public')->group(function () {

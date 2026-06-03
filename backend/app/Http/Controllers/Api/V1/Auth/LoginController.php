@@ -60,12 +60,7 @@ class LoginController extends Controller
             'data' => [
                 'token' => $token,
                 'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'language_preference' => $user->language_preference,
-                    'force_password_reset' => $user->force_password_reset,
-                    'permissions' => $this->permissionCodes($user),
+                    ...$this->userPayload($user),
                 ],
             ],
             'message' => 'login.success',
@@ -123,14 +118,9 @@ class LoginController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'language_preference' => $user->language_preference,
-                'force_password_reset' => $user->force_password_reset,
-                'permissions' => $this->permissionCodes($user),
-            ],
+            'data' => $this->userPayload($user),
+            'message' => 'auth.me',
+            'meta' => [],
         ]);
     }
 
@@ -167,5 +157,43 @@ class LoginController extends Controller
         }
 
         return $codes->values()->all();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function userPayload(User $user): array
+    {
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'language_preference' => $user->language_preference,
+            'force_password_reset' => $user->force_password_reset,
+            'permissions' => $this->permissionCodes($user),
+            'roles' => $this->rolePayload($user),
+        ];
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function rolePayload(User $user): array
+    {
+        return $user->roles()
+            ->withoutGlobalScope('company')
+            ->with('company')
+            ->get()
+            ->map(fn ($role): array => [
+                'id' => $role->getAttribute('id'),
+                'code' => $role->getAttribute('code'),
+                'name' => $role->getAttribute('name'),
+                'company_id' => $role->getAttribute('company_id'),
+                'company_name' => $role->relationLoaded('company') && $role->getRelation('company') !== null
+                    ? $role->getRelation('company')->getAttribute('name')
+                    : null,
+            ])
+            ->values()
+            ->all();
     }
 }

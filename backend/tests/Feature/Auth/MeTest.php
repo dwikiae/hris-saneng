@@ -26,7 +26,8 @@ it('returns user data when authenticated', function () {
     $this->getJson('/api/v1/auth/me', ['Authorization' => "Bearer $token"])
         ->assertStatus(200)
         ->assertJsonFragment(['email' => 'admin@saneng.co.id'])
-        ->assertJsonPath('data.permissions', []);
+        ->assertJsonPath('data.permissions', [])
+        ->assertJsonPath('data.roles', []);
 });
 
 it('returns permission codes when authenticated', function () {
@@ -51,7 +52,8 @@ it('returns permission codes when authenticated', function () {
 
     $this->getJson('/api/v1/auth/me', ['Authorization' => "Bearer $token"])
         ->assertOk()
-        ->assertJsonPath('data.permissions', ['employee.create']);
+        ->assertJsonPath('data.permissions', ['employee.create'])
+        ->assertJsonPath('data.roles.0.code', 'hr_staff');
 });
 
 it('returns platform settings permission for instance admin', function () {
@@ -68,15 +70,19 @@ it('returns platform settings permission for instance admin', function () {
 
     $this->getJson('/api/v1/auth/me', ['Authorization' => "Bearer $token"])
         ->assertOk()
-        ->assertJsonPath('data.permissions', ['platform.settings']);
+        ->assertJsonPath('data.permissions', ['platform.settings'])
+        ->assertJsonPath('data.roles', []);
 });
 
 it('returns 401 when unauthenticated', function () {
     $this->getJson('/api/v1/auth/me')->assertStatus(401);
 });
-it('returns 403 when force_password_reset is true', function () {
+it('returns user data when force_password_reset is true so auth can hydrate', function () {
     $this->user->update(['force_password_reset' => true]);
     $token = $this->user->createToken('test')->plainTextToken;
     $this->getJson('/api/v1/auth/me', ['Authorization' => "Bearer $token"])
-        ->assertStatus(403);
+        ->assertOk()
+        ->assertJsonPath('data.force_password_reset', true)
+        ->assertJsonPath('data.permissions', [])
+        ->assertJsonPath('data.roles', []);
 });

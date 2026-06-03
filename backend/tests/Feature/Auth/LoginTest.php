@@ -33,8 +33,9 @@ it('returns 200 with token on valid credentials', function () {
         ->assertOk()
         ->assertJsonPath('success', true)
         ->assertJsonPath('message', 'login.success')
-        ->assertJsonStructure(['data' => ['token', 'user' => ['id', 'name', 'email', 'language_preference', 'force_password_reset', 'permissions']]])
-        ->assertJsonPath('data.user.permissions', []);
+        ->assertJsonStructure(['data' => ['token', 'user' => ['id', 'name', 'email', 'language_preference', 'force_password_reset', 'permissions', 'roles']]])
+        ->assertJsonPath('data.user.permissions', [])
+        ->assertJsonPath('data.user.roles', []);
 });
 
 it('returns permission codes on valid login', function () {
@@ -60,7 +61,8 @@ it('returns permission codes on valid login', function () {
         'password' => 'Admin@1234',
     ])
         ->assertOk()
-        ->assertJsonPath('data.user.permissions', ['employee.view']);
+        ->assertJsonPath('data.user.permissions', ['employee.view'])
+        ->assertJsonPath('data.user.roles.0.code', 'hr_staff');
 });
 
 it('returns platform settings permission for instance admin login', function () {
@@ -79,7 +81,8 @@ it('returns platform settings permission for instance admin login', function () 
         'password' => 'Admin@1234',
     ])
         ->assertOk()
-        ->assertJsonPath('data.user.permissions', ['platform.settings']);
+        ->assertJsonPath('data.user.permissions', ['platform.settings'])
+        ->assertJsonPath('data.user.roles', []);
 });
 
 it('returns 401 for unknown email', function () {

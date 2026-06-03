@@ -5,6 +5,13 @@ export interface AuthUser {
   language_preference?: string | null;
   force_password_reset?: boolean;
   permissions: string[];
+  roles?: Array<{
+    id: number | string;
+    code?: string | null;
+    name: string;
+    company_id?: number | string | null;
+    company_name?: string | null;
+  }>;
 }
 
 export interface LoginRequest {
