@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { PermissionGate } from "@/components/platform/PermissionGate";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
@@ -83,8 +84,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
           {footerNavItems.map((item) => {
             const Icon = item.icon;
             const active = isActivePath(pathname, item.href);
-
-            return (
+            const link = (
               <Link
                 key={item.href}
                 href={item.href}
@@ -97,6 +97,14 @@ export function Sidebar({ onNavigate }: SidebarProps) {
                 <Icon className="h-4 w-4" aria-hidden="true" />
                 <span className="truncate">{t(item.labelKey)}</span>
               </Link>
+            );
+
+            return item.href === "/dashboard/settings" ? (
+              <PermissionGate key={item.href} permission="platform.settings">
+                {link}
+              </PermissionGate>
+            ) : (
+              link
             );
           })}
         </nav>

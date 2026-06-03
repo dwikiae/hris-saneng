@@ -114,6 +114,123 @@
     "description": "Surface untuk pengaturan company dan instance.",
     "body": "Pengaturan akan tetap dipisah antara company-scoped dan instance-level."
   },
+  "settingsNav": {
+    "companies": "Companies",
+    "users": "Users & Access",
+    "config": "Platform Config",
+    "audit": "Audit Log",
+    "modules": "Module Registry"
+  },
+  "settingsCompanies": {
+    "list": {
+      "title": "Company Management",
+      "description": "Kelola company yang berada di instance Dictive-HR."
+    },
+    "new": {
+      "title": "Tambah company",
+      "description": "Isi identitas, kontak, legal, konfigurasi operasional, dan modul aktif company."
+    },
+    "edit": {
+      "title": "Edit company",
+      "description": "Perbarui data company sesuai konfigurasi platform."
+    },
+    "detail": {
+      "loading": "Memuat company",
+      "tabs": {
+        "info": "Informasi",
+        "modules": "Modul"
+      }
+    },
+    "columns": {
+      "logo": "Logo",
+      "name": "Nama Company",
+      "type": "Jenis",
+      "city": "Kota",
+      "modules": "Modul Aktif",
+      "employeeCount": "Jumlah Karyawan",
+      "status": "Status",
+      "actions": "Aksi"
+    },
+    "fields": {
+      "name": "Nama perusahaan",
+      "legalName": "Nama legal",
+      "logo": "Logo",
+      "tagline": "Tagline / deskripsi singkat",
+      "companyType": "Jenis perusahaan",
+      "industry": "Bidang usaha",
+      "foundedDate": "Tanggal berdiri",
+      "address": "Alamat lengkap",
+      "city": "Kota",
+      "province": "Provinsi",
+      "postalCode": "Kode Pos",
+      "phone": "Nomor telepon",
+      "email": "Email perusahaan",
+      "website": "Website",
+      "hrPicName": "PIC HR - nama",
+      "hrPicPhone": "PIC HR - nomor HP",
+      "hrPicEmail": "PIC HR - email",
+      "npwp": "NPWP perusahaan",
+      "nibOrSiup": "NIB / SIUP",
+      "bpjsKetenagakerjaan": "BPJS Ketenagakerjaan",
+      "bpjsKesehatan": "BPJS Kesehatan",
+      "wlkpNumber": "Nomor WLKP",
+      "directorName": "Direktur / penanggung jawab",
+      "timezone": "Timezone",
+      "dateFormat": "Format tanggal",
+      "languageDefault": "Bahasa default",
+      "smtpHost": "SMTP host",
+      "smtpPort": "SMTP port",
+      "smtpUsername": "SMTP username",
+      "smtpPassword": "SMTP password",
+      "smtpFromName": "SMTP from name",
+      "smtpFromEmail": "SMTP from email",
+      "loginLockoutAttempts": "Percobaan lockout",
+      "loginLockoutMinutes": "Durasi lockout (menit)",
+      "sessionDurationHours": "Durasi sesi (jam)",
+      "activeModules": "Modul aktif",
+      "employeeCount": "Jumlah karyawan"
+    },
+    "form": {
+      "sections": {
+        "identity": "Identitas Perusahaan",
+        "contact": "Alamat & Kontak",
+        "legal": "Data Legal Indonesia",
+        "operations": "Konfigurasi Operasional",
+        "modules": "Modul Aktif"
+      }
+    },
+    "actions": {
+      "new": "Tambah company",
+      "open": "Buka",
+      "edit": "Edit",
+      "save": "Simpan",
+      "back": "Kembali"
+    },
+    "status": {
+      "active": "Aktif",
+      "inactive": "Nonaktif",
+      "archived": "Diarsipkan",
+      "unknown": "Belum tersedia"
+    },
+    "modules": {
+      "emptyTitle": "Modul belum tersedia",
+      "enable": "Enable",
+      "disable": "Disable"
+    },
+    "empty": {
+      "title": "Belum ada company",
+      "description": "Company akan muncul setelah endpoint instance company tersedia."
+    },
+    "api": {
+      "title": "API company belum tersedia",
+      "companiesNotReady": "Endpoint /api/v1/instance/companies belum tersedia di backend.",
+      "modulesNotReady": "Endpoint /api/v1/instance/modules belum tersedia. Toggle modul aktif belum bisa digunakan."
+    },
+    "toast": {
+      "created": "Company berhasil dibuat.",
+      "updated": "Company berhasil diperbarui."
+    }
+  },
   "calendar": {
     "title": "Kalender",
     "description": "Surface untuk modul kalender mandatory.",

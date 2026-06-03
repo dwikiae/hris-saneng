@@ -2,10 +2,10 @@
 Fase: 1
 Status: Fase 1 - retrofit sedang berjalan
 Terakhir dikerjakan: 3 Juni 2026
-Task terakhir selesai: Phase D1 Sub-task 1 - Auth pages frontend dibuat di /frontend
-Task berikutnya: Phase D1 Sub-task 2 - Company Management di /dashboard/settings/companies
-Known issues: Tabel attendance/leave belum ada, sehingga present_today, absent_today, dan leave_today masih 0. npm audit di /frontend melaporkan 5 vulnerability dari dependency tree; belum diperbaiki karena npm audit fix --force berpotensi breaking. PHP GD extension belum aktif, sehingga test employee photo variant di-skip sampai extension tersedia. Backend PostgreSQL/Docker daemon lokal sedang tidak aktif pada verifikasi Phase C, sehingga UserPreferencesTest belum bisa dijalankan ulang. Backend auth endpoint `forgot-password`, `reset-password`, dan `set-password` invitation belum ada; halaman frontend sudah contract-ready dan menampilkan API-not-ready state.
-Instruksi sesi ini: Baca START_HERE.md -> Baca AGENTS.md -> Baca docs/UIUX_SPEC.md -> Baca docs/PLATFORM_UI_SPEC.md -> Lanjutkan Phase D1 Sub-task 2 setelah approval.
+Task terakhir selesai: Phase D1 Sub-task 2 - Company Management frontend dibuat di /frontend
+Task berikutnya: Phase D1 Sub-task 3 - Users & Access di /dashboard/settings/users
+Known issues: Tabel attendance/leave belum ada, sehingga present_today, absent_today, dan leave_today masih 0. npm audit di /frontend melaporkan 5 vulnerability dari dependency tree; belum diperbaiki karena npm audit fix --force berpotensi breaking. PHP GD extension belum aktif, sehingga test employee photo variant di-skip sampai extension tersedia. Backend PostgreSQL/Docker daemon lokal sedang tidak aktif pada verifikasi Phase C, sehingga UserPreferencesTest belum bisa dijalankan ulang. Backend auth endpoint `forgot-password`, `reset-password`, dan `set-password` invitation belum ada. Backend spec endpoint `GET/POST /api/v1/instance/companies`, `GET/PUT/DELETE /api/v1/instance/companies/{id}`, dan `GET /api/v1/instance/modules` belum ada; Company Management frontend sudah contract-ready dan menampilkan API-not-ready state.
+Instruksi sesi ini: Baca START_HERE.md -> Baca AGENTS.md -> Baca docs/UIUX_SPEC.md -> Baca docs/PLATFORM_UI_SPEC.md -> Lanjutkan Phase D1 Sub-task 3 setelah approval.
 ---
 
 # Start Here
@@ -20,4 +20,6 @@ Phase C selesai: platform sekarang punya PermissionGate, ConfirmDialog, Toast sy
 
 Phase D1 Sub-task 1 selesai: auth surface frontend tersedia di `/login`, `/forgot-password`, `/reset-password`, dan `/set-password`. Login sudah memakai backend existing; forgot/reset/set-password invitation menunggu endpoint backend.
 
-Mulai sesi berikutnya dari Phase D1 Sub-task 2 Company Management di `/dashboard/settings/companies`. Keputusan tambahan di `docs/UIUX_SPEC.md` sudah final: light mode only, onboarding wizard, language switcher ID/EN, notifikasi WebSocket via Soketi, dan company branding per company.
+Phase D1 Sub-task 2 selesai: Company Management frontend tersedia di `/dashboard/settings/companies`, `/dashboard/settings/companies/new`, `/dashboard/settings/companies/[id]`, dan `/dashboard/settings/companies/[id]/edit`. Frontend menarget endpoint spec `/api/v1/instance/*`, bukan endpoint legacy `/api/v1/companies`.
+
+Mulai sesi berikutnya dari Phase D1 Sub-task 3 Users & Access di `/dashboard/settings/users`. Keputusan tambahan di `docs/UIUX_SPEC.md` sudah final: light mode only, onboarding wizard, language switcher ID/EN, notifikasi WebSocket via Soketi, dan company branding per company.

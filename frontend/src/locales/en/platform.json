@@ -114,6 +114,123 @@
     "description": "Surface for company and instance settings.",
     "body": "Settings stay separated between company-scoped and instance-level boundaries."
   },
+  "settingsNav": {
+    "companies": "Companies",
+    "users": "Users & Access",
+    "config": "Platform Config",
+    "audit": "Audit Log",
+    "modules": "Module Registry"
+  },
+  "settingsCompanies": {
+    "list": {
+      "title": "Company Management",
+      "description": "Manage companies inside the Dictive-HR instance."
+    },
+    "new": {
+      "title": "Add company",
+      "description": "Fill company identity, contact, legal, operational config, and active modules."
+    },
+    "edit": {
+      "title": "Edit company",
+      "description": "Update company data according to platform configuration."
+    },
+    "detail": {
+      "loading": "Loading company",
+      "tabs": {
+        "info": "Information",
+        "modules": "Modules"
+      }
+    },
+    "columns": {
+      "logo": "Logo",
+      "name": "Company Name",
+      "type": "Type",
+      "city": "City",
+      "modules": "Active Modules",
+      "employeeCount": "Employees",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "fields": {
+      "name": "Company name",
+      "legalName": "Legal name",
+      "logo": "Logo",
+      "tagline": "Tagline / short description",
+      "companyType": "Company type",
+      "industry": "Industry",
+      "foundedDate": "Founded date",
+      "address": "Full address",
+      "city": "City",
+      "province": "Province",
+      "postalCode": "Postal code",
+      "phone": "Phone number",
+      "email": "Company email",
+      "website": "Website",
+      "hrPicName": "HR PIC - name",
+      "hrPicPhone": "HR PIC - phone",
+      "hrPicEmail": "HR PIC - email",
+      "npwp": "Company NPWP",
+      "nibOrSiup": "NIB / SIUP",
+      "bpjsKetenagakerjaan": "BPJS Employment",
+      "bpjsKesehatan": "BPJS Health",
+      "wlkpNumber": "WLKP number",
+      "directorName": "Director / person in charge",
+      "timezone": "Timezone",
+      "dateFormat": "Date format",
+      "languageDefault": "Default language",
+      "smtpHost": "SMTP host",
+      "smtpPort": "SMTP port",
+      "smtpUsername": "SMTP username",
+      "smtpPassword": "SMTP password",
+      "smtpFromName": "SMTP from name",
+      "smtpFromEmail": "SMTP from email",
+      "loginLockoutAttempts": "Lockout attempts",
+      "loginLockoutMinutes": "Lockout duration (minutes)",
+      "sessionDurationHours": "Session duration (hours)",
+      "activeModules": "Active modules",
+      "employeeCount": "Employee count"
+    },
+    "form": {
+      "sections": {
+        "identity": "Company Identity",
+        "contact": "Address & Contact",
+        "legal": "Indonesian Legal Data",
+        "operations": "Operational Config",
+        "modules": "Active Modules"
+      }
+    },
+    "actions": {
+      "new": "Add company",
+      "open": "Open",
+      "edit": "Edit",
+      "save": "Save",
+      "back": "Back"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "archived": "Archived",
+      "unknown": "Unavailable"
+    },
+    "modules": {
+      "emptyTitle": "Modules are not available yet",
+      "enable": "Enable",
+      "disable": "Disable"
+    },
+    "empty": {
+      "title": "No companies yet",
+      "description": "Companies will appear after the instance company endpoint is available."
+    },
+    "api": {
+      "title": "Company API is not available yet",
+      "companiesNotReady": "The /api/v1/instance/companies endpoint is not available in the backend yet.",
+      "modulesNotReady": "The /api/v1/instance/modules endpoint is not available yet. Active module toggles cannot be used."
+    },
+    "toast": {
+      "created": "Company created.",
+      "updated": "Company updated."
+    }
+  },
   "calendar": {
     "title": "Calendar",
     "description": "Surface for the mandatory calendar module.",

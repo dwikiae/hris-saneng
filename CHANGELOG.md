@@ -2,6 +2,14 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-03 - Phase D1 Sub-task 2 Company Management
+
+- Menambahkan Company Management frontend contract-ready di `/dashboard/settings/companies`, termasuk list, form tambah/edit, detail, tab modul, dan tab catatan platform.
+- Menambahkan service `company.service.ts` yang menarget endpoint spec `/api/v1/instance/companies` dan `/api/v1/instance/modules`.
+- Menambahkan Settings sub-navigation dan membatasi menu Settings di sidebar dengan `PermissionGate permission="platform.settings"`.
+- Menambahkan translation key ID/EN untuk seluruh field company sesuai Section 4 PLATFORM_UI_SPEC.
+- Mencatat gap backend: endpoint instance company/modules dan field company extended belum tersedia, sehingga halaman menampilkan API-not-ready state.
+
 ## 2026-06-03 - Phase D1 Sub-task 1 Auth Pages
 
 - Menambahkan halaman auth frontend `/login`, `/forgot-password`, `/reset-password`, dan `/set-password` di luar dashboard AppShell.
