@@ -2,6 +2,14 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-03 - Phase D1 Sub-task 3 Users & Access
+
+- Menambahkan Users & Access frontend contract-ready di `/dashboard/settings/users` dengan tab Users dan Roles.
+- Menambahkan halaman tambah/edit/detail user serta halaman tambah/detail role memakai FormPageTemplate dan DetailPageTemplate.
+- Menambahkan permission matrix role 3 level yang menarget `GET /api/v1/instance/permissions/structure` dan `PATCH /api/v1/instance/roles/{id}/permissions`.
+- Menambahkan `user.service.ts`, `role.service.ts`, dan type contract-ready untuk user, role, assignment company/role, login activity, dan permission tree.
+- Mencatat gap backend: endpoint instance users, roles, resend invitation, dan permission structure belum tersedia, sehingga halaman menampilkan API-not-ready state.
+
 ## 2026-06-03 - Phase D1 Sub-task 2 Company Management
 
 - Menambahkan Company Management frontend contract-ready di `/dashboard/settings/companies`, termasuk list, form tambah/edit, detail, tab modul, dan tab catatan platform.

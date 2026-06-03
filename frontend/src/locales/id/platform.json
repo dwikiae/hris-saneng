@@ -231,6 +231,138 @@
       "updated": "Company berhasil diperbarui."
     }
   },
+  "settingsAccess": {
+    "tabs": {
+      "users": "Users",
+      "roles": "Roles"
+    },
+    "users": {
+      "title": "Users",
+      "description": "Kelola user platform, company assignment, role, dan invitation.",
+      "newTitle": "Tambah user",
+      "editTitle": "Edit user",
+      "formDescription": "Password tidak di-set di form ini. Sistem akan mengirim email invitation otomatis.",
+      "loading": "Memuat user",
+      "infoTitle": "Informasi user",
+      "activityEmptyTitle": "Aktivitas login belum tersedia",
+      "tabs": {
+        "info": "Informasi",
+        "activity": "Aktivitas"
+      }
+    },
+    "roles": {
+      "title": "Roles",
+      "description": "Kelola role dan permission per company.",
+      "newTitle": "Buat role",
+      "editTitle": "Edit role",
+      "formDescription": "Role dibuat per company dan permission diatur dari detail role.",
+      "loading": "Memuat role",
+      "usersEmptyTitle": "Belum ada user pada role ini",
+      "tabs": {
+        "permissions": "Permission",
+        "users": "Users"
+      }
+    },
+    "userForm": {
+      "sections": {
+        "account": "Informasi Akun",
+        "employee": "Kaitkan ke Karyawan",
+        "companies": "Assign Company",
+        "roles": "Assign Role",
+        "note": "Catatan"
+      },
+      "employeeHint": "Opsional. Jika dikaitkan, scope company otomatis mengikuti data karyawan.",
+      "employeePlaceholder": "Cari atau isi ID karyawan",
+      "companyHidden": "Assign company disembunyikan karena user dikaitkan ke karyawan."
+    },
+    "roleForm": {
+      "sections": {
+        "identity": "Informasi Role",
+        "copyFrom": "Salin dari"
+      },
+      "noTemplate": "Tidak memakai template",
+      "jobPositionPlaceholder": "ID / nama job position"
+    },
+    "fields": {
+      "name": "Nama lengkap",
+      "email": "Email",
+      "employee": "Karyawan",
+      "companies": "Company",
+      "roles": "Role",
+      "note": "Catatan invitation",
+      "roleName": "Nama role",
+      "description": "Deskripsi",
+      "company": "Company",
+      "copyFromRole": "Salin dari role",
+      "copyFromJobPosition": "Salin dari job position"
+    },
+    "columns": {
+      "name": "Nama",
+      "email": "Email",
+      "roles": "Role",
+      "companies": "Company",
+      "status": "Status",
+      "actions": "Aksi",
+      "roleName": "Nama Role",
+      "company": "Company",
+      "userCount": "Jumlah User",
+      "permissionCount": "Jumlah Permission"
+    },
+    "summary": {
+      "totalUsers": "Total Users",
+      "active": "Aktif",
+      "pendingInvitation": "Pending Invitation"
+    },
+    "filters": {
+      "statusAll": "Semua status",
+      "companyAll": "Semua company",
+      "roleAll": "Semua role"
+    },
+    "status": {
+      "active": "Aktif",
+      "inactive": "Nonaktif",
+      "pending": "Pending",
+      "archived": "Diarsipkan",
+      "unknown": "Belum tersedia"
+    },
+    "actions": {
+      "newUser": "Tambah user",
+      "newRole": "Buat Role",
+      "open": "Buka",
+      "edit": "Edit",
+      "save": "Simpan",
+      "back": "Kembali",
+      "resendInvitation": "Resend Invitation",
+      "deactivate": "Nonaktifkan",
+      "savePermissions": "Simpan permission"
+    },
+    "permissions": {
+      "checkAll": "Check all modul"
+    },
+    "empty": {
+      "usersTitle": "Belum ada user",
+      "usersDescription": "User akan muncul setelah endpoint instance users tersedia.",
+      "rolesTitle": "Belum ada role",
+      "rolesDescription": "Role akan muncul setelah endpoint instance roles tersedia."
+    },
+    "api": {
+      "title": "API Users & Access belum tersedia",
+      "usersNotReady": "Endpoint /api/v1/instance/users belum tersedia di backend.",
+      "rolesNotReady": "Endpoint /api/v1/instance/roles belum tersedia di backend.",
+      "permissionsNotReady": "Endpoint /api/v1/instance/permissions/structure belum tersedia di backend.",
+      "lookupsNotReady": "Lookup company/role belum tersedia sampai endpoint instance siap.",
+      "loginHistoryNotReady": "Login history belum tersedia di backend.",
+      "roleUsersNotReady": "Daftar user role belum tersedia di backend."
+    },
+    "toast": {
+      "userCreated": "User berhasil dibuat.",
+      "userUpdated": "User berhasil diperbarui.",
+      "userArchived": "User berhasil dinonaktifkan.",
+      "invitationSent": "Invitation berhasil dikirim ulang.",
+      "roleCreated": "Role berhasil dibuat.",
+      "permissionsSaved": "Permission role berhasil disimpan."
+    }
+  },
   "calendar": {
     "title": "Kalender",
     "description": "Surface untuk modul kalender mandatory.",

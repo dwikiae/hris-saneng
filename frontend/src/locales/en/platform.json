@@ -231,6 +231,138 @@
       "updated": "Company updated."
     }
   },
+  "settingsAccess": {
+    "tabs": {
+      "users": "Users",
+      "roles": "Roles"
+    },
+    "users": {
+      "title": "Users",
+      "description": "Manage platform users, company assignment, roles, and invitations.",
+      "newTitle": "Add user",
+      "editTitle": "Edit user",
+      "formDescription": "Passwords are not set in this form. The system sends an email invitation automatically.",
+      "loading": "Loading user",
+      "infoTitle": "User information",
+      "activityEmptyTitle": "Login activity is not available yet",
+      "tabs": {
+        "info": "Information",
+        "activity": "Activity"
+      }
+    },
+    "roles": {
+      "title": "Roles",
+      "description": "Manage company roles and permissions.",
+      "newTitle": "Create role",
+      "editTitle": "Edit role",
+      "formDescription": "Roles are company-scoped and permissions are configured from the role detail page.",
+      "loading": "Loading role",
+      "usersEmptyTitle": "No users are assigned to this role yet",
+      "tabs": {
+        "permissions": "Permissions",
+        "users": "Users"
+      }
+    },
+    "userForm": {
+      "sections": {
+        "account": "Account Information",
+        "employee": "Link Employee",
+        "companies": "Assign Company",
+        "roles": "Assign Role",
+        "note": "Note"
+      },
+      "employeeHint": "Optional. If linked, company scope follows the employee record.",
+      "employeePlaceholder": "Search or enter employee ID",
+      "companyHidden": "Company assignment is hidden because the user is linked to an employee."
+    },
+    "roleForm": {
+      "sections": {
+        "identity": "Role Information",
+        "copyFrom": "Copy from"
+      },
+      "noTemplate": "No template",
+      "jobPositionPlaceholder": "Job position ID / name"
+    },
+    "fields": {
+      "name": "Full name",
+      "email": "Email",
+      "employee": "Employee",
+      "companies": "Company",
+      "roles": "Role",
+      "note": "Invitation note",
+      "roleName": "Role name",
+      "description": "Description",
+      "company": "Company",
+      "copyFromRole": "Copy from role",
+      "copyFromJobPosition": "Copy from job position"
+    },
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "roles": "Role",
+      "companies": "Company",
+      "status": "Status",
+      "actions": "Actions",
+      "roleName": "Role Name",
+      "company": "Company",
+      "userCount": "User Count",
+      "permissionCount": "Permission Count"
+    },
+    "summary": {
+      "totalUsers": "Total Users",
+      "active": "Active",
+      "pendingInvitation": "Pending Invitation"
+    },
+    "filters": {
+      "statusAll": "All statuses",
+      "companyAll": "All companies",
+      "roleAll": "All roles"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending",
+      "archived": "Archived",
+      "unknown": "Unavailable"
+    },
+    "actions": {
+      "newUser": "Add user",
+      "newRole": "Create Role",
+      "open": "Open",
+      "edit": "Edit",
+      "save": "Save",
+      "back": "Back",
+      "resendInvitation": "Resend Invitation",
+      "deactivate": "Deactivate",
+      "savePermissions": "Save permissions"
+    },
+    "permissions": {
+      "checkAll": "Check all module"
+    },
+    "empty": {
+      "usersTitle": "No users yet",
+      "usersDescription": "Users will appear after the instance users endpoint is available.",
+      "rolesTitle": "No roles yet",
+      "rolesDescription": "Roles will appear after the instance roles endpoint is available."
+    },
+    "api": {
+      "title": "Users & Access API is not available yet",
+      "usersNotReady": "The /api/v1/instance/users endpoint is not available in the backend yet.",
+      "rolesNotReady": "The /api/v1/instance/roles endpoint is not available in the backend yet.",
+      "permissionsNotReady": "The /api/v1/instance/permissions/structure endpoint is not available in the backend yet.",
+      "lookupsNotReady": "Company/role lookups are unavailable until the instance endpoints are ready.",
+      "loginHistoryNotReady": "Login history is not available in the backend yet.",
+      "roleUsersNotReady": "Role user list is not available in the backend yet."
+    },
+    "toast": {
+      "userCreated": "User created.",
+      "userUpdated": "User updated.",
+      "userArchived": "User deactivated.",
+      "invitationSent": "Invitation resent.",
+      "roleCreated": "Role created.",
+      "permissionsSaved": "Role permissions saved."
+    }
+  },
   "calendar": {
     "title": "Calendar",
     "description": "Surface for the mandatory calendar module.",

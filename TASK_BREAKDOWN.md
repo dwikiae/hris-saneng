@@ -59,11 +59,12 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [x] Backend — endpoint `PATCH /api/v1/users/me/preferences` untuk preference bahasa ID/EN.
 - [x] `/frontend` — Phase D1 Sub-task 1 Auth Pages: `/login`, `/forgot-password`, `/reset-password`, dan `/set-password`.
 - [x] `/frontend` — Phase D1 Sub-task 2 Company Management di `/dashboard/settings/companies`.
-- [ ] `/frontend` — Phase D1 Sub-task 3 Users & Access di `/dashboard/settings/users`.
+- [x] `/frontend` — Phase D1 Sub-task 3 Users & Access di `/dashboard/settings/users`.
 - [ ] `/frontend` — Phase D1 Sub-task 4 Platform Config, Audit Log, dan Module Registry.
 - [ ] `/frontend` — Phase D2 Modul Karyawan memakai ListPageTemplate, DetailPageTemplate, dan FormPageTemplate.
 - [ ] Backend — buat endpoint auth password recovery: `forgot-password`, `reset-password`, dan `set-password` invitation.
 - [ ] Backend — buat endpoint spec Company Management: `/api/v1/instance/companies` dan `/api/v1/instance/modules`.
+- [ ] Backend — buat endpoint spec Users & Access: `/api/v1/instance/users`, `/api/v1/instance/roles`, dan `/api/v1/instance/permissions/structure`.
 - [ ] Backend — buat tabel/data source attendance dan leave agar dashboard tidak lagi mengembalikan 0 untuk hadir, tidak hadir, dan cuti.
 - [ ] `/frontend` — lanjutkan surface public company website.
 - [ ] `/frontend` — lanjutkan surface candidate portal.
