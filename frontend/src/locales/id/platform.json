@@ -19,6 +19,33 @@
     "openNavigation": "Buka navigasi",
     "closeNavigation": "Tutup navigasi"
   },
+  "templates": {
+    "error": {
+      "title": "Terjadi kendala"
+    },
+    "list": {
+      "searchPlaceholder": "Cari data...",
+      "mobileFilter": "Filter ({{count}} aktif)",
+      "reset": "Reset",
+      "selectedCount": "{{count}} dipilih",
+      "clearSelection": "Batalkan pilihan",
+      "pagination": "Menampilkan {{first}}-{{last}} dari {{total}}"
+    },
+    "detail": {
+      "notesTab": "Catatan",
+      "notesPlaceholder": "Log aktivitas dan catatan manual akan muncul di sini setelah ChatLog platform tersedia."
+    },
+    "form": {
+      "unsavedChanges": "Ada perubahan yang belum disimpan.",
+      "noChanges": "Belum ada perubahan."
+    },
+    "wizard": {
+      "stepCounter": "Step {{current}} dari {{total}}",
+      "back": "Kembali",
+      "next": "Lanjut",
+      "finish": "Selesai"
+    }
+  },
   "navigation": {
     "title": "Navigasi",
     "description": "Navigasi dashboard platform"

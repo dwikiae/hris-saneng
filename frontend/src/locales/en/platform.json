@@ -19,6 +19,33 @@
     "openNavigation": "Open navigation",
     "closeNavigation": "Close navigation"
   },
+  "templates": {
+    "error": {
+      "title": "Something went wrong"
+    },
+    "list": {
+      "searchPlaceholder": "Search data...",
+      "mobileFilter": "Filter ({{count}} active)",
+      "reset": "Reset",
+      "selectedCount": "{{count}} selected",
+      "clearSelection": "Clear selection",
+      "pagination": "Showing {{first}}-{{last}} of {{total}}"
+    },
+    "detail": {
+      "notesTab": "Notes",
+      "notesPlaceholder": "Activity logs and manual notes will appear here after the platform ChatLog is available."
+    },
+    "form": {
+      "unsavedChanges": "You have unsaved changes.",
+      "noChanges": "No changes yet."
+    },
+    "wizard": {
+      "stepCounter": "Step {{current}} of {{total}}",
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish"
+    }
+  },
   "navigation": {
     "title": "Navigation",
     "description": "Platform dashboard navigation"

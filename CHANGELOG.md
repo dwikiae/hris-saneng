@@ -2,6 +2,13 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-03 - Phase B Platform UI Templates
+
+- Menambahkan `docs/PLATFORM_UI_SPEC.md` sebagai source of truth platform UI di repo.
+- Membuat template platform frontend untuk halaman list, detail, form, dan wizard sebelum modul baru dibangun.
+- Menambahkan translation key ID/EN untuk label default template.
+- Menegaskan bahwa Phase C Platform Behaviors adalah task berikutnya sebelum menyentuh modul Karyawan atau modul lain.
+
 ## 2026-06-02 - Step 3b
 
 - Memindahkan backend test environment dari SQLite in-memory ke PostgreSQL database `hris_local_test` karena PHP environment tidak punya `pdo_sqlite`.
