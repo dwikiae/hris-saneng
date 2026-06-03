@@ -144,6 +144,60 @@
     "description": "Entry untuk membuka token kandidat.",
     "body": "Gunakan route /[company]/kandidat/quiz/[token] atau /[company]/kandidat/pemberkasan/[token]."
   },
+  "auth": {
+    "hero": {
+      "title": "Kelola operasional HR dalam satu platform yang rapi.",
+      "description": "Masuk untuk mengelola company, user, modul, approval, dan aktivitas HR dengan pengalaman yang konsisten."
+    },
+    "fields": {
+      "email": "Email",
+      "password": "Password",
+      "currentPassword": "Password saat ini",
+      "newPassword": "Password baru",
+      "confirmPassword": "Konfirmasi password"
+    },
+    "actions": {
+      "loading": "Memproses...",
+      "backToLogin": "Kembali ke login"
+    },
+    "validation": {
+      "passwordMismatch": "Konfirmasi password belum sama."
+    },
+    "gaps": {
+      "passwordRecovery": "Endpoint reset password belum tersedia di backend. Halaman ini siap dipakai setelah API dibuat.",
+      "invitation": "Endpoint invitation set-password belum tersedia di backend. Gunakan flow force password reset untuk user yang sudah login."
+    },
+    "login": {
+      "title": "Masuk ke Dictive-HR",
+      "description": "Gunakan akun platform untuk membuka dashboard.",
+      "submit": "Masuk",
+      "forgotPassword": "Lupa Password?",
+      "success": "Login berhasil.",
+      "failed": "Email atau password tidak valid."
+    },
+    "forgot": {
+      "title": "Reset password",
+      "description": "Masukkan email akun untuk menerima tautan reset password.",
+      "submit": "Kirim tautan reset",
+      "success": "Instruksi reset password dikirim.",
+      "submitted": "Jika email terdaftar, tautan reset password akan dikirim."
+    },
+    "reset": {
+      "title": "Buat password baru",
+      "description": "Masukkan password baru untuk akun Anda.",
+      "submit": "Simpan password baru",
+      "success": "Password berhasil direset.",
+      "submitted": "Password baru tersimpan. Silakan login kembali.",
+      "missingToken": "Token reset password tidak ditemukan."
+    },
+    "setPassword": {
+      "title": "Set password akun",
+      "description": "Buat password untuk akun invitation atau ganti password pertama saat login awal.",
+      "submit": "Set password",
+      "success": "Password berhasil disimpan. Silakan login kembali.",
+      "failed": "Password gagal disimpan."
+    }
+  },
   "platformBehavior": {
     "confirm": {
       "cancel": "Batal",

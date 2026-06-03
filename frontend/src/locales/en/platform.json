@@ -144,6 +144,60 @@
     "description": "Entry point for candidate tokens.",
     "body": "Use /[company]/kandidat/quiz/[token] or /[company]/kandidat/pemberkasan/[token]."
   },
+  "auth": {
+    "hero": {
+      "title": "Run HR operations from one calm platform.",
+      "description": "Sign in to manage companies, users, modules, approvals, and HR activity with one consistent experience."
+    },
+    "fields": {
+      "email": "Email",
+      "password": "Password",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password"
+    },
+    "actions": {
+      "loading": "Processing...",
+      "backToLogin": "Back to login"
+    },
+    "validation": {
+      "passwordMismatch": "Password confirmation does not match."
+    },
+    "gaps": {
+      "passwordRecovery": "The password reset endpoint is not available in the backend yet. This page is ready once the API is added.",
+      "invitation": "The invitation set-password endpoint is not available in the backend yet. Use the forced password reset flow for users who are already signed in."
+    },
+    "login": {
+      "title": "Sign in to Dictive-HR",
+      "description": "Use your platform account to open the dashboard.",
+      "submit": "Sign in",
+      "forgotPassword": "Forgot password?",
+      "success": "Signed in successfully.",
+      "failed": "Email or password is invalid."
+    },
+    "forgot": {
+      "title": "Reset password",
+      "description": "Enter your account email to receive a password reset link.",
+      "submit": "Send reset link",
+      "success": "Password reset instructions were sent.",
+      "submitted": "If the email exists, a password reset link will be sent."
+    },
+    "reset": {
+      "title": "Create a new password",
+      "description": "Enter a new password for your account.",
+      "submit": "Save new password",
+      "success": "Password was reset.",
+      "submitted": "Your new password has been saved. Please sign in again.",
+      "missingToken": "Password reset token was not found."
+    },
+    "setPassword": {
+      "title": "Set account password",
+      "description": "Create a password for an invitation account or change the first-login password.",
+      "submit": "Set password",
+      "success": "Password has been saved. Please sign in again.",
+      "failed": "Password failed to save."
+    }
+  },
   "platformBehavior": {
     "confirm": {
       "cancel": "Cancel",

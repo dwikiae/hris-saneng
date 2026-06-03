@@ -2,6 +2,13 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-03 - Phase D1 Sub-task 1 Auth Pages
+
+- Menambahkan halaman auth frontend `/login`, `/forgot-password`, `/reset-password`, dan `/set-password` di luar dashboard AppShell.
+- Menyambungkan login ke service layer dan backend `POST /api/v1/auth/login`, termasuk simpan token, hydrate auth store, dan redirect.
+- Menambahkan contract-ready service untuk forgot password, reset password, set password invitation, serta fallback force password reset memakai endpoint `change-password` existing.
+- Menambahkan translation key ID/EN untuk semua teks auth dan mencatat bahwa endpoint backend password recovery/invitation belum tersedia.
+
 ## 2026-06-03 - Phase C Platform Behaviors
 
 - Menambahkan platform behaviors di `/frontend`: PermissionGate, ConfirmDialog, Toast system, NotificationBell, LanguageSwitcher, ExportButton, DocumentUpload, ApprovalPanel, ApprovalTimeline, dan ChatLog.
