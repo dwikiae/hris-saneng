@@ -2,6 +2,11 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-03 - Fix Frontend API Proxy
+
+- Menambahkan rewrite Next.js untuk meneruskan `/api/v1/*` dari frontend dev server ke Laravel API, sehingga `AuthHydrator` bisa membaca `/api/v1/auth/me` dari backend.
+- Menjaga target default Laravel di `http://localhost:8000/api/v1` dan menyediakan override via `API_BASE_URL` atau `NEXT_PUBLIC_API_BASE_URL`.
+
 ## 2026-06-03 - Fix Settings Navigation Permission
 
 - Menambahkan permission virtual `platform.settings` pada response login dan `/auth/me` untuk Instance Admin (`company_id = null`), supaya menu Settings di sidebar tidak tersembunyi untuk Platform Administrator.
