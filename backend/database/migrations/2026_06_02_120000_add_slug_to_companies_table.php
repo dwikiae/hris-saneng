@@ -13,9 +13,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('companies', function (Blueprint $table) {
-            $table->string('slug')->nullable()->after('legal_name');
-        });
+        $columnAdded = false;
+
+        if (!Schema::hasColumn('companies', 'slug')) {
+            Schema::table('companies', function (Blueprint $table) {
+                $table->string('slug')->nullable()->after('legal_name');
+            });
+            $columnAdded = true;
+        }
 
         $usedSlugs = [];
 
@@ -36,9 +41,11 @@ return new class extends Migration
                 ->update(['slug' => $slug]);
         });
 
-        Schema::table('companies', function (Blueprint $table) {
-            $table->unique('slug');
-        });
+        if ($columnAdded) {
+            Schema::table('companies', function (Blueprint $table) {
+                $table->unique('slug');
+            });
+        }
     }
 
     /**

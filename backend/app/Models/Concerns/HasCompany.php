@@ -22,15 +22,15 @@ trait HasCompany
 
             $user = Auth::user();
 
-            if ($user instanceof User) {
-                if ($user->isInstanceAdmin()) {
-                    return;
-                }
-
-                $companyId = $user->company_id;
-            } else {
-                $companyId = (int) config('company.default_id', 1);
+            if (! $user instanceof User) {
+                return;
             }
+
+            if ($user->isInstanceAdmin()) {
+                return;
+            }
+
+            $companyId = $user->company_id;
 
             if ($companyId !== null && $companyId > 0) {
                 $query->where($query->getModel()->getTable().'.company_id', $companyId);

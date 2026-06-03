@@ -19,6 +19,7 @@ class InstanceUserRepository implements InstanceUserRepositoryInterface
     {
         $query = $this->model->newQuery()
             ->withoutGlobalScope('company')
+            ->whereNotNull('company_id')
             ->with(['company', 'roles.company', 'invitations' => fn ($query) => $query->latest()])
             ->orderBy('name');
 

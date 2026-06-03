@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasColumn('companies', 'archived_at')) {
+            return;
+        }
+
         Schema::table('companies', function (Blueprint $table) {
             $table->timestamp('archived_at')->nullable()->after('language_default');
             $table->foreignId('archived_by')->nullable()->after('archived_at')->constrained('users')->nullOnDelete();
