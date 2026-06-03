@@ -13,7 +13,8 @@ class DashboardStatsRepository implements DashboardStatsRepositoryInterface
     public function totalEmployees(int $companyId): int
     {
         return Employee::query()
-            ->forCompany($companyId)
+            ->withoutGlobalScope('company')
+            ->where('company_id', $companyId)
             ->count();
     }
 
@@ -23,7 +24,8 @@ class DashboardStatsRepository implements DashboardStatsRepositoryInterface
     public function pendingEmployeeApprovals(int $companyId, int $limit): array
     {
         return Employee::query()
-            ->forCompany($companyId)
+            ->withoutGlobalScope('company')
+            ->where('company_id', $companyId)
             ->where('status', Employee::PENDING)
             ->orderByDesc('updated_at')
             ->orderByDesc('id')
@@ -51,7 +53,8 @@ class DashboardStatsRepository implements DashboardStatsRepositoryInterface
     {
         /** @var Collection<int, int> $employeeIds */
         $employeeIds = Employee::query()
-            ->forCompany($companyId)
+            ->withoutGlobalScope('company')
+            ->where('company_id', $companyId)
             ->pluck('id');
 
         if ($employeeIds->isEmpty()) {
@@ -91,7 +94,7 @@ class DashboardStatsRepository implements DashboardStatsRepositoryInterface
         }
 
         return User::query()
-            ->withoutCompanyScope()
+            ->withoutGlobalScope('company')
             ->whereKey((int) $actorId)
             ->value('name');
     }
@@ -116,7 +119,7 @@ class DashboardStatsRepository implements DashboardStatsRepositoryInterface
 
         /** @var array<int, string> $names */
         $names = User::query()
-            ->withoutCompanyScope()
+            ->withoutGlobalScope('company')
             ->whereIn('id', $actorIds)
             ->pluck('name', 'id')
             ->all();

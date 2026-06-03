@@ -60,14 +60,14 @@ class ResolveCompany
             return (string) $routeCompany->getKey();
         }
 
-        if (is_string($routeCompany) || is_numeric($routeCompany)) {
-            return trim((string) $routeCompany) ?: null;
+        if (is_string($routeCompany)) {
+            return trim($routeCompany) ?: null;
         }
 
         $headerCompanyId = $request->header('X-Company-Id');
 
-        if (is_string($headerCompanyId) || is_numeric($headerCompanyId)) {
-            return trim((string) $headerCompanyId) ?: null;
+        if (is_string($headerCompanyId)) {
+            return trim($headerCompanyId) ?: null;
         }
 
         return null;
