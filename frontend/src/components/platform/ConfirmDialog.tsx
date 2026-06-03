@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 type ConfirmVariant = "danger" | "warning";
@@ -25,6 +26,10 @@ interface ConfirmDialogProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   onConfirm: () => void;
+  confirmationLabel?: string;
+  confirmationExpected?: string;
+  confirmationValue?: string;
+  onConfirmationChange?: (value: string) => void;
   children?: ReactNode;
 }
 
@@ -36,9 +41,15 @@ export function ConfirmDialog({
   open,
   onOpenChange,
   onConfirm,
+  confirmationLabel,
+  confirmationExpected,
+  confirmationValue = "",
+  onConfirmationChange,
   children
 }: ConfirmDialogProps) {
   const { t } = useTranslation("platform");
+  const confirmationMatches =
+    !confirmationExpected || confirmationValue.trim() === confirmationExpected.trim();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -56,6 +67,18 @@ export function ConfirmDialog({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
+        {confirmationExpected ? (
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground" htmlFor="confirm-text">
+              {confirmationLabel}
+            </label>
+            <Input
+              id="confirm-text"
+              value={confirmationValue}
+              onChange={(event) => onConfirmationChange?.(event.target.value)}
+            />
+          </div>
+        ) : null}
         <DialogFooter>
           <Button type="button" variant="outline" onClick={() => onOpenChange?.(false)}>
             {t("platformBehavior.confirm.cancel")}
@@ -64,6 +87,7 @@ export function ConfirmDialog({
             type="button"
             variant={confirmVariant === "danger" ? "destructive" : "default"}
             className={confirmVariant === "warning" ? "bg-warning text-warning-foreground hover:bg-warning/90" : undefined}
+            disabled={!confirmationMatches}
             onClick={() => {
               onConfirm();
               onOpenChange?.(false);

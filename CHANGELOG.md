@@ -2,6 +2,14 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-03 - Phase D1 Sub-task 4 Platform Config, Audit Log, dan Module Registry
+
+- Menambahkan frontend Platform Config di `/dashboard/settings/config` dengan form lokalisasi, keamanan sesi, lockout login, SMTP, toggle password, test email, dan save langsung.
+- Menambahkan frontend Audit Log di `/dashboard/settings/audit` dengan list read-only, summary strip, filter tanggal/actor/modul/action, export Excel/CSV, dan drawer detail diff dengan redaction field sensitif.
+- Menambahkan frontend Module Registry di `/dashboard/settings/modules` dengan grid card modul, badge dependency, flow install, dan flow uninstall dua tahap dengan warning UU PDP serta export data per company.
+- Menambahkan service `platform-config.service.ts`, `audit-log.service.ts`, `module-registry.service.ts`, dan type contract-ready untuk Platform Settings.
+- Mencatat gap backend: endpoint spec `/api/v1/instance/config`, `/api/v1/instance/audit`, dan lifecycle `/api/v1/instance/modules` belum tersedia, sehingga halaman menampilkan API-not-ready state.
+
 ## 2026-06-03 - Phase D1 Sub-task 3 Users & Access
 
 - Menambahkan Users & Access frontend contract-ready di `/dashboard/settings/users` dengan tab Users dan Roles.

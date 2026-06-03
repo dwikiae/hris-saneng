@@ -363,6 +363,153 @@
       "permissionsSaved": "Permission role berhasil disimpan."
     }
   },
+  "settingsPlatform": {
+    "access": {
+      "deniedTitle": "Akses settings dibatasi",
+      "deniedDescription": "Halaman Settings Platform hanya tersedia untuk Platform Administrator."
+    },
+    "actions": {
+      "back": "Kembali",
+      "save": "Simpan"
+    },
+    "config": {
+      "title": "Platform Config",
+      "description": "Kelola lokalisasi, sesi, keamanan login, dan SMTP instance.",
+      "sections": {
+        "localization": "Lokalisasi",
+        "session": "Keamanan Sesi",
+        "smtp": "SMTP"
+      },
+      "fields": {
+        "timezone": "Timezone",
+        "defaultLanguage": "Bahasa default",
+        "dateFormat": "Format tanggal",
+        "sessionDurationHours": "Durasi sesi dalam jam",
+        "autoLogoutExpired": "Auto logout saat expired",
+        "loginLockoutAttempts": "Percobaan login sebelum lockout",
+        "loginLockoutMinutes": "Durasi lockout dalam menit",
+        "smtpHost": "Host",
+        "smtpPort": "Port",
+        "smtpEncryption": "Encryption",
+        "smtpUsername": "Username",
+        "smtpPassword": "Password",
+        "smtpFromName": "From Name",
+        "smtpFromEmail": "From Email",
+        "testEmail": "Kirim Email Test"
+      },
+      "options": {
+        "id": "ID",
+        "en": "EN",
+        "enabled": "Ya, logout otomatis saat sesi expired",
+        "tls": "TLS",
+        "ssl": "SSL",
+        "none": "None"
+      },
+      "actions": {
+        "testEmail": "Kirim Email Test",
+        "togglePassword": "Tampilkan atau sembunyikan password SMTP"
+      },
+      "api": {
+        "title": "API Platform Config belum tersedia",
+        "notReady": "Endpoint /api/v1/instance/config belum tersedia di backend."
+      },
+      "toast": {
+        "saved": "Platform config berhasil disimpan.",
+        "testSent": "Email test berhasil dikirim.",
+        "testFailed": "Email test gagal dikirim."
+      }
+    },
+    "audit": {
+      "title": "Audit Log",
+      "description": "Pantau aktivitas sistem secara read-only dan export untuk kebutuhan review.",
+      "columns": {
+        "time": "Waktu",
+        "actor": "Actor",
+        "action": "Aksi",
+        "module": "Modul",
+        "entity": "Entity",
+        "detail": "Detail"
+      },
+      "summary": {
+        "total": "Total Log",
+        "today": "Hari Ini",
+        "thisWeek": "Minggu Ini"
+      },
+      "filters": {
+        "actor": "Cari actor...",
+        "moduleAll": "Semua modul",
+        "actionAll": "Semua aksi"
+      },
+      "actions": {
+        "created": "Created",
+        "updated": "Updated",
+        "archived": "Archived",
+        "exported": "Exported"
+      },
+      "drawer": {
+        "title": "Detail audit log",
+        "close": "Tutup detail audit",
+        "diffTitle": "Old value -> New value",
+        "oldValue": "Old value",
+        "newValue": "New value"
+      },
+      "empty": {
+        "title": "Belum ada audit log",
+        "description": "Audit log akan muncul setelah endpoint instance audit tersedia.",
+        "diffTitle": "Tidak ada diff",
+        "diffDescription": "Detail perubahan field tidak tersedia untuk log ini."
+      },
+      "api": {
+        "notReady": "Endpoint /api/v1/instance/audit belum tersedia di backend."
+      }
+    },
+    "modules": {
+      "title": "Module Registry",
+      "description": "Kelola instalasi modul instance dan lihat dependency antar modul.",
+      "version": "Versi {{version}}",
+      "dependencies": "Dependencies",
+      "noDependencies": "Tanpa dependency",
+      "status": {
+        "installed": "Installed",
+        "notInstalled": "Not Installed"
+      },
+      "actions": {
+        "install": "Install",
+        "disable": "Nonaktifkan",
+        "uninstall": "Uninstall",
+        "mandatory": "Mandatory",
+        "exportAndContinue": "Export data dan lanjutkan"
+      },
+      "install": {
+        "title": "Install modul",
+        "description": "Install modul {{module}} ke instance setelah dependency terpenuhi."
+      },
+      "uninstall": {
+        "title": "Uninstall modul",
+        "description": "Peringatan UU PDP: Data semua company yang menggunakan modul {{module}} akan diekspor terlebih dahulu sebelum dihapus. Ketik nama modul untuk lanjut.",
+        "confirmLabel": "Ketik {{module}} untuk konfirmasi",
+        "finalTitle": "Konfirmasi uninstall final",
+        "finalDescription": "Export data sudah diproses. Lanjutkan uninstall modul {{module}} dari instance?"
+      },
+      "empty": {
+        "title": "Module registry belum tersedia",
+        "description": "Modul akan muncul setelah endpoint instance modules tersedia.",
+        "descriptionMissing": "Deskripsi modul belum tersedia."
+      },
+      "api": {
+        "title": "API Module Registry belum tersedia",
+        "notReady": "Endpoint /api/v1/instance/modules belum tersedia di backend."
+      },
+      "toast": {
+        "dependenciesMissing": "Dependency belum terpenuhi: {{dependencies}}.",
+        "installing": "Install modul sedang diproses...",
+        "installed": "Modul berhasil di-install.",
+        "exporting": "Export data per company sedang diproses...",
+        "exported": "Export data selesai. Konfirmasi final diperlukan.",
+        "uninstalled": "Modul berhasil di-uninstall."
+      }
+    }
+  },
   "calendar": {
     "title": "Kalender",
     "description": "Surface untuk modul kalender mandatory.",

@@ -363,6 +363,153 @@
       "permissionsSaved": "Role permissions saved."
     }
   },
+  "settingsPlatform": {
+    "access": {
+      "deniedTitle": "Settings access is restricted",
+      "deniedDescription": "Platform Settings pages are only available to Platform Administrators."
+    },
+    "actions": {
+      "back": "Back",
+      "save": "Save"
+    },
+    "config": {
+      "title": "Platform Config",
+      "description": "Manage instance localization, session security, login lockout, and SMTP.",
+      "sections": {
+        "localization": "Localization",
+        "session": "Session Security",
+        "smtp": "SMTP"
+      },
+      "fields": {
+        "timezone": "Timezone",
+        "defaultLanguage": "Default language",
+        "dateFormat": "Date format",
+        "sessionDurationHours": "Session duration in hours",
+        "autoLogoutExpired": "Auto logout when expired",
+        "loginLockoutAttempts": "Login attempts before lockout",
+        "loginLockoutMinutes": "Lockout duration in minutes",
+        "smtpHost": "Host",
+        "smtpPort": "Port",
+        "smtpEncryption": "Encryption",
+        "smtpUsername": "Username",
+        "smtpPassword": "Password",
+        "smtpFromName": "From Name",
+        "smtpFromEmail": "From Email",
+        "testEmail": "Send Test Email"
+      },
+      "options": {
+        "id": "ID",
+        "en": "EN",
+        "enabled": "Yes, automatically logout when the session expires",
+        "tls": "TLS",
+        "ssl": "SSL",
+        "none": "None"
+      },
+      "actions": {
+        "testEmail": "Send Test Email",
+        "togglePassword": "Show or hide SMTP password"
+      },
+      "api": {
+        "title": "Platform Config API is not available yet",
+        "notReady": "The /api/v1/instance/config endpoint is not available in the backend yet."
+      },
+      "toast": {
+        "saved": "Platform config saved.",
+        "testSent": "Test email was sent.",
+        "testFailed": "Test email failed to send."
+      }
+    },
+    "audit": {
+      "title": "Audit Log",
+      "description": "Review system activity in read-only mode and export it for audits.",
+      "columns": {
+        "time": "Time",
+        "actor": "Actor",
+        "action": "Action",
+        "module": "Module",
+        "entity": "Entity",
+        "detail": "Detail"
+      },
+      "summary": {
+        "total": "Total Logs",
+        "today": "Today",
+        "thisWeek": "This Week"
+      },
+      "filters": {
+        "actor": "Search actor...",
+        "moduleAll": "All modules",
+        "actionAll": "All actions"
+      },
+      "actions": {
+        "created": "Created",
+        "updated": "Updated",
+        "archived": "Archived",
+        "exported": "Exported"
+      },
+      "drawer": {
+        "title": "Audit log detail",
+        "close": "Close audit detail",
+        "diffTitle": "Old value -> New value",
+        "oldValue": "Old value",
+        "newValue": "New value"
+      },
+      "empty": {
+        "title": "No audit logs yet",
+        "description": "Audit logs will appear after the instance audit endpoint is available.",
+        "diffTitle": "No diff",
+        "diffDescription": "Field-level change details are not available for this log."
+      },
+      "api": {
+        "notReady": "The /api/v1/instance/audit endpoint is not available in the backend yet."
+      }
+    },
+    "modules": {
+      "title": "Module Registry",
+      "description": "Manage instance module installation and view module dependencies.",
+      "version": "Version {{version}}",
+      "dependencies": "Dependencies",
+      "noDependencies": "No dependencies",
+      "status": {
+        "installed": "Installed",
+        "notInstalled": "Not Installed"
+      },
+      "actions": {
+        "install": "Install",
+        "disable": "Disable",
+        "uninstall": "Uninstall",
+        "mandatory": "Mandatory",
+        "exportAndContinue": "Export data and continue"
+      },
+      "install": {
+        "title": "Install module",
+        "description": "Install {{module}} to the instance after dependencies are satisfied."
+      },
+      "uninstall": {
+        "title": "Uninstall module",
+        "description": "UU PDP warning: Data from every company using {{module}} will be exported first before removal. Type the module name to continue.",
+        "confirmLabel": "Type {{module}} to confirm",
+        "finalTitle": "Final uninstall confirmation",
+        "finalDescription": "Data export has been processed. Continue uninstalling {{module}} from the instance?"
+      },
+      "empty": {
+        "title": "Module registry is not available yet",
+        "description": "Modules will appear after the instance modules endpoint is available.",
+        "descriptionMissing": "Module description is not available yet."
+      },
+      "api": {
+        "title": "Module Registry API is not available yet",
+        "notReady": "The /api/v1/instance/modules endpoint is not available in the backend yet."
+      },
+      "toast": {
+        "dependenciesMissing": "Missing dependencies: {{dependencies}}.",
+        "installing": "Module installation is in progress...",
+        "installed": "Module installed.",
+        "exporting": "Exporting data per company...",
+        "exported": "Data export finished. Final confirmation is required.",
+        "uninstalled": "Module uninstalled."
+      }
+    }
+  },
   "calendar": {
     "title": "Calendar",
     "description": "Surface for the mandatory calendar module.",

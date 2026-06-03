@@ -19,6 +19,7 @@ interface ExportButtonProps {
   endpoint: string;
   filters?: ExportRequest["filters"];
   filename: string;
+  formats?: ExportFormat[];
 }
 
 const formats: Array<{ format: ExportFormat; key: string }> = [
@@ -27,9 +28,10 @@ const formats: Array<{ format: ExportFormat; key: string }> = [
   { format: "csv", key: "csv" }
 ];
 
-export function ExportButton({ endpoint, filters, filename }: ExportButtonProps) {
+export function ExportButton({ endpoint, filters, filename, formats: allowedFormats }: ExportButtonProps) {
   const { t } = useTranslation("platform");
   const [activeFormat, setActiveFormat] = useState<ExportFormat | null>(null);
+  const availableFormats = allowedFormats ? formats.filter((item) => allowedFormats.includes(item.format)) : formats;
 
   const runExport = async (format: ExportFormat) => {
     setActiveFormat(format);
@@ -52,7 +54,7 @@ export function ExportButton({ endpoint, filters, filename }: ExportButtonProps)
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {formats.map((item) => (
+        {availableFormats.map((item) => (
           <DropdownMenuItem
             key={item.format}
             disabled={Boolean(activeFormat)}

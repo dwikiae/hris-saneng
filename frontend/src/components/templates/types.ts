@@ -7,6 +7,7 @@ export type TemplateActionVariant = "primary" | "secondary" | "ghost" | "danger"
 export interface TemplateAction {
   id: string;
   label: string;
+  custom?: ReactNode;
   icon?: ReactNode;
   href?: string;
   onClick?: () => void;

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
@@ -96,18 +97,35 @@ export function TemplateActionGroup({
 
   return (
     <div className={cn("flex flex-wrap gap-2", compact ? "justify-start" : "justify-end")}>
-      {actions.map((action) => (
-        <Button
-          key={action.id}
-          type="button"
-          variant={buttonVariantFor(action)}
-          disabled={action.disabled}
-          onClick={action.onClick}
-        >
-          {action.icon ? <span className="mr-2">{action.icon}</span> : null}
-          {action.label}
-        </Button>
-      ))}
+      {actions.map((action) => {
+        if (action.custom) {
+          return <div key={action.id}>{action.custom}</div>;
+        }
+
+        if (action.href) {
+          return (
+            <Button key={action.id} asChild variant={buttonVariantFor(action)}>
+              <Link href={action.href}>
+                {action.icon ? <span className="mr-2">{action.icon}</span> : null}
+                {action.label}
+              </Link>
+            </Button>
+          );
+        }
+
+        return (
+          <Button
+            key={action.id}
+            type="button"
+            variant={buttonVariantFor(action)}
+            disabled={action.disabled}
+            onClick={action.onClick}
+          >
+            {action.icon ? <span className="mr-2">{action.icon}</span> : null}
+            {action.label}
+          </Button>
+        );
+      })}
     </div>
   );
 }
