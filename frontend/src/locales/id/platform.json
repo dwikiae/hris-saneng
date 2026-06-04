@@ -6,6 +6,7 @@
   "nav": {
     "dashboard": "Dashboard",
     "employees": "Karyawan",
+    "employeeSettings": "Pengaturan",
     "calendar": "Kalender",
     "recruitment": "Recruitment",
     "assets": "Aset",
@@ -103,6 +104,125 @@
     "title": "Karyawan",
     "description": "Surface untuk data karyawan mandatory module.",
     "body": "Data karyawan akan terhubung ke API company-scoped ketika modul berjalan penuh."
+  },
+  "employeesSettings": {
+    "title": "Pengaturan Karyawan",
+    "description": "Kelola master data dan konfigurasi modul Karyawan per company.",
+    "breadcrumb": {
+      "dashboard": "Dashboard",
+      "employees": "Karyawan"
+    },
+    "company": {
+      "label": "Company",
+      "emptyTitle": "Company context belum tersedia",
+      "emptyDescription": "User ini belum memiliki role dengan company aktif untuk membuka pengaturan modul Karyawan."
+    },
+    "nav": {
+      "mobileLabel": "Section pengaturan",
+      "masterData": "Master Data",
+      "configuration": "Konfigurasi"
+    },
+    "sections": {
+      "departemen": "Departemen",
+      "jabatan": "Jabatan",
+      "levelGrade": "Level/Grade",
+      "tipeKontrak": "Tipe Kontrak",
+      "lokasiKerja": "Lokasi Kerja",
+      "agama": "Agama",
+      "bank": "Bank",
+      "jenisDokumen": "Jenis Dokumen",
+      "pendidikan": "Pendidikan",
+      "pengaturan": "Pengaturan"
+    },
+    "entities": {
+      "departemen": "Departemen",
+      "jabatan": "Jabatan",
+      "levelGrade": "Level/Grade",
+      "tipeKontrak": "Tipe Kontrak",
+      "lokasiKerja": "Lokasi Kerja",
+      "agama": "Agama",
+      "bank": "Bank",
+      "jenisDokumen": "Jenis Dokumen",
+      "pendidikan": "Pendidikan",
+      "pengaturan": "Pengaturan"
+    },
+    "master": {
+      "description": "Kelola daftar {{entity}} yang dipakai dalam data karyawan.",
+      "searchPlaceholder": "Cari kode atau nama..."
+    },
+    "columns": {
+      "code": "Kode",
+      "name": "Nama",
+      "order": "Urutan",
+      "city": "Kota",
+      "address": "Alamat",
+      "status": "Status",
+      "actions": "Aksi"
+    },
+    "fields": {
+      "code": "Kode",
+      "name": "Nama",
+      "description": "Deskripsi",
+      "order": "Urutan",
+      "city": "Kode kota",
+      "cityPlaceholder": "Contoh: 3171",
+      "address": "Alamat",
+      "isActive": "Aktif"
+    },
+    "filters": {
+      "all": "Semua status",
+      "active": "Aktif",
+      "inactive": "Nonaktif"
+    },
+    "status": {
+      "active": "Aktif",
+      "inactive": "Nonaktif"
+    },
+    "actions": {
+      "new": "Tambah {{entity}}",
+      "edit": "Edit",
+      "archive": "Arsipkan",
+      "cancel": "Batal",
+      "save": "Simpan"
+    },
+    "modal": {
+      "newTitle": "Tambah {{entity}}",
+      "editTitle": "Edit {{entity}}",
+      "description": "Isi kode, nama, status, dan field tambahan sesuai kebutuhan entitas."
+    },
+    "archive": {
+      "title": "Arsipkan {{entity}}?",
+      "description": "{{entity}} akan disembunyikan dari daftar aktif tanpa hard delete."
+    },
+    "settings": {
+      "description": "Atur format nomor karyawan, masa probasi, pengingat kontrak, dan batas PKWT.",
+      "employeeNumberFormat": "Format nomor karyawan",
+      "formatHelper": "{YYYY} = tahun, {SEQ} = nomor urut",
+      "preview": "Preview",
+      "probationDays": "Masa probasi default",
+      "contractExpiryNotifyDays": "Notifikasi kontrak berakhir",
+      "pkwtMaxMonths": "Batas maksimal PKWT",
+      "days": "hari",
+      "daysBefore": "hari sebelumnya",
+      "months": "bulan"
+    },
+    "empty": {
+      "title": "Belum ada data",
+      "description": "Data akan muncul setelah ditambahkan."
+    },
+    "api": {
+      "notReadyTitle": "Endpoint master data belum tersedia",
+      "notReadyDescription": "Section ini sudah siap secara UI dan akan aktif setelah backend menyediakan endpoint spec modul Karyawan.",
+      "settingsNotReadyTitle": "Endpoint pengaturan belum tersedia",
+      "settingsNotReadyDescription": "Pengaturan modul Karyawan belum bisa dimuat dari backend."
+    },
+    "toast": {
+      "created": "Data berhasil ditambahkan.",
+      "updated": "Data berhasil diperbarui.",
+      "archived": "Data berhasil diarsipkan.",
+      "settingsSaved": "Pengaturan Karyawan berhasil disimpan.",
+      "failed": "Aksi gagal diproses."
+    }
   },
   "recruitment": {
     "title": "Recruitment",

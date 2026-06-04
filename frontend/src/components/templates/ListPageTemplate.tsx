@@ -42,6 +42,7 @@ interface ListPageTemplateProps<T> {
   activeFilterCount?: number;
   onResetFilters?: () => void;
   summaryItems?: SummaryItem[];
+  showSummaryStrip?: boolean;
   columns: Array<ListColumn<T>>;
   data: T[];
   getRowId: (row: T) => string;
@@ -67,6 +68,7 @@ export function ListPageTemplate<T>({
   activeFilterCount = 0,
   onResetFilters,
   summaryItems = [],
+  showSummaryStrip = true,
   columns,
   data,
   getRowId,
@@ -155,9 +157,9 @@ export function ListPageTemplate<T>({
             </Button>
           </div>
         </div>
-      ) : (
+      ) : showSummaryStrip ? (
         <SummaryStrip items={summaryItems} />
-      )}
+      ) : null}
 
       {isLoading ? <ListSkeleton /> : null}
       {!isLoading && error ? <ErrorPanel message={error.message} /> : null}

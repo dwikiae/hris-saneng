@@ -48,6 +48,8 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   const hasPlatformSettings = useAuthStore((state) => state.hasPermission("platform.settings"));
   const hasToken = typeof window !== "undefined" && Boolean(window.localStorage.getItem("dictive_hr_token"));
   const { logout, isLoggingOut } = useLogout();
+  const isEmployeesContext = pathname.startsWith("/dashboard/employees");
+  const employeesSettingsActive = pathname.startsWith("/dashboard/employees/settings");
 
   return (
     <div className="flex h-full w-[240px] flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
@@ -86,6 +88,21 @@ export function Sidebar({ onNavigate }: SidebarProps) {
       <div className="px-3 pb-4">
         <Separator className="mb-3" />
         <nav className="space-y-1">
+          {isEmployeesContext ? (
+            <PermissionGate permission="karyawan.settings">
+              <Link
+                href="/dashboard/employees/settings"
+                onClick={onNavigate}
+                className={cn(
+                  "flex h-10 items-center gap-3 rounded-md border-l-2 border-transparent px-3 text-sm font-medium text-muted-foreground transition hover:bg-slate-50 hover:text-foreground",
+                  employeesSettingsActive && "border-l-primary bg-blue-100 text-blue-700 hover:bg-blue-100 hover:text-blue-700"
+                )}
+              >
+                <Settings className="h-4 w-4" aria-hidden="true" />
+                <span className="truncate">{t("nav.employeeSettings")}</span>
+              </Link>
+            </PermissionGate>
+          ) : null}
           {footerNavItems.map((item) => {
             const Icon = item.icon;
             const active = isActivePath(pathname, item.href);

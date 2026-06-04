@@ -2,6 +2,15 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-04 - Phase D2-2 Frontend Settings Modul Karyawan
+
+- Menambahkan halaman `/dashboard/employees/settings?section={slug}` dengan layout settings modul, vertical nav, dan mobile section dropdown.
+- Menghubungkan section Level/Grade dan Lokasi Kerja ke endpoint company-scoped modul Karyawan, termasuk tambah/edit inline modal, filter aktif/nonaktif, toast, dan arsip via ConfirmDialog.
+- Menambahkan form konfigurasi modul Karyawan untuk format nomor karyawan, masa probasi, notifikasi kontrak berakhir, dan batas maksimal PKWT.
+- Menambahkan service frontend `employee-master.service.ts`, `employee-settings.service.ts`, dan `wilayah.service.ts`.
+- Menambahkan footer Pengaturan di sidebar saat user berada di konteks `/dashboard/employees/*`, gated dengan permission `karyawan.settings`.
+- Menampilkan API-not-ready state untuk section master data lain yang belum punya endpoint spec backend modul Karyawan.
+
 ## 2026-06-04 - Phase D2-1 Backend Settings Modul Karyawan
 
 - Menambahkan backend Settings Modul Karyawan untuk lokasi kerja, level karyawan, konfigurasi modul, wilayah Indonesia, dan negara ISO.

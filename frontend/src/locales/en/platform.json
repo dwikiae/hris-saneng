@@ -6,6 +6,7 @@
   "nav": {
     "dashboard": "Dashboard",
     "employees": "Employees",
+    "employeeSettings": "Settings",
     "calendar": "Calendar",
     "recruitment": "Recruitment",
     "assets": "Assets",
@@ -103,6 +104,125 @@
     "title": "Employees",
     "description": "Surface for the mandatory employee module.",
     "body": "Employee data will connect to company-scoped APIs once the module is fully active."
+  },
+  "employeesSettings": {
+    "title": "Employee Settings",
+    "description": "Manage employee module master data and configuration per company.",
+    "breadcrumb": {
+      "dashboard": "Dashboard",
+      "employees": "Employees"
+    },
+    "company": {
+      "label": "Company",
+      "emptyTitle": "Company context is unavailable",
+      "emptyDescription": "This user does not have a role with an active company for employee module settings."
+    },
+    "nav": {
+      "mobileLabel": "Settings section",
+      "masterData": "Master Data",
+      "configuration": "Configuration"
+    },
+    "sections": {
+      "departemen": "Departments",
+      "jabatan": "Positions",
+      "levelGrade": "Level/Grade",
+      "tipeKontrak": "Contract Types",
+      "lokasiKerja": "Work Locations",
+      "agama": "Religions",
+      "bank": "Banks",
+      "jenisDokumen": "Document Types",
+      "pendidikan": "Education",
+      "pengaturan": "Settings"
+    },
+    "entities": {
+      "departemen": "Department",
+      "jabatan": "Position",
+      "levelGrade": "Level/Grade",
+      "tipeKontrak": "Contract Type",
+      "lokasiKerja": "Work Location",
+      "agama": "Religion",
+      "bank": "Bank",
+      "jenisDokumen": "Document Type",
+      "pendidikan": "Education",
+      "pengaturan": "Settings"
+    },
+    "master": {
+      "description": "Manage {{entity}} values used in employee data.",
+      "searchPlaceholder": "Search code or name..."
+    },
+    "columns": {
+      "code": "Code",
+      "name": "Name",
+      "order": "Order",
+      "city": "City",
+      "address": "Address",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "fields": {
+      "code": "Code",
+      "name": "Name",
+      "description": "Description",
+      "order": "Order",
+      "city": "City code",
+      "cityPlaceholder": "Example: 3171",
+      "address": "Address",
+      "isActive": "Active"
+    },
+    "filters": {
+      "all": "All statuses",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "actions": {
+      "new": "Add {{entity}}",
+      "edit": "Edit",
+      "archive": "Archive",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "modal": {
+      "newTitle": "Add {{entity}}",
+      "editTitle": "Edit {{entity}}",
+      "description": "Fill code, name, status, and additional fields for this entity."
+    },
+    "archive": {
+      "title": "Archive {{entity}}?",
+      "description": "{{entity}} will be hidden from active lists without hard delete."
+    },
+    "settings": {
+      "description": "Configure employee numbers, probation, contract reminders, and PKWT limits.",
+      "employeeNumberFormat": "Employee number format",
+      "formatHelper": "{YYYY} = year, {SEQ} = sequence number",
+      "preview": "Preview",
+      "probationDays": "Default probation period",
+      "contractExpiryNotifyDays": "Contract expiry notification",
+      "pkwtMaxMonths": "Maximum PKWT duration",
+      "days": "days",
+      "daysBefore": "days before",
+      "months": "months"
+    },
+    "empty": {
+      "title": "No data yet",
+      "description": "Data will appear after it is added."
+    },
+    "api": {
+      "notReadyTitle": "Master data endpoint is not ready",
+      "notReadyDescription": "This section is UI-ready and will activate once the employee module backend spec endpoint exists.",
+      "settingsNotReadyTitle": "Settings endpoint is not ready",
+      "settingsNotReadyDescription": "Employee module settings cannot be loaded from the backend yet."
+    },
+    "toast": {
+      "created": "Data has been added.",
+      "updated": "Data has been updated.",
+      "archived": "Data has been archived.",
+      "settingsSaved": "Employee settings have been saved.",
+      "failed": "The action could not be processed."
+    }
   },
   "recruitment": {
     "title": "Recruitment",

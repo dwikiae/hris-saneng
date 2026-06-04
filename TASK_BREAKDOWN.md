@@ -61,6 +61,7 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [x] `/frontend` — Phase D1 Sub-task 2 Company Management di `/dashboard/settings/companies`.
 - [x] `/frontend` — Phase D1 Sub-task 3 Users & Access di `/dashboard/settings/users`.
 - [x] `/frontend` — Phase D1 Sub-task 4 Platform Config, Audit Log, dan Module Registry.
+- [x] `/frontend` — Phase D2-2 Settings Modul Karyawan di `/dashboard/employees/settings`.
 - [ ] `/frontend` — Phase D2 Modul Karyawan memakai ListPageTemplate, DetailPageTemplate, dan FormPageTemplate.
 - [x] Backend — buat endpoint auth password recovery: `forgot-password`, `reset-password`, dan `set-password` invitation.
 - [x] Backend — Phase D1 Grup 1 Company Management: `/api/v1/instance/companies`.
