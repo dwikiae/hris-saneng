@@ -15,6 +15,7 @@ import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { PermissionGate } from "@/components/platform/PermissionGate";
 import { Separator } from "@/components/ui/separator";
+import { useLogout } from "@/hooks/useLogout";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth.store";
 
@@ -29,8 +30,7 @@ const mainNavItems = [
 
 const footerNavItems = [
   { href: "/dashboard/settings", labelKey: "nav.settings", icon: Settings },
-  { href: "/dashboard/profile", labelKey: "nav.profile", icon: UserCircle },
-  { href: "/dashboard/logout", labelKey: "nav.logout", icon: LogOut }
+  { href: "/dashboard/profile", labelKey: "nav.profile", icon: UserCircle }
 ];
 
 function isActivePath(pathname: string, href: string): boolean {
@@ -47,6 +47,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   const isAuthHydrated = useAuthStore((state) => state.isHydrated);
   const hasPlatformSettings = useAuthStore((state) => state.hasPermission("platform.settings"));
   const hasToken = typeof window !== "undefined" && Boolean(window.localStorage.getItem("dictive_hr_token"));
+  const { logout, isLoggingOut } = useLogout();
 
   return (
     <div className="flex h-full w-[240px] flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
@@ -117,6 +118,18 @@ export function Sidebar({ onNavigate }: SidebarProps) {
               </PermissionGate>
             );
           })}
+          <button
+            type="button"
+            onClick={() => {
+              onNavigate?.();
+              logout();
+            }}
+            disabled={isLoggingOut}
+            className="flex h-10 w-full items-center gap-3 rounded-md border-l-2 border-transparent px-3 text-left text-sm font-medium text-muted-foreground transition hover:bg-slate-50 hover:text-foreground disabled:pointer-events-none disabled:opacity-60"
+          >
+            <LogOut className="h-4 w-4" aria-hidden="true" />
+            <span className="truncate">{t("nav.logout")}</span>
+          </button>
         </nav>
       </div>
     </div>

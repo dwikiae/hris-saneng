@@ -2,6 +2,14 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-04 - Fix Auth Flow End-to-End
+
+- Menghapus halaman placeholder `/dashboard/logout` supaya logout berjalan sebagai aksi, bukan navigasi ke halaman logout.
+- Menyambungkan tombol Keluar di Sidebar dan menu Topbar ke `authService.logout()`, lalu membersihkan `dictive_hr_token`, clear auth store, dan redirect ke `/login`.
+- Memastikan login tetap memakai `POST /api/v1/auth/login`, menyimpan token, mengisi auth store, dan redirect ke `/dashboard` saat login sukses tanpa force password reset.
+- Memperketat coverage auth agar `admin@saneng.co.id` sebagai Instance Admin (`company_id = null`) menerima permission virtual `platform.settings` dari login dan `/auth/me`.
+- Memverifikasi `/login` dan `/dashboard/settings/companies` bisa dirender dari build lokal, sedangkan `/dashboard/logout` sudah tidak tersedia.
+
 ## 2026-06-03 - Phase D1 Backend Grup 2 Users & Access
 
 - Menambahkan endpoint instance-level Users di `/api/v1/instance/users` untuk list, create, detail, update, archive, dan resend invitation khusus Platform Administrator.

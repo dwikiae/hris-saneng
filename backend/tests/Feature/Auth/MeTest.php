@@ -57,16 +57,11 @@ it('returns permission codes when authenticated', function () {
 });
 
 it('returns platform settings permission for instance admin', function () {
-    $admin = User::create([
+    $this->user->update([
         'company_id' => null,
-        'name' => 'Instance Admin',
-        'email' => 'instance.admin@example.test',
-        'password' => 'Admin@1234',
-        'language_preference' => 'id',
-        'force_password_reset' => false,
-        'login_attempts' => 0,
+        'name' => 'System Administrator',
     ]);
-    $token = $admin->createToken('test')->plainTextToken;
+    $token = $this->user->createToken('test')->plainTextToken;
 
     $this->getJson('/api/v1/auth/me', ['Authorization' => "Bearer $token"])
         ->assertOk()

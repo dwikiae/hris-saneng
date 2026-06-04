@@ -1,10 +1,10 @@
 ---
 Fase: 1
 Status: Fase 1 - retrofit sedang berjalan
-Terakhir dikerjakan: 3 Juni 2026
-Task terakhir selesai: Phase D1 Backend Grup 2 - Users & Access instance-level endpoints dibuat
+Terakhir dikerjakan: 4 Juni 2026
+Task terakhir selesai: Fix auth flow end-to-end frontend logout, login/auth hydration verification, dan Settings Platform Admin
 Task berikutnya: Phase D1 Backend Grup 3 - Platform Config & Audit instance-level endpoints
-Known issues: Tabel attendance/leave belum ada, sehingga present_today, absent_today, dan leave_today masih 0. npm audit di /frontend melaporkan 5 vulnerability dari dependency tree; belum diperbaiki karena npm audit fix --force berpotensi breaking. PHP GD extension belum aktif, sehingga test employee photo variant di-skip sampai extension tersedia. Backend PostgreSQL/Docker daemon lokal sedang tidak aktif pada verifikasi Grup 2, sehingga `InstanceUserControllerTest`, `InstanceRoleControllerTest`, `PasswordAccessTest`, `LoginTest`, dan `MeTest` belum bisa dijalankan sampai assertion. Backend spec endpoint `/api/v1/instance/modules`, `/api/v1/instance/config`, dan `/api/v1/instance/audit` belum ada; Settings Platform frontend sudah contract-ready dan menampilkan API-not-ready state untuk endpoint yang belum tersedia.
+Known issues: Tabel attendance/leave belum ada, sehingga present_today, absent_today, dan leave_today masih 0. npm audit di /frontend melaporkan 5 vulnerability dari dependency tree; belum diperbaiki karena npm audit fix --force berpotensi breaking. PHP GD extension belum aktif, sehingga test employee photo variant di-skip sampai extension tersedia. Backend spec endpoint `/api/v1/instance/modules`, `/api/v1/instance/config`, dan `/api/v1/instance/audit` belum ada; Settings Platform frontend sudah contract-ready dan menampilkan API-not-ready state untuk endpoint yang belum tersedia.
 Instruksi sesi ini: Baca START_HERE.md -> Baca AGENTS.md -> Baca docs/UIUX_SPEC.md -> Baca docs/PLATFORM_UI_SPEC.md -> Lanjutkan Phase D1 Backend Grup 3 Platform Config & Audit setelah approval.
 ---
 
@@ -29,5 +29,7 @@ Phase D1 Sub-task 4 selesai: Platform Config, Audit Log, dan Module Registry fro
 Phase D1 Backend Grup 1 selesai secara implementasi: endpoint instance-level Company Management tersedia di `/api/v1/instance/companies`, hanya untuk Platform Administrator, dengan create/update/detail/list dan archive tanpa hard delete. Field extended frontend disimpan di `company_settings`, sedangkan tabel `companies` hanya ditambah kolom archive yang sudah disetujui.
 
 Phase D1 Backend Grup 2 selesai secara implementasi: endpoint instance-level Users & Access tersedia di `/api/v1/instance/users`, `/api/v1/instance/roles`, dan `/api/v1/instance/permissions/structure`, hanya untuk Platform Administrator. Auth password recovery dan set-password invitation tersedia di `/api/v1/auth/forgot-password`, `/api/v1/auth/reset-password`, dan `/api/v1/auth/set-password`. Invitation email dan reset password email dikirim via queue, token invitation berlaku 24 jam, token reset password berlaku 1 jam, role tetap per company, dan archive user/role tidak memakai hard delete.
+
+Fix auth flow end-to-end selesai: `/dashboard/logout` placeholder dihapus, tombol Keluar di Sidebar dan Topbar sekarang memanggil `POST /api/v1/auth/logout`, membersihkan token `dictive_hr_token`, clear auth store, dan redirect ke `/login`. Login tetap memakai `POST /api/v1/auth/login`, menyimpan token, dan redirect ke `/dashboard` saat user tidak wajib reset password. `AuthHydrator` tetap memakai `GET /api/v1/auth/me`, permissions masuk ke auth store, dan test backend memastikan `admin@saneng.co.id` dengan `company_id = null` mendapat `platform.settings`.
 
 Mulai sesi berikutnya dari Phase D1 Backend Grup 3 Platform Config & Audit. Keputusan tambahan di `docs/UIUX_SPEC.md` sudah final: light mode only, onboarding wizard, language switcher ID/EN, notifikasi WebSocket via Soketi, dan company branding per company.

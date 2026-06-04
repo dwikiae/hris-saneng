@@ -15,6 +15,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useLogout } from "@/hooks/useLogout";
 
 interface TopbarProps {
   onOpenSidebar: () => void;
@@ -22,6 +23,7 @@ interface TopbarProps {
 
 export function Topbar({ onOpenSidebar }: TopbarProps) {
   const { t } = useTranslation("platform");
+  const { logout, isLoggingOut } = useLogout();
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border bg-background px-4 lg:px-6">
@@ -67,7 +69,15 @@ export function Topbar({ onOpenSidebar }: TopbarProps) {
             <DropdownMenuLabel>{t("account.name")}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>{t("nav.profile")}</DropdownMenuItem>
-            <DropdownMenuItem>{t("nav.logout")}</DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={isLoggingOut}
+              onSelect={(event) => {
+                event.preventDefault();
+                logout();
+              }}
+            >
+              {t("nav.logout")}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

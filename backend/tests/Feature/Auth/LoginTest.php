@@ -66,18 +66,13 @@ it('returns permission codes on valid login', function () {
 });
 
 it('returns platform settings permission for instance admin login', function () {
-    $admin = User::create([
+    $this->user->update([
         'company_id' => null,
-        'name' => 'Instance Admin',
-        'email' => 'instance.admin@example.test',
-        'password' => 'Admin@1234',
-        'language_preference' => 'id',
-        'force_password_reset' => false,
-        'login_attempts' => 0,
+        'name' => 'System Administrator',
     ]);
 
     $this->postJson('/api/v1/auth/login', [
-        'email' => $admin->email,
+        'email' => 'admin@saneng.co.id',
         'password' => 'Admin@1234',
     ])
         ->assertOk()
