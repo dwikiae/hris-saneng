@@ -802,3 +802,57 @@ Phase D5 — Surface Public (company website + candidate portal)
 *Dokumen ini adalah living document.*
 *Setiap perubahan harus di-commit dan dicatat di CHANGELOG.md.*
 *Konflik antara dokumen ini dan AGENTS.md → AGENTS.md menang.*
+
+---
+
+## 22. SettingsModuleLayout
+
+Pattern standar untuk semua halaman settings modul yang punya banyak sub-item.
+Berlaku untuk: `/dashboard/{module}/settings`
+
+### Anatomi
+```
+┌─────────────────────────────────────────────────────────┐
+│ PAGE HEADER                                             │
+│ [Breadcrumb]                                            │
+│ Pengaturan {Nama Modul}                                 │
+├──────────────────┬──────────────────────────────────────┤
+│ VERTICAL NAV     │ CONTENT PANEL                        │
+│ (200px)          │                                      │
+│                  │ [Judul Entitas]                      │
+│ MASTER DATA      │ [ListPageTemplate mini atau Form]    │
+│   Departemen  ←  │                                      │
+│   Jabatan        │                                      │
+│   Level/Grade    │                                      │
+│   Tipe Kontrak   │                                      │
+│   Lokasi Kerja   │                                      │
+│   Agama          │                                      │
+│   Bank           │                                      │
+│   Jenis Dokumen  │                                      │
+│   Pendidikan     │                                      │
+│                  │                                      │
+│ KONFIGURASI      │                                      │
+│   Pengaturan  ←  │                                      │
+│                  │                                      │
+└──────────────────┴──────────────────────────────────────┘
+```
+
+### Rules
+- Vertical nav di kiri (200px fixed) — tidak collapsible di desktop
+- Di mobile: vertical nav collapse jadi dropdown di atas content
+- Section label (MASTER DATA, KONFIGURASI) adalah visual separator — tidak bisa diklik
+- Active item: background biru-50, teks biru-700, left border biru-600 (2px)
+- Content panel kanan: ListPageTemplate mini untuk master data, FormPageTemplate untuk konfigurasi
+- ListPageTemplate mini: sama dengan ListPageTemplate standar tapi tanpa summary strip
+- Inline modal untuk tambah/edit master data — tidak perlu halaman terpisah
+- URL pattern: `/dashboard/{module}/settings?section={entitas}`
+  section di URL → active item di vertical nav sync otomatis
+
+### Kapan Dipakai
+- Modul dengan 5+ entitas master data
+- Settings Platform sudah pakai SettingsNav yang mirip pattern ini
+- Modul dengan < 5 entitas: boleh pakai tab horizontal biasa
+
+### Referensi Visual
+- Notion Settings, Linear Settings, GitHub Settings — vertical nav kiri
+- Odoo Settings — panel kiri untuk navigasi master data
