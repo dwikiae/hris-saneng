@@ -2,6 +2,15 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-04 - Phase D2-1 Backend Settings Modul Karyawan
+
+- Menambahkan backend Settings Modul Karyawan untuk lokasi kerja, level karyawan, konfigurasi modul, wilayah Indonesia, dan negara ISO.
+- Menambahkan migration modul Karyawan untuk `work_locations`, `employee_levels`, `employee_module_settings`, `provinces`, `cities`, dan `countries`.
+- Menambahkan endpoint company-scoped `/api/v1/{company}/employees/master/*` dan `/api/v1/{company}/employees/settings` dengan permission `karyawan.settings`.
+- Menambahkan endpoint authenticated read-only `/api/v1/instance/wilayah/*` untuk provinsi, kota/kabupaten, dan negara tanpa permission khusus.
+- Menambahkan seeders offline 38 provinsi, 514 kota/kabupaten, 249 negara ISO, serta command `wilayah:sync` dan `countries:sync`.
+- Menambahkan feature test untuk permission, company isolation, archive/restore, settings default/override, wilayah read-only, dan command sync idempotent.
+
 ## 2026-06-04 - Fix Company Edit Cache Refresh
 
 - Memastikan save Company Management yang berhasil langsung memperbarui cache React Query untuk detail company.

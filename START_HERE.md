@@ -2,10 +2,10 @@
 Fase: 1
 Status: Fase 1 - retrofit sedang berjalan
 Terakhir dikerjakan: 4 Juni 2026
-Task terakhir selesai: Fix Company Management edit cache refresh setelah save
-Task berikutnya: Phase D2 Modul Karyawan memakai platform templates
+Task terakhir selesai: Phase D2-1 Backend Settings Modul Karyawan
+Task berikutnya: Phase D2-2 Frontend Settings Modul Karyawan memakai platform templates
 Known issues: Tabel attendance/leave belum ada, sehingga present_today, absent_today, dan leave_today masih 0. npm audit di /frontend melaporkan 5 vulnerability dari dependency tree; belum diperbaiki karena npm audit fix --force berpotensi breaking. PHP GD extension belum aktif, sehingga test employee photo variant di-skip sampai extension tersedia.
-Instruksi sesi ini: Baca START_HERE.md -> Baca AGENTS.md -> Baca docs/UIUX_SPEC.md -> Baca docs/PLATFORM_UI_SPEC.md -> Lanjutkan Phase D2 Modul Karyawan setelah approval.
+Instruksi sesi ini: Baca START_HERE.md -> Baca AGENTS.md -> Baca docs/UIUX_SPEC.md -> Baca docs/PLATFORM_UI_SPEC.md -> Lanjutkan Phase D2-2 Frontend Settings Modul Karyawan setelah approval.
 ---
 
 # Start Here
@@ -42,4 +42,6 @@ Phase D1 Backend Grup 5 selesai: endpoint instance-level Module Registry tersedi
 
 Fix Company Management edit cache refresh selesai: `next.config.mjs` sudah diverifikasi meneruskan `/api/v1/*` ke Laravel `http://localhost:8000/api/v1`. Request PUT company lewat proxy Next ke `/api/v1/instance/companies/{id}` berhasil 2xx dan mengubah data di Laravel. Bug "save sukses tapi data tampak tidak berubah" berasal dari cache React Query `staleTime: 60_000`; halaman create/edit company sekarang mengisi cache detail terbaru dan invalidate query Settings Companies setelah save.
 
-Mulai sesi berikutnya dari Phase D2 Modul Karyawan setelah approval. Keputusan tambahan di `docs/UIUX_SPEC.md` sudah final: light mode only, onboarding wizard, language switcher ID/EN, notifikasi WebSocket via Soketi, dan company branding per company.
+Phase D2-1 Backend Settings Modul Karyawan selesai: migration modul Karyawan sekarang menyediakan `work_locations`, `employee_levels`, `employee_module_settings`, `provinces`, `cities`, dan `countries`. Endpoint company-scoped tersedia di `/api/v1/{company}/employees/master/work-locations`, `/api/v1/{company}/employees/master/employee-levels`, dan `/api/v1/{company}/employees/settings` dengan permission `karyawan.settings`, archive/restore tanpa hard delete, dan filter company via `company.resolve`. Endpoint wilayah authenticated read-only tersedia di `/api/v1/instance/wilayah/provinces`, `/api/v1/instance/wilayah/provinces/{code}/cities`, dan `/api/v1/instance/wilayah/countries`. Seeder offline mencakup 38 provinsi, 514 kota/kabupaten, 249 negara ISO, serta command `wilayah:sync` dan `countries:sync`.
+
+Mulai sesi berikutnya dari Phase D2-2 Frontend Settings Modul Karyawan setelah approval. Keputusan tambahan di `docs/UIUX_SPEC.md` sudah final: light mode only, onboarding wizard, language switcher ID/EN, notifikasi WebSocket via Soketi, dan company branding per company.

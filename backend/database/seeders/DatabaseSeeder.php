@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Modules\Karyawan\Database\Seeders\CitySeeder;
+use App\Modules\Karyawan\Database\Seeders\CountrySeeder;
+use App\Modules\Karyawan\Database\Seeders\ProvinceSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,6 +16,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             InstanceSettingsSeeder::class,
+            ProvinceSeeder::class,
+            CitySeeder::class,
+            CountrySeeder::class,
             CompanySeeder::class,
             CompanySettingsSeeder::class,
             PermissionSeeder::class,

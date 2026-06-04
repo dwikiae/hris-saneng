@@ -68,6 +68,7 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [x] Backend — buat endpoint spec Users & Access: `/api/v1/instance/users`, `/api/v1/instance/roles`, dan `/api/v1/instance/permissions/structure`.
 - [x] Backend — Phase D1 Grup 3 Platform Config: `/api/v1/instance/config` dan `/api/v1/instance/config/test-smtp`.
 - [x] Backend — Phase D1 Grup 4 Audit Log: `/api/v1/instance/audit` dan `/api/v1/instance/audit/export`.
+- [x] Backend — Phase D2-1 Settings Modul Karyawan: master lokasi kerja, level karyawan, konfigurasi Karyawan, wilayah Indonesia, negara ISO, dan command sync offline.
 - [ ] Backend — buat tabel/data source attendance dan leave agar dashboard tidak lagi mengembalikan 0 untuk hadir, tidak hadir, dan cuti.
 - [ ] `/frontend` — lanjutkan surface public company website.
 - [ ] `/frontend` — lanjutkan surface candidate portal.

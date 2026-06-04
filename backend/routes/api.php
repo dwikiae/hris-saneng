@@ -40,6 +40,10 @@ use App\Http\Controllers\Api\V1\Recruitment\JobPostingController;
 use App\Http\Controllers\Api\V1\Recruitment\TestController;
 use App\Http\Controllers\Api\V1\Settings\SettingsController;
 use App\Http\Controllers\Api\V1\Setup\SetupController;
+use App\Modules\Karyawan\Http\Controllers\EmployeeLevelController;
+use App\Modules\Karyawan\Http\Controllers\EmployeeModuleSettingsController;
+use App\Modules\Karyawan\Http\Controllers\WilayahController;
+use App\Modules\Karyawan\Http\Controllers\WorkLocationController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1/auth')->group(function () {
@@ -127,6 +131,37 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(functio
         Route::post('{code}/install', [InstanceModuleController::class, 'install']);
         Route::post('{code}/export-data', [InstanceModuleController::class, 'exportData']);
         Route::post('{code}/uninstall', [InstanceModuleController::class, 'uninstall']);
+    });
+
+    Route::prefix('instance/wilayah')->group(function () {
+        Route::get('provinces', [WilayahController::class, 'provinces']);
+        Route::get('provinces/{code}/cities', [WilayahController::class, 'cities']);
+        Route::get('countries', [WilayahController::class, 'countries']);
+    });
+
+    Route::prefix('{company}/employees')->middleware('company.resolve')->group(function () {
+        Route::get('settings', [EmployeeModuleSettingsController::class, 'show']);
+        Route::put('settings', [EmployeeModuleSettingsController::class, 'update']);
+
+        Route::prefix('master/work-locations')->group(function () {
+            Route::get('/', [WorkLocationController::class, 'index']);
+            Route::post('/', [WorkLocationController::class, 'store']);
+            Route::get('{id}', [WorkLocationController::class, 'show']);
+            Route::put('{id}', [WorkLocationController::class, 'update']);
+            Route::post('{id}', [WorkLocationController::class, 'postUpdate']);
+            Route::post('{id}/archive', [WorkLocationController::class, 'archive']);
+            Route::post('{id}/restore', [WorkLocationController::class, 'restore']);
+        });
+
+        Route::prefix('master/employee-levels')->group(function () {
+            Route::get('/', [EmployeeLevelController::class, 'index']);
+            Route::post('/', [EmployeeLevelController::class, 'store']);
+            Route::get('{id}', [EmployeeLevelController::class, 'show']);
+            Route::put('{id}', [EmployeeLevelController::class, 'update']);
+            Route::post('{id}', [EmployeeLevelController::class, 'postUpdate']);
+            Route::post('{id}/archive', [EmployeeLevelController::class, 'archive']);
+            Route::post('{id}/restore', [EmployeeLevelController::class, 'restore']);
+        });
     });
 
     Route::middleware('company.resolve')->group(function () {
