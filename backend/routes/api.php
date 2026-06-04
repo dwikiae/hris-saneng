@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Auth\PasswordAccessController;
 use App\Http\Controllers\Api\V1\Auth\UserController;
 use App\Http\Controllers\Api\V1\Company\CompanyController;
 use App\Http\Controllers\Api\V1\Core\InstanceCompanyController;
+use App\Http\Controllers\Api\V1\Core\InstanceConfigController;
 use App\Http\Controllers\Api\V1\Core\InstancePermissionController;
 use App\Http\Controllers\Api\V1\Core\InstanceRoleController;
 use App\Http\Controllers\Api\V1\Core\InstanceUserController;
@@ -106,6 +107,12 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(functio
     });
 
     Route::get('instance/permissions/structure', [InstancePermissionController::class, 'structure']);
+
+    Route::prefix('instance/config')->group(function () {
+        Route::get('/', [InstanceConfigController::class, 'show']);
+        Route::put('/', [InstanceConfigController::class, 'update']);
+        Route::post('test-smtp', [InstanceConfigController::class, 'testSmtp']);
+    });
 
     Route::middleware('company.resolve')->group(function () {
         Route::get('dashboard/stats', [DashboardController::class, 'stats']);

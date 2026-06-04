@@ -2,6 +2,14 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-04 - Phase D1 Backend Grup 3 Platform Config
+
+- Menambahkan endpoint instance-level Platform Config di `/api/v1/instance/config` untuk membaca dan menyimpan konfigurasi platform khusus Platform Administrator.
+- Menyimpan konfigurasi di tabel `instance_settings` existing tanpa migration baru, termasuk timezone, bahasa, format tanggal, sesi, lockout, dan SMTP.
+- Mengenkripsi `smtp_password` sebelum disimpan dan hanya mengembalikan mask di response API.
+- Menambahkan endpoint `/api/v1/instance/config/test-smtp` yang mengantre email test SMTP ke Platform Admin yang sedang login.
+- Menambahkan queued job, mailable, Blade email, resource, FormRequest, service, dan feature test untuk flow Platform Config.
+
 ## 2026-06-04 - Fix Settings Index Navigation
 
 - Mengubah `/dashboard/settings` dari placeholder menjadi redirect otomatis ke `/dashboard/settings/companies` melalui Next config, dengan fallback redirect di page index.

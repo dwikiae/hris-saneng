@@ -66,7 +66,8 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [x] Backend — Phase D1 Grup 1 Company Management: `/api/v1/instance/companies`.
 - [ ] Backend — Phase D1 Grup 5 Module Registry: `/api/v1/instance/modules` dan lifecycle install/uninstall/export.
 - [x] Backend — buat endpoint spec Users & Access: `/api/v1/instance/users`, `/api/v1/instance/roles`, dan `/api/v1/instance/permissions/structure`.
-- [ ] Backend — buat endpoint spec Platform Settings: `/api/v1/instance/config`, `/api/v1/instance/audit`, dan lifecycle `/api/v1/instance/modules`.
+- [x] Backend — Phase D1 Grup 3 Platform Config: `/api/v1/instance/config` dan `/api/v1/instance/config/test-smtp`.
+- [ ] Backend — Phase D1 Grup 4 Audit Log: `/api/v1/instance/audit` dan `/api/v1/instance/audit/export`.
 - [ ] Backend — buat tabel/data source attendance dan leave agar dashboard tidak lagi mengembalikan 0 untuk hadir, tidak hadir, dan cuti.
 - [ ] `/frontend` — lanjutkan surface public company website.
 - [ ] `/frontend` — lanjutkan surface candidate portal.

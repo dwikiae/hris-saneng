@@ -15,12 +15,22 @@ class InstanceSettingsRepository implements InstanceSettingsRepositoryInterface
         'default_locale' => 'id',
         'mandatory_modules_installed' => false,
         'installed_mandatory_modules' => [],
+        'timezone' => 'Asia/Jakarta',
+        'language' => 'id',
+        'date_format' => 'DD/MM/YYYY',
+        'session_duration_hours' => 8,
+        'auto_logout' => true,
+        'lockout_attempts' => 3,
+        'lockout_duration_minutes' => 15,
         'storage_driver' => null,
         'storage_endpoint' => null,
         'smtp_host' => null,
         'smtp_port' => 587,
+        'smtp_encryption' => 'tls',
         'smtp_username' => null,
         'smtp_password' => null,
+        'smtp_from_name' => null,
+        'smtp_from_email' => null,
     ];
 
     public function __construct(private readonly InstanceSetting $model) {}
