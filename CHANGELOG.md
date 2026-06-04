@@ -2,6 +2,14 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-04 - Phase D1 Backend Grup 5 Module Registry
+
+- Menambahkan endpoint instance-level Module Registry di `/api/v1/instance/modules` khusus Platform Administrator.
+- Menambahkan tabel `module_registry` untuk status install instance-level tanpa `company_id`.
+- Menggabungkan data registry database dengan manifest `module.json` dari filesystem, termasuk status mandatory, dependency, installed state, dan missing dependency.
+- Menambahkan lifecycle install/uninstall modul optional dengan migration runner yang aman saat folder migration modul masih kosong.
+- Menambahkan export-data per company ke private storage path `exports/{company_id}/{date}/{module}.xlsx`, signed URL, export marker di `instance_settings`, dan audit log dengan warning UU PDP saat uninstall.
+
 ## 2026-06-04 - Phase D1 Backend Grup 4 Audit Log
 
 - Menambahkan endpoint instance-level Audit Log di `/api/v1/instance/audit` khusus Platform Administrator.

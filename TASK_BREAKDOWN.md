@@ -64,7 +64,7 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [ ] `/frontend` — Phase D2 Modul Karyawan memakai ListPageTemplate, DetailPageTemplate, dan FormPageTemplate.
 - [x] Backend — buat endpoint auth password recovery: `forgot-password`, `reset-password`, dan `set-password` invitation.
 - [x] Backend — Phase D1 Grup 1 Company Management: `/api/v1/instance/companies`.
-- [ ] Backend — Phase D1 Grup 5 Module Registry: `/api/v1/instance/modules` dan lifecycle install/uninstall/export.
+- [x] Backend — Phase D1 Grup 5 Module Registry: `/api/v1/instance/modules` dan lifecycle install/uninstall/export.
 - [x] Backend — buat endpoint spec Users & Access: `/api/v1/instance/users`, `/api/v1/instance/roles`, dan `/api/v1/instance/permissions/structure`.
 - [x] Backend — Phase D1 Grup 3 Platform Config: `/api/v1/instance/config` dan `/api/v1/instance/config/test-smtp`.
 - [x] Backend — Phase D1 Grup 4 Audit Log: `/api/v1/instance/audit` dan `/api/v1/instance/audit/export`.

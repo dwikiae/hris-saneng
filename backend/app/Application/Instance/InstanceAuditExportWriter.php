@@ -27,14 +27,14 @@ class InstanceAuditExportWriter
     /**
      * @param  array<int, array<int, string>>  $rows
      */
-    public function xlsx(array $rows): string
+    public function xlsx(array $rows, string $sheetName = 'Audit Log'): string
     {
         $path = tempnam(sys_get_temp_dir(), 'audit-xlsx-');
         $zip = new ZipArchive;
         $zip->open((string) $path, ZipArchive::CREATE | ZipArchive::OVERWRITE);
         $zip->addFromString('[Content_Types].xml', $this->contentTypesXml());
         $zip->addFromString('_rels/.rels', $this->relationshipsXml());
-        $zip->addFromString('xl/workbook.xml', $this->workbookXml());
+        $zip->addFromString('xl/workbook.xml', $this->workbookXml($sheetName));
         $zip->addFromString('xl/_rels/workbook.xml.rels', $this->workbookRelationshipsXml());
         $zip->addFromString('xl/worksheets/sheet1.xml', $this->worksheetXml($rows));
         $zip->close();
@@ -64,12 +64,12 @@ class InstanceAuditExportWriter
             .'</Relationships>';
     }
 
-    private function workbookXml(): string
+    private function workbookXml(string $sheetName): string
     {
         return '<?xml version="1.0" encoding="UTF-8"?>'
             .'<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '
             .'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
-            .'<sheets><sheet name="Audit Log" sheetId="1" r:id="rId1"/></sheets>'
+            .'<sheets><sheet name="'.htmlspecialchars($sheetName, ENT_XML1 | ENT_COMPAT, 'UTF-8').'" sheetId="1" r:id="rId1"/></sheets>'
             .'</workbook>';
     }
 

@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\Company\CompanyController;
 use App\Http\Controllers\Api\V1\Core\InstanceAuditController;
 use App\Http\Controllers\Api\V1\Core\InstanceCompanyController;
 use App\Http\Controllers\Api\V1\Core\InstanceConfigController;
+use App\Http\Controllers\Api\V1\Core\InstanceModuleController;
 use App\Http\Controllers\Api\V1\Core\InstancePermissionController;
 use App\Http\Controllers\Api\V1\Core\InstanceRoleController;
 use App\Http\Controllers\Api\V1\Core\InstanceUserController;
@@ -119,6 +120,13 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(functio
         Route::get('/', [InstanceConfigController::class, 'show']);
         Route::put('/', [InstanceConfigController::class, 'update']);
         Route::post('test-smtp', [InstanceConfigController::class, 'testSmtp']);
+    });
+
+    Route::prefix('instance/modules')->group(function () {
+        Route::get('/', [InstanceModuleController::class, 'index']);
+        Route::post('{code}/install', [InstanceModuleController::class, 'install']);
+        Route::post('{code}/export-data', [InstanceModuleController::class, 'exportData']);
+        Route::post('{code}/uninstall', [InstanceModuleController::class, 'uninstall']);
     });
 
     Route::middleware('company.resolve')->group(function () {

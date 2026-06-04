@@ -15,6 +15,7 @@ class InstanceSettingsRepository implements InstanceSettingsRepositoryInterface
         'default_locale' => 'id',
         'mandatory_modules_installed' => false,
         'installed_mandatory_modules' => [],
+        'module_uninstall_exports' => [],
         'timezone' => 'Asia/Jakarta',
         'language' => 'id',
         'date_format' => 'DD/MM/YYYY',
