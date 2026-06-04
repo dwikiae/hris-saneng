@@ -2,7 +2,7 @@
 Fase: 1
 Status: Fase 1 - retrofit sedang berjalan
 Terakhir dikerjakan: 4 Juni 2026
-Task terakhir selesai: Phase D1 Backend Grup 5 - Module Registry instance-level endpoints dibuat
+Task terakhir selesai: Fix Company Management edit cache refresh setelah save
 Task berikutnya: Phase D2 Modul Karyawan memakai platform templates
 Known issues: Tabel attendance/leave belum ada, sehingga present_today, absent_today, dan leave_today masih 0. npm audit di /frontend melaporkan 5 vulnerability dari dependency tree; belum diperbaiki karena npm audit fix --force berpotensi breaking. PHP GD extension belum aktif, sehingga test employee photo variant di-skip sampai extension tersedia.
 Instruksi sesi ini: Baca START_HERE.md -> Baca AGENTS.md -> Baca docs/UIUX_SPEC.md -> Baca docs/PLATFORM_UI_SPEC.md -> Lanjutkan Phase D2 Modul Karyawan setelah approval.
@@ -39,5 +39,7 @@ Phase D1 Backend Grup 3 selesai: endpoint instance-level Platform Config tersedi
 Phase D1 Backend Grup 4 selesai: endpoint instance-level Audit Log tersedia di `/api/v1/instance/audit` dan `/api/v1/instance/audit/export` khusus Platform Administrator. Query memakai `activity_log` Spatie, mendukung filter tanggal/causer/log/event dan alias frontend, redaction field sensitif berbasis permission `audit.view_sensitive`, export CSV/XLSX tanpa dependency baru, dan setiap export dicatat kembali ke audit log.
 
 Phase D1 Backend Grup 5 selesai: endpoint instance-level Module Registry tersedia di `/api/v1/instance/modules` untuk list, install, export-data, dan uninstall khusus Platform Administrator. Registry menggabungkan `module.json` filesystem dengan tabel `module_registry`, install/uninstall menjalankan migration modul bila ada, export-data membuat XLSX per company via private storage, dan uninstall wajib didahului export dengan audit log berisi warning UU PDP.
+
+Fix Company Management edit cache refresh selesai: `next.config.mjs` sudah diverifikasi meneruskan `/api/v1/*` ke Laravel `http://localhost:8000/api/v1`. Request PUT company lewat proxy Next ke `/api/v1/instance/companies/{id}` berhasil 2xx dan mengubah data di Laravel. Bug "save sukses tapi data tampak tidak berubah" berasal dari cache React Query `staleTime: 60_000`; halaman create/edit company sekarang mengisi cache detail terbaru dan invalidate query Settings Companies setelah save.
 
 Mulai sesi berikutnya dari Phase D2 Modul Karyawan setelah approval. Keputusan tambahan di `docs/UIUX_SPEC.md` sudah final: light mode only, onboarding wizard, language switcher ID/EN, notifikasi WebSocket via Soketi, dan company branding per company.

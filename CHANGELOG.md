@@ -2,6 +2,12 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-04 - Fix Company Edit Cache Refresh
+
+- Memastikan save Company Management yang berhasil langsung memperbarui cache React Query untuk detail company.
+- Meng-invalidate query Settings Companies setelah create/update agar halaman detail dan list tidak menampilkan data lama selama `staleTime` frontend.
+- Memverifikasi proxy Next `/api/v1/*` tetap mengarah ke Laravel `http://localhost:8000/api/v1` dan request update company lewat proxy berhasil mengubah data.
+
 ## 2026-06-04 - Phase D1 Backend Grup 5 Module Registry
 
 - Menambahkan endpoint instance-level Module Registry di `/api/v1/instance/modules` khusus Platform Administrator.

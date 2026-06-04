@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { platformToast } from "@/components/platform/ToastProvider";
@@ -16,6 +16,7 @@ export default function EditCompanyPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const companyId = params.id;
+  const queryClient = useQueryClient();
   const companyQuery = useQuery({
     queryKey: ["settings", "companies", companyId],
     queryFn: () => companyService.detail(companyId)
@@ -27,6 +28,9 @@ export default function EditCompanyPage() {
   const mutation = useMutation({
     mutationFn: (payload: CompanyPayload) => companyService.update(companyId, payload),
     onSuccess: (company) => {
+      queryClient.setQueryData(["settings", "companies", companyId], company);
+      queryClient.setQueryData(["settings", "companies", company.id], company);
+      void queryClient.invalidateQueries({ queryKey: ["settings", "companies"] });
       platformToast.success(t("settingsCompanies.toast.updated"));
       router.push(`/dashboard/settings/companies/${company.id}`);
     },
