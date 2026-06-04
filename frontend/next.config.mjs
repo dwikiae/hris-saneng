@@ -13,6 +13,15 @@ const nextConfig = {
       }
     ]
   },
+  async redirects() {
+    return [
+      {
+        source: "/dashboard/settings",
+        destination: "/dashboard/settings/companies",
+        permanent: false
+      }
+    ];
+  },
   async rewrites() {
     return [
       {

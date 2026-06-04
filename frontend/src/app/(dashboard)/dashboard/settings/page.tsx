@@ -1,11 +1,5 @@
-import { InfoPanel } from "@/components/core/platform/InfoPanel";
+import { redirect } from "next/navigation";
 
 export default function SettingsPage() {
-  return (
-    <InfoPanel
-      titleKey="settings.title"
-      descriptionKey="settings.description"
-      bodyKey="settings.body"
-    />
-  );
+  redirect("/dashboard/settings/companies");
 }

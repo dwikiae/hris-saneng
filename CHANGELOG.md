@@ -2,6 +2,12 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-04 - Fix Settings Index Navigation
+
+- Mengubah `/dashboard/settings` dari placeholder menjadi redirect otomatis ke `/dashboard/settings/companies` melalui Next config, dengan fallback redirect di page index.
+- Menjadikan Company Management sebagai default landing page Settings karena semua sub-menu Settings sudah tersedia melalui `SettingsNav` di halaman detailnya.
+- Menjaga subpage Settings existing tetap tidak berubah.
+
 ## 2026-06-04 - Fix Auth Flow End-to-End
 
 - Menghapus halaman placeholder `/dashboard/logout` supaya logout berjalan sebagai aksi, bukan navigasi ke halaman logout.
