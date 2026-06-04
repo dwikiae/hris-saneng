@@ -2,6 +2,14 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-04 - Phase D1 Backend Grup 4 Audit Log
+
+- Menambahkan endpoint instance-level Audit Log di `/api/v1/instance/audit` khusus Platform Administrator.
+- Menambahkan export audit log di `/api/v1/instance/audit/export` untuk format CSV dan XLSX tanpa dependency Composer baru, termasuk kompatibilitas POST untuk `ExportButton` frontend existing.
+- Mengambil data dari tabel `activity_log` Spatie dengan filter tanggal, causer, log name, event, dan alias frontend actor/module/action/search.
+- Mengembalikan response frontend-ready berisi `items`, `meta`, dan `diffs` dengan redaction field sensitif berbasis permission `audit.view_sensitive`.
+- Mencatat setiap export audit log ke audit log itu sendiri dengan format, filter, record count, dan waktu export.
+
 ## 2026-06-04 - Phase D1 Backend Grup 3 Platform Config
 
 - Menambahkan endpoint instance-level Platform Config di `/api/v1/instance/config` untuk membaca dan menyimpan konfigurasi platform khusus Platform Administrator.

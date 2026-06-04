@@ -27,6 +27,7 @@ class PermissionSeeder extends Seeder
         ['code' => 'settings.view', 'name' => 'View Settings', 'description' => 'View system settings'],
         ['code' => 'settings.update', 'name' => 'Update Settings', 'description' => 'Update system settings'],
         ['code' => 'audit.view', 'name' => 'View Audit Log', 'description' => 'View audit logs'],
+        ['code' => 'audit.view_sensitive', 'name' => 'View Sensitive Audit Log', 'description' => 'View sensitive audit log fields'],
         ['code' => 'archive.manage', 'name' => 'Manage Archive', 'description' => 'Manage archived records'],
         ['code' => 'company.view', 'name' => 'View Company', 'description' => 'View company records'],
         ['code' => 'company.create', 'name' => 'Create Company', 'description' => 'Create company records'],

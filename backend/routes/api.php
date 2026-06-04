@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Auth\LoginController;
 use App\Http\Controllers\Api\V1\Auth\PasswordAccessController;
 use App\Http\Controllers\Api\V1\Auth\UserController;
 use App\Http\Controllers\Api\V1\Company\CompanyController;
+use App\Http\Controllers\Api\V1\Core\InstanceAuditController;
 use App\Http\Controllers\Api\V1\Core\InstanceCompanyController;
 use App\Http\Controllers\Api\V1\Core\InstanceConfigController;
 use App\Http\Controllers\Api\V1\Core\InstancePermissionController;
@@ -107,6 +108,12 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(functio
     });
 
     Route::get('instance/permissions/structure', [InstancePermissionController::class, 'structure']);
+
+    Route::prefix('instance/audit')->group(function () {
+        Route::get('/', [InstanceAuditController::class, 'index']);
+        Route::get('export', [InstanceAuditController::class, 'export']);
+        Route::post('export', [InstanceAuditController::class, 'export']);
+    });
 
     Route::prefix('instance/config')->group(function () {
         Route::get('/', [InstanceConfigController::class, 'show']);
