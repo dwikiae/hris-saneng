@@ -7,6 +7,8 @@ use App\Core\FileStorage\Domain\StorageAdapterInterface;
 use App\Core\FileStorage\Infrastructure\MinIOStorageAdapter;
 use App\Repositories\Contracts\CompanyRepositoryInterface;
 use App\Repositories\Contracts\DashboardStatsRepositoryInterface;
+use App\Repositories\Contracts\EmployeeContractRepositoryInterface;
+use App\Repositories\Contracts\EmployeeFamilyRepositoryInterface;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
 use App\Repositories\Contracts\InstanceAuditRepositoryInterface;
 use App\Repositories\Contracts\InstanceCompanyRepositoryInterface;
@@ -28,6 +30,8 @@ use App\Repositories\Contracts\Recruitment\TestRepositoryInterface;
 use App\Repositories\Contracts\SettingsRepositoryInterface;
 use App\Repositories\Eloquent\CompanyRepository;
 use App\Repositories\Eloquent\DashboardStatsRepository;
+use App\Repositories\Eloquent\EmployeeContractRepository;
+use App\Repositories\Eloquent\EmployeeFamilyRepository;
 use App\Repositories\Eloquent\EmployeeRepository;
 use App\Repositories\Eloquent\InstanceAuditRepository;
 use App\Repositories\Eloquent\InstanceCompanyRepository;
@@ -58,6 +62,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->scoped(CompanyContext::class, fn (): CompanyContext => new CompanyContext);
         $this->app->bind(EmployeeRepositoryInterface::class, EmployeeRepository::class);
+        $this->app->bind(EmployeeContractRepositoryInterface::class, EmployeeContractRepository::class);
+        $this->app->bind(EmployeeFamilyRepositoryInterface::class, EmployeeFamilyRepository::class);
         $this->app->bind(StorageAdapterInterface::class, MinIOStorageAdapter::class);
         $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
         $this->app->bind(InstanceAuditRepositoryInterface::class, InstanceAuditRepository::class);

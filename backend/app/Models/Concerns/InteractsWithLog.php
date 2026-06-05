@@ -23,6 +23,7 @@ trait InteractsWithLog
             'secret',
             'nik',
             'npwp',
+            'passport_number',
             'bank_account_number',
             'account_number',
             'salary',

@@ -2,6 +2,14 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-05 - Phase D2-4a Backend Employee Detail Profile Contract Family
+
+- Menambahkan migration modul Karyawan untuk kolom profil tambahan di `employees`, tabel `employee_contracts`, dan tabel `employee_family`.
+- Menambahkan model, repository, service, controller, FormRequest, Resource, route, dan binding provider untuk endpoint kontrak dan keluarga karyawan.
+- Menambahkan rule kontrak: create selalu `draft`, PKWT wajib punya `end_date`, approve menjadikan kontrak baru `active`, lalu kontrak aktif lama menjadi `superseded` dan diarsipkan.
+- Menambahkan encrypted cast dan akses sensitif untuk `passport_number`, termasuk exclusion dari audit log sensitif.
+- Menambahkan test feature untuk kontrak, keluarga, migration profile columns, encrypted passport, passport field permission, dan guardrail no hard delete.
+
 ## 2026-06-05 - Phase D2-3 Frontend List Karyawan
 
 - Mengganti placeholder `/dashboard/employees` menjadi halaman daftar karyawan memakai `ListPageTemplate`, lengkap dengan breadcrumb, filter, summary strip, tabel desktop, bulk select, dan card stack mobile.

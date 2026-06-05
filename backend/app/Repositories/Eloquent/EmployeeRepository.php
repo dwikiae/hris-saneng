@@ -21,6 +21,17 @@ class EmployeeRepository implements EmployeeRepositoryInterface
         'user.roles',
         'department',
         'position',
+        'employmentType',
+        'religion',
+        'maritalStatus',
+        'bloodType',
+        'province',
+        'city',
+        'domicileProvince',
+        'domicileCity',
+        'employeeLevel',
+        'workLocation',
+        'supervisor',
     ];
 
     public function __construct(

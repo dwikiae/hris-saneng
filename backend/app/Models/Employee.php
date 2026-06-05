@@ -6,6 +6,10 @@ use App\Contracts\Archivable;
 use App\Models\Concerns\HasArchive;
 use App\Models\Concerns\HasCompany;
 use App\Models\Concerns\InteractsWithLog;
+use App\Modules\Karyawan\Models\City;
+use App\Modules\Karyawan\Models\EmployeeLevel;
+use App\Modules\Karyawan\Models\Province;
+use App\Modules\Karyawan\Models\WorkLocation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,16 +42,32 @@ class Employee extends Model implements Archivable
         'company_id',
         'employee_number',
         'name',
+        'nickname',
         'email',
         'phone',
         'address',
+        'province_id',
+        'city_id',
+        'domicile_address',
+        'domicile_province_id',
+        'domicile_city_id',
         'birth_date',
         'birth_place',
+        'country_of_birth',
         'gender',
+        'religion_id',
+        'marital_status_id',
+        'blood_type_id',
+        'nationality',
+        'passport_number',
         'department_id',
         'position_id',
         'employment_type_id',
+        'employee_level_id',
+        'work_location_id',
+        'supervisor_id',
         'join_date',
+        'probation_end_date',
         'end_date',
         'nik',
         'npwp',
@@ -90,6 +110,16 @@ class Employee extends Model implements Archivable
         return $this->hasMany(EmployeeDocument::class);
     }
 
+    public function contracts(): HasMany
+    {
+        return $this->hasMany(EmployeeContract::class);
+    }
+
+    public function family(): HasMany
+    {
+        return $this->hasMany(EmployeeFamily::class);
+    }
+
     public function photo(): HasOne
     {
         return $this->hasOne(EmployeePhoto::class)->latestOfMany();
@@ -115,6 +145,56 @@ class Employee extends Model implements Archivable
         return $this->belongsTo(EmploymentType::class);
     }
 
+    public function religion(): BelongsTo
+    {
+        return $this->belongsTo(Religion::class);
+    }
+
+    public function maritalStatus(): BelongsTo
+    {
+        return $this->belongsTo(MaritalStatus::class);
+    }
+
+    public function bloodType(): BelongsTo
+    {
+        return $this->belongsTo(BloodType::class);
+    }
+
+    public function province(): BelongsTo
+    {
+        return $this->belongsTo(Province::class, 'province_id', 'code');
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class, 'city_id', 'code');
+    }
+
+    public function domicileProvince(): BelongsTo
+    {
+        return $this->belongsTo(Province::class, 'domicile_province_id', 'code');
+    }
+
+    public function domicileCity(): BelongsTo
+    {
+        return $this->belongsTo(City::class, 'domicile_city_id', 'code');
+    }
+
+    public function employeeLevel(): BelongsTo
+    {
+        return $this->belongsTo(EmployeeLevel::class);
+    }
+
+    public function workLocation(): BelongsTo
+    {
+        return $this->belongsTo(WorkLocation::class);
+    }
+
+    public function supervisor(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'supervisor_id');
+    }
+
     /**
      * @return array<int, string>
      */
@@ -123,6 +203,7 @@ class Employee extends Model implements Archivable
         return [
             'nik',
             'npwp',
+            'passport_number',
             'bank_account_number',
             'salary',
             'allowances',
@@ -152,9 +233,11 @@ class Employee extends Model implements Archivable
         return [
             'birth_date' => 'date',
             'join_date' => 'date',
+            'probation_end_date' => 'date',
             'end_date' => 'date',
             'nik' => 'encrypted',
             'npwp' => 'encrypted',
+            'passport_number' => 'encrypted',
             'bank_account_number' => 'encrypted',
             'salary' => 'encrypted',
             'allowances' => 'encrypted',
