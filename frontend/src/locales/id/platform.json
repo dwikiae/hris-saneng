@@ -186,6 +186,222 @@
       "failed": "Aksi karyawan gagal diproses."
     }
   },
+  "employeesDetail": {
+    "loading": "Memuat karyawan",
+    "actions": {
+      "back": "Kembali ke daftar karyawan",
+      "edit": "Edit",
+      "archive": "Arsipkan",
+      "approve": "Setujui",
+      "reject": "Tolak",
+      "cancel": "Batal",
+      "save": "Simpan",
+      "retry": "Coba lagi"
+    },
+    "tabs": {
+      "profile": "Profil",
+      "employment": "Kepegawaian",
+      "contracts": "Kontrak",
+      "family": "Keluarga",
+      "educationExperience": "Pendidikan & Pengalaman",
+      "documents": "Dokumen",
+      "offboarding": "Offboarding",
+      "notes": "Catatan"
+    },
+    "meta": {
+      "contractType": "Tipe Kontrak",
+      "workLocation": "Lokasi Kerja",
+      "joinDate": "Tanggal Masuk",
+      "status": "Status"
+    },
+    "profile": {
+      "personal": "Data Personal",
+      "identity": "Identitas",
+      "contact": "Kontak",
+      "ktpAddress": "Alamat KTP",
+      "domicileAddress": "Alamat Domisili",
+      "finance": "Data Keuangan"
+    },
+    "employment": {
+      "title": "Data Kepegawaian"
+    },
+    "contracts": {
+      "title": "Daftar Kontrak",
+      "newTitle": "Kontrak Baru",
+      "new": "Kontrak Baru",
+      "pendingApproval": "Kontrak draft menunggu persetujuan."
+    },
+    "family": {
+      "title": "Data Keluarga",
+      "newTitle": "Tambah Anggota Keluarga",
+      "editTitle": "Edit Anggota Keluarga",
+      "new": "Tambah Anggota Keluarga"
+    },
+    "education": {
+      "title": "Pendidikan",
+      "newTitle": "Tambah Pendidikan",
+      "new": "Tambah Pendidikan"
+    },
+    "experience": {
+      "title": "Pengalaman Kerja",
+      "newTitle": "Tambah Pengalaman",
+      "new": "Tambah Pengalaman",
+      "current": "Masih Bekerja"
+    },
+    "documents": {
+      "title": "Dokumen",
+      "filterType": "Jenis dokumen",
+      "general": "Umum"
+    },
+    "offboarding": {
+      "title": "Offboarding",
+      "noActive": "Tidak ada offboarding aktif",
+      "noActiveDescription": "Riwayat offboarding pernah ada, tetapi tidak ada proses yang sedang berjalan.",
+      "startTitle": "Mulai Proses Offboarding",
+      "start": "Mulai Proses Offboarding",
+      "progress": "Progress checklist",
+      "checklistNewTitle": "Tambah Checklist",
+      "checklistNew": "Tambah Checklist",
+      "complete": "Selesaikan Offboarding",
+      "done": "Selesai",
+      "markDone": "Tandai selesai"
+    },
+    "approval": {
+      "title": "Menunggu Approval",
+      "description": "{{name}} membutuhkan review sebelum aktif.",
+      "rejectTitle": "Tolak karyawan"
+    },
+    "fields": {
+      "fullName": "Nama lengkap",
+      "nickname": "Nama panggilan",
+      "birthPlace": "Tempat lahir",
+      "birthDate": "Tanggal lahir",
+      "gender": "Jenis kelamin",
+      "religion": "Agama",
+      "maritalStatus": "Status pernikahan",
+      "bloodType": "Golongan darah",
+      "nationality": "Kewarganegaraan",
+      "countryOfBirth": "Negara kelahiran",
+      "nik": "NIK",
+      "ktpNumber": "Nomor KTP",
+      "passportNumber": "Nomor Passport",
+      "npwp": "NPWP",
+      "phone": "Nomor HP",
+      "personalEmail": "Email pribadi",
+      "province": "Provinsi",
+      "city": "Kota",
+      "address": "Alamat lengkap",
+      "sameAsKtp": "Sama dengan alamat KTP",
+      "bankName": "Nama bank",
+      "bankAccount": "Nomor rekening",
+      "bankAccountOwner": "Nama pemilik rekening",
+      "salary": "Gaji",
+      "allowances": "Tunjangan",
+      "deductions": "Potongan",
+      "employeeNumber": "Nomor karyawan",
+      "department": "Departemen",
+      "position": "Jabatan",
+      "levelGrade": "Level/Grade",
+      "supervisor": "Atasan langsung",
+      "workLocation": "Lokasi kerja",
+      "joinDate": "Tanggal masuk",
+      "probationEndDate": "Tanggal probasi berakhir",
+      "employeeStatus": "Status karyawan",
+      "contractType": "Tipe kontrak",
+      "contractNumber": "Nomor kontrak",
+      "startDate": "Tanggal mulai",
+      "endDate": "Tanggal selesai",
+      "notes": "Catatan",
+      "name": "Nama",
+      "relationship": "Hubungan",
+      "isDependent": "Tanggungan",
+      "occupation": "Pekerjaan",
+      "institution": "Institusi",
+      "educationLevel": "Jenjang",
+      "major": "Jurusan",
+      "startYear": "Tahun mulai",
+      "endYear": "Tahun selesai",
+      "gpa": "IPK",
+      "certificateNumber": "Nomor sertifikat",
+      "companyName": "Perusahaan",
+      "isCurrent": "Masih bekerja",
+      "responsibilities": "Tanggung jawab",
+      "reasonLeaving": "Alasan keluar",
+      "reasonType": "Alasan",
+      "lastWorkingDate": "Tanggal kerja terakhir",
+      "status": "Status",
+      "reasonDetail": "Detail alasan",
+      "title": "Judul",
+      "description": "Deskripsi",
+      "assignedTo": "Ditugaskan ke",
+      "dueDate": "Jatuh tempo",
+      "order": "Urutan"
+    },
+    "values": {
+      "yes": "Ya",
+      "no": "Tidak",
+      "noNotes": "Tidak ada catatan.",
+      "present": "Sekarang",
+      "choose": "Pilih data"
+    },
+    "relationship": {
+      "spouse": "Pasangan",
+      "child": "Anak",
+      "parent": "Orang tua",
+      "sibling": "Saudara",
+      "other": "Lainnya"
+    },
+    "contractStatus": {
+      "draft": "Draft",
+      "active": "Aktif",
+      "expired": "Expired",
+      "superseded": "Digantikan",
+      "terminated": "Diakhiri"
+    },
+    "offboardingStatus": {
+      "draft": "Draft",
+      "in_progress": "Berjalan",
+      "completed": "Selesai"
+    },
+    "reason": {
+      "resignation": "Resign",
+      "termination": "PHK",
+      "contract_end": "Kontrak berakhir",
+      "retirement": "Pensiun",
+      "other": "Lainnya"
+    },
+    "empty": {
+      "contractsTitle": "Belum ada kontrak",
+      "contractsDescription": "Kontrak karyawan akan muncul setelah ditambahkan.",
+      "familyTitle": "Belum ada data keluarga",
+      "familyDescription": "Anggota keluarga akan muncul setelah ditambahkan.",
+      "educationTitle": "Belum ada data pendidikan",
+      "experienceTitle": "Belum ada pengalaman kerja"
+    },
+    "archive": {
+      "title": "Arsipkan {{name}}?",
+      "description": "Karyawan akan disembunyikan dari daftar aktif tanpa hard delete."
+    },
+    "api": {
+      "detailTitle": "Detail karyawan belum tersedia",
+      "detail": "Endpoint detail karyawan belum bisa diakses.",
+      "contracts": "Data kontrak belum bisa dimuat.",
+      "family": "Data keluarga belum bisa dimuat.",
+      "educationExperience": "Data pendidikan atau pengalaman belum bisa dimuat.",
+      "documents": "Data dokumen belum bisa dimuat.",
+      "offboarding": "Data offboarding belum bisa dimuat."
+    },
+    "toast": {
+      "photoUploaded": "Foto karyawan berhasil diunggah.",
+      "documentUploaded": "Dokumen berhasil diunggah.",
+      "saved": "Data berhasil disimpan.",
+      "approved": "Data berhasil disetujui.",
+      "rejected": "Data berhasil ditolak.",
+      "archived": "Data berhasil diarsipkan.",
+      "completed": "Proses berhasil diselesaikan.",
+      "failed": "Aksi gagal diproses."
+    }
+  },
   "employeesSettings": {
     "title": "Pengaturan Karyawan",
     "description": "Kelola master data dan konfigurasi modul Karyawan per company.",

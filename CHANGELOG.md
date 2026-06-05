@@ -2,6 +2,15 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-05 - Phase D2-4d Frontend Detail Karyawan
+
+- Menambahkan halaman `/dashboard/employees/{id}` memakai `DetailPageTemplate` dengan breadcrumb, entity header, status badge, action Edit/Arsipkan, dan approval panel untuk karyawan pending.
+- Menambahkan tab URL `?tab=` untuk Profil, Kepegawaian, Kontrak, Keluarga, Pendidikan & Pengalaman, Dokumen, Offboarding, dan Catatan dengan lazy loading, skeleton, error state, dan retry per tab.
+- Memperluas `employee.service.ts` dan tipe frontend untuk detail karyawan, kontrak, keluarga, pendidikan, pengalaman, notes, dokumen, foto, offboarding, dan checklist.
+- Menambahkan UI action untuk kontrak, keluarga, pendidikan, pengalaman, dokumen, notes, offboarding, dan checklist menggunakan endpoint backend yang sudah tersedia.
+- Menambahkan adapter backward-compatible pada `DetailPageTemplate`, `ChatLog`, dan `DocumentUpload` agar slug Catatan, payload employee notes, dan archive dokumen employee bisa memakai komponen platform.
+- Mencatat gap backend detail: permission sensitif belum selaras, signed download dokumen karyawan belum ada, activity endpoint employee belum ada, dan read photo/document masih memakai `employee.update`.
+
 ## 2026-06-05 - Phase D2-4c Backend Employee Offboarding
 
 - Menambahkan migration modul Karyawan untuk `employee_offboardings` dan `offboarding_checklist_items`.

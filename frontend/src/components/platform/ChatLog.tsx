@@ -17,6 +17,8 @@ interface ChatLogProps {
   activityEndpoint?: string;
   notesEndpoint?: string;
   createNoteEndpoint?: string;
+  createNote?: (body: string) => Promise<ChatNoteItem>;
+  loadNotes?: () => Promise<{ items: ChatNoteItem[]; nextCursor?: string | null }>;
   realtimeChannel?: string;
   initialActivities?: ChatActivityItem[];
   initialNotes?: ChatNoteItem[];
@@ -30,6 +32,8 @@ export function ChatLog({
   activityEndpoint,
   notesEndpoint,
   createNoteEndpoint,
+  createNote,
+  loadNotes,
   realtimeChannel,
   initialActivities = [],
   initialNotes = []
@@ -46,11 +50,11 @@ export function ChatLog({
   });
   const notesQuery = useQuery({
     queryKey: ["chat-log", module, recordId, "notes"],
-    queryFn: () => chatLogService.notes(notesEndpoint ?? ""),
-    enabled: Boolean(notesEndpoint)
+    queryFn: () => (loadNotes ? loadNotes() : chatLogService.notes(notesEndpoint ?? "")),
+    enabled: Boolean(notesEndpoint || loadNotes)
   });
   const mutation = useMutation({
-    mutationFn: (body: string) => chatLogService.createNote(createNoteEndpoint ?? "", body),
+    mutationFn: (body: string) => (createNote ? createNote(body) : chatLogService.createNote(createNoteEndpoint ?? "", body)),
     onSuccess: (note) => {
       setLiveNotes((current) => [note, ...current]);
       setNoteBody("");
@@ -71,13 +75,13 @@ export function ChatLog({
     });
   }, [realtimeChannel]);
 
-  const createNote = () => {
+  const submitNote = () => {
     if (!noteBody.trim()) {
       platformToast.warning(t("platformBehavior.chat.noteRequired"));
       return;
     }
 
-    if (createNoteEndpoint) {
+    if (createNoteEndpoint || createNote) {
       mutation.mutate(noteBody);
       return;
     }
@@ -153,7 +157,7 @@ export function ChatLog({
             placeholder={t("platformBehavior.chat.notePlaceholder")}
             onChange={(event) => setNoteBody(event.target.value)}
           />
-          <Button type="button" disabled={mutation.isPending} onClick={createNote}>
+          <Button type="button" disabled={mutation.isPending} onClick={submitNote}>
             <MessageSquare className="mr-2 h-4 w-4" aria-hidden="true" />
             {t("platformBehavior.chat.saveNote")}
           </Button>

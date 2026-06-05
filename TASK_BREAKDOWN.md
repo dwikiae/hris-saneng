@@ -68,7 +68,7 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [x] `/frontend` — Phase D2-2 Settings Modul Karyawan di `/dashboard/employees/settings`.
 - [ ] `/frontend` — Phase D2 Modul Karyawan memakai ListPageTemplate, DetailPageTemplate, dan FormPageTemplate.
   - [x] Phase D2-3 — List Karyawan di `/dashboard/employees` dan `/dashboard/employees/archived` memakai ListPageTemplate.
-  - [ ] Phase D2 berikutnya — Detail Karyawan memakai DetailPageTemplate.
+  - [x] Phase D2-4d — Detail Karyawan di `/dashboard/employees/{id}` memakai DetailPageTemplate dan tab lazy-load.
   - [ ] Phase D2 berikutnya — Form tambah/edit Karyawan memakai FormPageTemplate.
 - [x] Backend — buat endpoint auth password recovery: `forgot-password`, `reset-password`, dan `set-password` invitation.
 - [x] Backend — Phase D1 Grup 1 Company Management: `/api/v1/instance/companies`.
@@ -83,6 +83,10 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [ ] Backend — lengkapi `GET /api/v1/employees` untuk filter `archived`, `contract_type`, sort server-side `sort_by/sort_dir`, dan response meta summary agar List Karyawan tidak perlu fallback frontend.
 - [ ] Backend — sediakan endpoint export karyawan ter-audit untuk filter aktif dan selected IDs.
 - [ ] Backend — sediakan endpoint restore karyawan module-specific atau selaraskan permission restore arsip dengan UX Karyawan.
+- [ ] Backend — selaraskan permission sensitif employee antara spec `employee.view_sensitive`, resource identitas, dan `employee.view_salary`.
+- [ ] Backend — sediakan signed download URL untuk dokumen karyawan agar tab Dokumen bisa mengunduh file via endpoint resmi.
+- [ ] Backend — sediakan activity log endpoint khusus employee untuk sub-tab Log Aktivitas pada ChatLog detail karyawan.
+- [ ] Backend — ubah read permission photo/document employee dari `employee.update` ke kontrak read yang sesuai, jika role read-only harus bisa melihat detail.
 - [ ] Backend — buat tabel/data source attendance dan leave agar dashboard tidak lagi mengembalikan 0 untuk hadir, tidak hadir, dan cuti.
 - [ ] `/frontend` — lanjutkan surface public company website.
 - [ ] `/frontend` — lanjutkan surface candidate portal.

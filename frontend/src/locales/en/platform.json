@@ -186,6 +186,222 @@
       "failed": "Employee action failed."
     }
   },
+  "employeesDetail": {
+    "loading": "Loading employee",
+    "actions": {
+      "back": "Back to employee list",
+      "edit": "Edit",
+      "archive": "Archive",
+      "approve": "Approve",
+      "reject": "Reject",
+      "cancel": "Cancel",
+      "save": "Save",
+      "retry": "Try again"
+    },
+    "tabs": {
+      "profile": "Profile",
+      "employment": "Employment",
+      "contracts": "Contracts",
+      "family": "Family",
+      "educationExperience": "Education & Experience",
+      "documents": "Documents",
+      "offboarding": "Offboarding",
+      "notes": "Notes"
+    },
+    "meta": {
+      "contractType": "Contract Type",
+      "workLocation": "Work Location",
+      "joinDate": "Join Date",
+      "status": "Status"
+    },
+    "profile": {
+      "personal": "Personal Data",
+      "identity": "Identity",
+      "contact": "Contact",
+      "ktpAddress": "KTP Address",
+      "domicileAddress": "Domicile Address",
+      "finance": "Finance Data"
+    },
+    "employment": {
+      "title": "Employment Data"
+    },
+    "contracts": {
+      "title": "Contract List",
+      "newTitle": "New Contract",
+      "new": "New Contract",
+      "pendingApproval": "Draft contract is waiting for approval."
+    },
+    "family": {
+      "title": "Family Data",
+      "newTitle": "Add Family Member",
+      "editTitle": "Edit Family Member",
+      "new": "Add Family Member"
+    },
+    "education": {
+      "title": "Education",
+      "newTitle": "Add Education",
+      "new": "Add Education"
+    },
+    "experience": {
+      "title": "Work Experience",
+      "newTitle": "Add Experience",
+      "new": "Add Experience",
+      "current": "Currently Working"
+    },
+    "documents": {
+      "title": "Documents",
+      "filterType": "Document type",
+      "general": "General"
+    },
+    "offboarding": {
+      "title": "Offboarding",
+      "noActive": "No active offboarding",
+      "noActiveDescription": "Offboarding history exists, but there is no process currently running.",
+      "startTitle": "Start Offboarding Process",
+      "start": "Start Offboarding Process",
+      "progress": "Checklist progress",
+      "checklistNewTitle": "Add Checklist",
+      "checklistNew": "Add Checklist",
+      "complete": "Complete Offboarding",
+      "done": "Done",
+      "markDone": "Mark done"
+    },
+    "approval": {
+      "title": "Pending Approval",
+      "description": "{{name}} needs review before becoming active.",
+      "rejectTitle": "Reject employee"
+    },
+    "fields": {
+      "fullName": "Full name",
+      "nickname": "Nickname",
+      "birthPlace": "Birth place",
+      "birthDate": "Birth date",
+      "gender": "Gender",
+      "religion": "Religion",
+      "maritalStatus": "Marital status",
+      "bloodType": "Blood type",
+      "nationality": "Nationality",
+      "countryOfBirth": "Country of birth",
+      "nik": "NIK",
+      "ktpNumber": "KTP number",
+      "passportNumber": "Passport number",
+      "npwp": "NPWP",
+      "phone": "Phone number",
+      "personalEmail": "Personal email",
+      "province": "Province",
+      "city": "City",
+      "address": "Full address",
+      "sameAsKtp": "Same as KTP address",
+      "bankName": "Bank name",
+      "bankAccount": "Bank account number",
+      "bankAccountOwner": "Bank account owner",
+      "salary": "Salary",
+      "allowances": "Allowances",
+      "deductions": "Deductions",
+      "employeeNumber": "Employee number",
+      "department": "Department",
+      "position": "Position",
+      "levelGrade": "Level/Grade",
+      "supervisor": "Direct supervisor",
+      "workLocation": "Work location",
+      "joinDate": "Join date",
+      "probationEndDate": "Probation end date",
+      "employeeStatus": "Employee status",
+      "contractType": "Contract type",
+      "contractNumber": "Contract number",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "notes": "Notes",
+      "name": "Name",
+      "relationship": "Relationship",
+      "isDependent": "Dependent",
+      "occupation": "Occupation",
+      "institution": "Institution",
+      "educationLevel": "Education level",
+      "major": "Major",
+      "startYear": "Start year",
+      "endYear": "End year",
+      "gpa": "GPA",
+      "certificateNumber": "Certificate number",
+      "companyName": "Company",
+      "isCurrent": "Currently working",
+      "responsibilities": "Responsibilities",
+      "reasonLeaving": "Reason for leaving",
+      "reasonType": "Reason",
+      "lastWorkingDate": "Last working date",
+      "status": "Status",
+      "reasonDetail": "Reason detail",
+      "title": "Title",
+      "description": "Description",
+      "assignedTo": "Assigned to",
+      "dueDate": "Due date",
+      "order": "Order"
+    },
+    "values": {
+      "yes": "Yes",
+      "no": "No",
+      "noNotes": "No notes.",
+      "present": "Present",
+      "choose": "Choose data"
+    },
+    "relationship": {
+      "spouse": "Spouse",
+      "child": "Child",
+      "parent": "Parent",
+      "sibling": "Sibling",
+      "other": "Other"
+    },
+    "contractStatus": {
+      "draft": "Draft",
+      "active": "Active",
+      "expired": "Expired",
+      "superseded": "Superseded",
+      "terminated": "Terminated"
+    },
+    "offboardingStatus": {
+      "draft": "Draft",
+      "in_progress": "In Progress",
+      "completed": "Completed"
+    },
+    "reason": {
+      "resignation": "Resignation",
+      "termination": "Termination",
+      "contract_end": "Contract end",
+      "retirement": "Retirement",
+      "other": "Other"
+    },
+    "empty": {
+      "contractsTitle": "No contracts yet",
+      "contractsDescription": "Employee contracts will appear after they are added.",
+      "familyTitle": "No family data yet",
+      "familyDescription": "Family members will appear after they are added.",
+      "educationTitle": "No education data yet",
+      "experienceTitle": "No work experience yet"
+    },
+    "archive": {
+      "title": "Archive {{name}}?",
+      "description": "The employee will be hidden from active lists without hard delete."
+    },
+    "api": {
+      "detailTitle": "Employee detail is not available",
+      "detail": "The employee detail endpoint cannot be reached.",
+      "contracts": "Contract data could not be loaded.",
+      "family": "Family data could not be loaded.",
+      "educationExperience": "Education or experience data could not be loaded.",
+      "documents": "Document data could not be loaded.",
+      "offboarding": "Offboarding data could not be loaded."
+    },
+    "toast": {
+      "photoUploaded": "Employee photo uploaded.",
+      "documentUploaded": "Document uploaded.",
+      "saved": "Data saved.",
+      "approved": "Data approved.",
+      "rejected": "Data rejected.",
+      "archived": "Data archived.",
+      "completed": "Process completed.",
+      "failed": "The action could not be processed."
+    }
+  },
   "employeesSettings": {
     "title": "Employee Settings",
     "description": "Manage employee module master data and configuration per company.",

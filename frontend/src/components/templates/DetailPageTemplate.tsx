@@ -37,6 +37,8 @@ interface DetailPageTemplateProps {
   tabs: DetailTab[];
   defaultTab?: string;
   notesContent?: ReactNode;
+  notesSlug?: string;
+  notesLabel?: string;
   isLoading?: boolean;
 }
 
@@ -57,6 +59,8 @@ export function DetailPageTemplate({
   tabs,
   defaultTab,
   notesContent,
+  notesSlug = "notes",
+  notesLabel,
   isLoading = false
 }: DetailPageTemplateProps) {
   const { t } = useTranslation("platform");
@@ -66,8 +70,8 @@ export function DetailPageTemplate({
   const visibleTabs = [
     ...tabs.filter((tab) => (typeof tab.visible === "function" ? tab.visible() : tab.visible ?? true)),
     {
-      slug: "notes",
-      label: t("templates.detail.notesTab"),
+      slug: notesSlug,
+      label: notesLabel ?? t("templates.detail.notesTab"),
       content: notesContent ?? <NotesPlaceholder />
     }
   ];

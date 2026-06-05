@@ -22,6 +22,7 @@ interface DocumentUploadProps {
   onArchived?: (document: PlatformDocument) => void;
   archiveEndpoint?: (document: PlatformDocument) => string;
   uploadFile?: (file: File, onProgress: (progress: number) => void) => Promise<PlatformDocument>;
+  archiveFile?: (document: PlatformDocument) => Promise<null>;
 }
 
 const defaultMimeTypes = [
@@ -91,7 +92,8 @@ export function DocumentUpload({
   onUploaded,
   onArchived,
   archiveEndpoint,
-  uploadFile
+  uploadFile,
+  archiveFile
 }: DocumentUploadProps) {
   const { t } = useTranslation("platform");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -131,11 +133,15 @@ export function DocumentUpload({
   };
 
   const archiveDocument = async (document: PlatformDocument) => {
-    if (!archiveEndpoint) {
+    if (!archiveEndpoint && !archiveFile) {
       return;
     }
 
-    await documentService.archive(archiveEndpoint(document));
+    if (archiveFile) {
+      await archiveFile(document);
+    } else if (archiveEndpoint) {
+      await documentService.archive(archiveEndpoint(document));
+    }
     onArchived?.(document);
   };
 
@@ -201,7 +207,7 @@ export function DocumentUpload({
                 type="button"
                 variant="outline"
                 size="sm"
-                disabled={!archiveEndpoint}
+                disabled={!archiveEndpoint && !archiveFile}
                 onClick={() => void archiveDocument(document)}
               >
                 <Archive className="mr-2 h-4 w-4" aria-hidden="true" />
