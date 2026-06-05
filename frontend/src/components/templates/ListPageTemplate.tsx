@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { Search, X } from "lucide-react";
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { Button } from "@/components/ui/button";
@@ -22,7 +23,7 @@ import {
   SummaryStrip,
   TemplateActionGroup
 } from "./TemplateParts";
-import type { EmptyStateConfig, PaginationState, SummaryItem, TemplateAction } from "./types";
+import type { BreadcrumbItem, EmptyStateConfig, PaginationState, SummaryItem, TemplateAction } from "./types";
 
 export interface ListColumn<T> {
   key: string;
@@ -34,7 +35,9 @@ export interface ListColumn<T> {
 interface ListPageTemplateProps<T> {
   title: string;
   description?: string;
+  breadcrumbs?: BreadcrumbItem[];
   actions?: TemplateAction[];
+  banner?: ReactNode;
   searchValue?: string;
   searchPlaceholder?: string;
   onSearchChange?: (value: string) => void;
@@ -60,7 +63,9 @@ interface ListPageTemplateProps<T> {
 export function ListPageTemplate<T>({
   title,
   description,
+  breadcrumbs = [],
   actions = [],
+  banner,
   searchValue = "",
   searchPlaceholder,
   onSearchChange,
@@ -112,7 +117,17 @@ export function ListPageTemplate<T>({
   return (
     <section className="space-y-5">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-        <div>
+        <div className="space-y-2">
+          {breadcrumbs.length > 0 ? (
+            <nav className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+              {breadcrumbs.map((item, index) => (
+                <span key={`${item.label}-${index}`} className="flex items-center gap-2">
+                  {item.href ? <Link href={item.href}>{item.label}</Link> : <span>{item.label}</span>}
+                  {index < breadcrumbs.length - 1 ? <span>/</span> : null}
+                </span>
+              ))}
+            </nav>
+          ) : null}
           <h1 className="text-2xl font-semibold text-foreground">{title}</h1>
           {description ? (
             <p className="mt-1 max-w-3xl text-sm leading-6 text-muted-foreground">{description}</p>
@@ -120,6 +135,8 @@ export function ListPageTemplate<T>({
         </div>
         <TemplateActionGroup actions={actions} />
       </div>
+
+      {banner}
 
       <div className="rounded-lg border border-border bg-card p-4 shadow-sm">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">

@@ -49,6 +49,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   const hasToken = typeof window !== "undefined" && Boolean(window.localStorage.getItem("dictive_hr_token"));
   const { logout, isLoggingOut } = useLogout();
   const isEmployeesContext = pathname.startsWith("/dashboard/employees");
+  const employeesListActive = isEmployeesContext && !pathname.startsWith("/dashboard/employees/settings");
   const employeesSettingsActive = pathname.startsWith("/dashboard/employees/settings");
 
   return (
@@ -64,25 +65,44 @@ export function Sidebar({ onNavigate }: SidebarProps) {
       </div>
 
       <nav className="flex-1 space-y-1 px-3 py-4">
-        {mainNavItems.map((item) => {
-          const Icon = item.icon;
-          const active = isActivePath(pathname, item.href);
-
-          return (
+        {isEmployeesContext ? (
+          <>
+            <p className="px-3 pb-2 text-xs font-semibold uppercase text-muted-foreground">
+              {t("nav.employeeSection")}
+            </p>
             <Link
-              key={item.href}
-              href={item.href}
+              href="/dashboard/employees"
               onClick={onNavigate}
               className={cn(
                 "flex h-10 items-center gap-3 rounded-md border-l-2 border-transparent px-3 text-sm font-medium text-muted-foreground transition hover:bg-slate-50 hover:text-foreground",
-                active && "border-l-primary bg-blue-100 text-blue-700 hover:bg-blue-100 hover:text-blue-700"
+                employeesListActive && "border-l-primary bg-blue-100 text-blue-700 hover:bg-blue-100 hover:text-blue-700"
               )}
             >
-              <Icon className="h-4 w-4" aria-hidden="true" />
-              <span className="truncate">{t(item.labelKey)}</span>
+              <Users className="h-4 w-4" aria-hidden="true" />
+              <span className="truncate">{t("nav.employeeList")}</span>
             </Link>
-          );
-        })}
+          </>
+        ) : (
+          mainNavItems.map((item) => {
+            const Icon = item.icon;
+            const active = isActivePath(pathname, item.href);
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={onNavigate}
+                className={cn(
+                  "flex h-10 items-center gap-3 rounded-md border-l-2 border-transparent px-3 text-sm font-medium text-muted-foreground transition hover:bg-slate-50 hover:text-foreground",
+                  active && "border-l-primary bg-blue-100 text-blue-700 hover:bg-blue-100 hover:text-blue-700"
+                )}
+              >
+                <Icon className="h-4 w-4" aria-hidden="true" />
+                <span className="truncate">{t(item.labelKey)}</span>
+              </Link>
+            );
+          })
+        )}
       </nav>
 
       <div className="px-3 pb-4">

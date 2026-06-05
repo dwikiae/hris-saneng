@@ -63,6 +63,9 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [x] `/frontend` — Phase D1 Sub-task 4 Platform Config, Audit Log, dan Module Registry.
 - [x] `/frontend` — Phase D2-2 Settings Modul Karyawan di `/dashboard/employees/settings`.
 - [ ] `/frontend` — Phase D2 Modul Karyawan memakai ListPageTemplate, DetailPageTemplate, dan FormPageTemplate.
+  - [x] Phase D2-3 — List Karyawan di `/dashboard/employees` dan `/dashboard/employees/archived` memakai ListPageTemplate.
+  - [ ] Phase D2 berikutnya — Detail Karyawan memakai DetailPageTemplate.
+  - [ ] Phase D2 berikutnya — Form tambah/edit Karyawan memakai FormPageTemplate.
 - [x] Backend — buat endpoint auth password recovery: `forgot-password`, `reset-password`, dan `set-password` invitation.
 - [x] Backend — Phase D1 Grup 1 Company Management: `/api/v1/instance/companies`.
 - [x] Backend — Phase D1 Grup 5 Module Registry: `/api/v1/instance/modules` dan lifecycle install/uninstall/export.
@@ -70,6 +73,9 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [x] Backend — Phase D1 Grup 3 Platform Config: `/api/v1/instance/config` dan `/api/v1/instance/config/test-smtp`.
 - [x] Backend — Phase D1 Grup 4 Audit Log: `/api/v1/instance/audit` dan `/api/v1/instance/audit/export`.
 - [x] Backend — Phase D2-1 Settings Modul Karyawan: master lokasi kerja, level karyawan, konfigurasi Karyawan, wilayah Indonesia, negara ISO, dan command sync offline.
+- [ ] Backend — lengkapi `GET /api/v1/employees` untuk filter `archived`, `contract_type`, sort server-side `sort_by/sort_dir`, dan response meta summary agar List Karyawan tidak perlu fallback frontend.
+- [ ] Backend — sediakan endpoint export karyawan ter-audit untuk filter aktif dan selected IDs.
+- [ ] Backend — sediakan endpoint restore karyawan module-specific atau selaraskan permission restore arsip dengan UX Karyawan.
 - [ ] Backend — buat tabel/data source attendance dan leave agar dashboard tidak lagi mengembalikan 0 untuk hadir, tidak hadir, dan cuti.
 - [ ] `/frontend` — lanjutkan surface public company website.
 - [ ] `/frontend` — lanjutkan surface candidate portal.

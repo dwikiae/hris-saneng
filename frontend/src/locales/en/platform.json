@@ -6,6 +6,8 @@
   "nav": {
     "dashboard": "Dashboard",
     "employees": "Employees",
+    "employeeSection": "Employees",
+    "employeeList": "Employee List",
     "employeeSettings": "Settings",
     "calendar": "Calendar",
     "recruitment": "Recruitment",
@@ -104,6 +106,85 @@
     "title": "Employees",
     "description": "Surface for the mandatory employee module.",
     "body": "Employee data will connect to company-scoped APIs once the module is fully active."
+  },
+  "employeesList": {
+    "title": "Employees",
+    "archiveMode": "ARCHIVE MODE",
+    "searchPlaceholder": "Search name or employee ID...",
+    "breadcrumb": {
+      "dashboard": "Dashboard",
+      "employees": "Employees"
+    },
+    "summary": {
+      "total": "Total Employees",
+      "active": "Active Employees",
+      "probation": "On Probation",
+      "pending": "Pending Approval"
+    },
+    "filters": {
+      "statusAll": "All statuses",
+      "departmentAll": "All departments",
+      "contractAll": "All contract types"
+    },
+    "columns": {
+      "name": "Photo + Name",
+      "employeeId": "Employee ID",
+      "position": "Position",
+      "department": "Department",
+      "contractType": "Contract Type",
+      "status": "Status",
+      "archivedBy": "Archived by",
+      "archivedAt": "Archive date",
+      "actions": "Actions"
+    },
+    "contract": {
+      "pkwt": "PKWT",
+      "pkwtt": "PKWTT"
+    },
+    "status": {
+      "active": "Active",
+      "approved": "Active",
+      "probation": "Probation",
+      "pending": "Pending",
+      "inactive": "Inactive",
+      "draft": "Draft",
+      "rejected": "Rejected",
+      "unknown": "Unavailable"
+    },
+    "actions": {
+      "new": "Add Employee",
+      "viewArchive": "View Archive",
+      "exportSelected": "Export selected data",
+      "openMenu": "Open action menu",
+      "detail": "View Detail",
+      "edit": "Edit",
+      "archive": "Archive",
+      "restore": "Restore"
+    },
+    "confirm": {
+      "archive": {
+        "title": "Archive {{name}}?",
+        "description": "The employee will be hidden from active lists without hard delete."
+      },
+      "restore": {
+        "title": "Restore {{name}}?",
+        "description": "The employee will appear in the active list again."
+      }
+    },
+    "empty": {
+      "title": "No employees yet",
+      "description": "Employee records will appear after the endpoint and data are available.",
+      "archivedTitle": "No archived employees",
+      "archivedDescription": "Archived data will appear after the backend supports archived employee lists."
+    },
+    "api": {
+      "notReady": "The employee list endpoint cannot be reached yet."
+    },
+    "toast": {
+      "archived": "Employee archived.",
+      "restored": "Employee restored.",
+      "failed": "Employee action failed."
+    }
   },
   "employeesSettings": {
     "title": "Employee Settings",

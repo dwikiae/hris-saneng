@@ -2,6 +2,15 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-05 - Phase D2-3 Frontend List Karyawan
+
+- Mengganti placeholder `/dashboard/employees` menjadi halaman daftar karyawan memakai `ListPageTemplate`, lengkap dengan breadcrumb, filter, summary strip, tabel desktop, bulk select, dan card stack mobile.
+- Menambahkan halaman `/dashboard/employees/archived` dengan banner MODE ARSIP, kolom arsip, dan aksi Pulihkan.
+- Menambahkan `employee.service.ts`, tipe kontrak frontend employee, dan `AvatarWithInfo` untuk daftar karyawan.
+- Menambahkan dukungan breadcrumb dan banner pada `ListPageTemplate` tanpa mengubah halaman existing yang sudah memakai template tersebut.
+- Mengubah sidebar saat berada di konteks `/dashboard/employees/*` agar menampilkan navigasi modul Karyawan dan footer Pengaturan sesuai permission `karyawan.settings`.
+- Mencatat gap backend: endpoint list karyawan belum support archived, sort server-side, contract_type, employee export, dan restore module-specific.
+
 ## 2026-06-04 - Phase D2-2 Frontend Settings Modul Karyawan
 
 - Menambahkan halaman `/dashboard/employees/settings?section={slug}` dengan layout settings modul, vertical nav, dan mobile section dropdown.

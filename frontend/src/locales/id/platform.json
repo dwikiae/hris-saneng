@@ -6,6 +6,8 @@
   "nav": {
     "dashboard": "Dashboard",
     "employees": "Karyawan",
+    "employeeSection": "Karyawan",
+    "employeeList": "Daftar Karyawan",
     "employeeSettings": "Pengaturan",
     "calendar": "Kalender",
     "recruitment": "Recruitment",
@@ -104,6 +106,85 @@
     "title": "Karyawan",
     "description": "Surface untuk data karyawan mandatory module.",
     "body": "Data karyawan akan terhubung ke API company-scoped ketika modul berjalan penuh."
+  },
+  "employeesList": {
+    "title": "Karyawan",
+    "archiveMode": "MODE ARSIP",
+    "searchPlaceholder": "Cari nama atau ID karyawan...",
+    "breadcrumb": {
+      "dashboard": "Dashboard",
+      "employees": "Karyawan"
+    },
+    "summary": {
+      "total": "Total Karyawan",
+      "active": "Karyawan Aktif",
+      "probation": "Sedang Probasi",
+      "pending": "Pending Approval"
+    },
+    "filters": {
+      "statusAll": "Semua status",
+      "departmentAll": "Semua departemen",
+      "contractAll": "Semua tipe kontrak"
+    },
+    "columns": {
+      "name": "Foto + Nama",
+      "employeeId": "ID Karyawan",
+      "position": "Jabatan",
+      "department": "Departemen",
+      "contractType": "Tipe Kontrak",
+      "status": "Status",
+      "archivedBy": "Diarsipkan oleh",
+      "archivedAt": "Tanggal arsip",
+      "actions": "Aksi"
+    },
+    "contract": {
+      "pkwt": "PKWT",
+      "pkwtt": "PKWTT"
+    },
+    "status": {
+      "active": "Aktif",
+      "approved": "Aktif",
+      "probation": "Probasi",
+      "pending": "Pending",
+      "inactive": "Nonaktif",
+      "draft": "Draft",
+      "rejected": "Ditolak",
+      "unknown": "Belum tersedia"
+    },
+    "actions": {
+      "new": "Tambah Karyawan",
+      "viewArchive": "Lihat Arsip",
+      "exportSelected": "Export data yang dipilih",
+      "openMenu": "Buka menu aksi",
+      "detail": "Lihat Detail",
+      "edit": "Edit",
+      "archive": "Arsipkan",
+      "restore": "Pulihkan"
+    },
+    "confirm": {
+      "archive": {
+        "title": "Arsipkan {{name}}?",
+        "description": "Karyawan akan disembunyikan dari daftar aktif tanpa hard delete."
+      },
+      "restore": {
+        "title": "Pulihkan {{name}}?",
+        "description": "Karyawan akan kembali muncul di daftar aktif."
+      }
+    },
+    "empty": {
+      "title": "Belum ada karyawan",
+      "description": "Data karyawan akan muncul setelah endpoint dan data tersedia.",
+      "archivedTitle": "Belum ada karyawan di arsip",
+      "archivedDescription": "Data arsip akan muncul setelah backend mendukung daftar archived karyawan."
+    },
+    "api": {
+      "notReady": "Endpoint daftar karyawan belum bisa diakses."
+    },
+    "toast": {
+      "archived": "Karyawan berhasil diarsipkan.",
+      "restored": "Karyawan berhasil dipulihkan.",
+      "failed": "Aksi karyawan gagal diproses."
+    }
   },
   "employeesSettings": {
     "title": "Pengaturan Karyawan",

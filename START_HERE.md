@@ -1,11 +1,11 @@
 ---
 Fase: 1
 Status: Fase 1 - retrofit sedang berjalan
-Terakhir dikerjakan: 4 Juni 2026
-Task terakhir selesai: Phase D2-2 Frontend Settings Modul Karyawan
-Task berikutnya: Phase D2-3 Frontend List Karyawan memakai ListPageTemplate
-Known issues: Tabel attendance/leave belum ada, sehingga present_today, absent_today, dan leave_today masih 0. npm audit di /frontend melaporkan 5 vulnerability dari dependency tree; belum diperbaiki karena npm audit fix --force berpotensi breaking. PHP GD extension belum aktif, sehingga test employee photo variant di-skip sampai extension tersedia.
-Instruksi sesi ini: Baca START_HERE.md -> Baca AGENTS.md -> Baca docs/UIUX_SPEC.md -> Baca docs/PLATFORM_UI_SPEC.md -> Lanjutkan Phase D2-3 Frontend List Karyawan setelah approval.
+Terakhir dikerjakan: 5 Juni 2026
+Task terakhir selesai: Phase D2-3 Frontend List Karyawan
+Task berikutnya: Phase D2 Modul Karyawan Detail dan Form Karyawan memakai DetailPageTemplate/FormPageTemplate
+Known issues: Backend GET /api/v1/employees belum support archived, sort_by, sort_dir, contract_type, employee export, dan module-specific restore; halaman arsip frontend tidak menampilkan data aktif sambil menunggu endpoint archived. Tabel attendance/leave belum ada, sehingga present_today, absent_today, dan leave_today masih 0. npm audit di /frontend melaporkan 5 vulnerability dari dependency tree; belum diperbaiki karena npm audit fix --force berpotensi breaking. PHP GD extension belum aktif, sehingga test employee photo variant di-skip sampai extension tersedia.
+Instruksi sesi ini: Baca START_HERE.md -> Baca AGENTS.md -> Baca docs/UIUX_SPEC.md -> Baca docs/PLATFORM_UI_SPEC.md -> Lanjutkan Phase D2 Detail/Form Karyawan setelah approval.
 ---
 
 # Start Here
@@ -46,4 +46,6 @@ Phase D2-1 Backend Settings Modul Karyawan selesai: migration modul Karyawan sek
 
 Phase D2-2 Frontend Settings Modul Karyawan selesai: `/dashboard/employees/settings?section={slug}` tersedia dengan SettingsModuleLayout, vertical nav, guard `karyawan.settings`, company context dari role user, dan footer Pengaturan di sidebar konteks Karyawan. Section `level-grade` dan `lokasi-kerja` terhubung ke endpoint D2-1, section master data lain menampilkan API-not-ready state sesuai keputusan contract-ready, serta section `pengaturan` terhubung ke `/api/v1/{company}/employees/settings`. Service `employee-master.service.ts`, `employee-settings.service.ts`, dan `wilayah.service.ts` tersedia untuk phase Karyawan berikutnya.
 
-Mulai sesi berikutnya dari Phase D2-3 Frontend List Karyawan setelah approval. Keputusan tambahan di `docs/UIUX_SPEC.md` sudah final: light mode only, onboarding wizard, language switcher ID/EN, notifikasi WebSocket via Soketi, dan company branding per company.
+Phase D2-3 Frontend List Karyawan selesai: `/dashboard/employees` dan `/dashboard/employees/archived` memakai ListPageTemplate dengan breadcrumb, filter, summary strip, bulk select/export, tabel desktop, card stack mobile, action menu Arsipkan/Pulihkan, service `employee.service.ts`, dan sidebar konteks modul Karyawan. Frontend memakai permission existing `employee.create` untuk tombol Tambah karena backend/manifest masih memakai permission `employee.*`. Gap backend endpoint list/export/arsip dicatat di TASK_BREAKDOWN.md sebagai follow-up.
+
+Mulai sesi berikutnya dari Phase D2 Detail/Form Karyawan setelah approval. Keputusan tambahan di `docs/UIUX_SPEC.md` sudah final: light mode only, onboarding wizard, language switcher ID/EN, notifikasi WebSocket via Soketi, dan company branding per company.
