@@ -32,8 +32,10 @@ function EmployeeSettingsPageContent() {
   const user = useAuthStore((state) => state.user);
   const isHydrated = useAuthStore((state) => state.isHydrated);
   const hasPermission = useAuthStore((state) => state.hasPermission("karyawan.settings"));
+  const activeCompanyId = useAuthStore((state) => state.activeCompanyId);
+  const setActiveCompanyId = useAuthStore((state) => state.setActiveCompanyId);
   const companyOptions = useEmployeeCompanyOptions(user);
-  const [company, setCompany] = useState("");
+  const [company, setCompany] = useState(activeCompanyId ?? "");
   const sectionParam = searchParams.get("section");
   const activeSection = findEmployeeSettingsSection(sectionParam);
 
@@ -45,9 +47,11 @@ function EmployeeSettingsPageContent() {
 
   useEffect(() => {
     if (!company && companyOptions.length > 0) {
-      setCompany(companyOptions[0].id);
+      const initial = companyOptions[0].id;
+      setCompany(initial);
+      setActiveCompanyId(initial);
     }
-  }, [company, companyOptions]);
+  }, [company, companyOptions, setActiveCompanyId]);
 
   useEffect(() => {
     if (!sectionParam) {
@@ -55,12 +59,17 @@ function EmployeeSettingsPageContent() {
     }
   }, [router, sectionParam]);
 
+  const handleCompanyChange = (value: string) => {
+    setCompany(value);
+    setActiveCompanyId(value);
+  };
+
   if (!isHydrated || !hasPermission) {
     return <LoadingSkeleton rows={3} itemClassName="h-20" />;
   }
 
   const headerAction = (
-    <EmployeeCompanySelector options={companyOptions} value={company} onChange={setCompany} />
+    <EmployeeCompanySelector options={companyOptions} value={company} onChange={handleCompanyChange} />
   );
 
   return (

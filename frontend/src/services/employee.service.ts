@@ -61,34 +61,37 @@ function queryString(params: EmployeeListParams): string {
   return serialized ? `?${serialized}` : "";
 }
 
-function employeeContextHeaders(): Record<string, string> {
-  const user = useAuthStore.getState().user;
-  const companyId = user?.roles?.find((role) => role.company_id !== null && role.company_id !== undefined)?.company_id;
+function employeeContextHeaders(explicitCompanyId?: string | number | null): Record<string, string> {
+  if (explicitCompanyId !== null && explicitCompanyId !== undefined) {
+    return { "X-Company-Id": String(explicitCompanyId) };
+  }
 
-  return companyId === null || companyId === undefined ? {} : { "X-Company-Id": String(companyId) };
+  const activeCompanyId = useAuthStore.getState().activeCompanyId;
+
+  return activeCompanyId ? { "X-Company-Id": activeCompanyId } : {};
 }
 
-function withEmployeeContext(init: RequestInit = {}): RequestInit {
+function withEmployeeContext(init: RequestInit = {}, companyId?: string | number | null): RequestInit {
   return {
     ...init,
     headers: {
-      ...employeeContextHeaders(),
+      ...employeeContextHeaders(companyId),
       ...(init.headers as Record<string, string> | undefined)
     }
   };
 }
 
-function requestEmployeeJson<T>(path: string, init?: RequestInit): Promise<T> {
-  return requestPrivateJson<T>(path, withEmployeeContext(init));
+function requestEmployeeJson<T>(path: string, init?: RequestInit, companyId?: string | number | null): Promise<T> {
+  return requestPrivateJson<T>(path, withEmployeeContext(init, companyId));
 }
 
-async function requestEmployeeMultipart<T>(path: string, formData: FormData): Promise<T> {
+async function requestEmployeeMultipart<T>(path: string, formData: FormData, companyId?: string | number | null): Promise<T> {
   const response = await fetch(privatePath(path), {
     method: "POST",
     headers: {
       Accept: "application/json",
       ...privateHeaders(),
-      ...employeeContextHeaders()
+      ...employeeContextHeaders(companyId)
     },
     body: formData
   });
@@ -101,12 +104,12 @@ async function requestEmployeeMultipart<T>(path: string, formData: FormData): Pr
   return payload.data;
 }
 
-async function requestEmployeeList(path: string): Promise<EmployeeListResponse> {
+async function requestEmployeeList(path: string, companyId?: string | number | null): Promise<EmployeeListResponse> {
   const response = await fetch(privatePath(path), {
     headers: {
       Accept: "application/json",
       ...privateHeaders(),
-      ...employeeContextHeaders()
+      ...employeeContextHeaders(companyId)
     }
   });
   const payload = (await response.json()) as ApiResponse<LaravelPaginator<EmployeeListItem>>;
