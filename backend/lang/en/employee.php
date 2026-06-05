@@ -29,6 +29,22 @@ return [
         'created' => 'Employee note created.',
         'list' => 'Employee notes list.',
     ],
+    'offboarding' => [
+        'active_exists' => 'Employee already has an active offboarding process.',
+        'already_completed' => 'Offboarding process has already been completed.',
+        'checklist' => [
+            'archived' => 'Offboarding checklist item archived.',
+            'completed' => 'Offboarding checklist item completed.',
+            'created' => 'Offboarding checklist item created.',
+            'list' => 'Offboarding checklist list.',
+            'updated' => 'Offboarding checklist item updated.',
+        ],
+        'completed' => 'Employee offboarding completed.',
+        'created' => 'Employee offboarding started.',
+        'detail' => 'Employee offboarding detail.',
+        'incomplete_checklist' => 'All offboarding checklist items must be completed.',
+        'updated' => 'Employee offboarding updated.',
+    ],
     'contracts' => [
         'approved' => 'Employee contract approved.',
         'archived' => 'Employee contract archived.',

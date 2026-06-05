@@ -2,6 +2,14 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-05 - Phase D2-4c Backend Employee Offboarding
+
+- Menambahkan migration modul Karyawan untuk `employee_offboardings` dan `offboarding_checklist_items`.
+- Menambahkan model, repository, service, controller, FormRequest, Resource, route, dan binding provider untuk workflow offboarding serta checklist.
+- Menambahkan rule offboarding: hanya satu proses aktif per karyawan, complete wajib semua checklist selesai, employee menjadi `inactive`, dan kontrak aktif menjadi `superseded` lalu archived.
+- Menambahkan system note saat offboarding dimulai dan selesai, termasuk detail termination/PHK untuk konteks audit regulasi.
+- Menambahkan feature test untuk inisiasi, duplicate active guard, incomplete checklist guard, complete success, termination note, checklist lifecycle, regression kontrak, workflow approval, dan no hard delete.
+
 ## 2026-06-05 - Phase D2-4b Backend Employee Detail Education Experience Notes
 
 - Menambahkan migration modul Karyawan untuk `employee_education`, `employee_experience`, dan `employee_notes`.

@@ -29,6 +29,22 @@ return [
         'created' => 'Catatan karyawan dibuat.',
         'list' => 'Daftar catatan karyawan.',
     ],
+    'offboarding' => [
+        'active_exists' => 'Karyawan sudah memiliki proses offboarding aktif.',
+        'already_completed' => 'Proses offboarding sudah selesai.',
+        'checklist' => [
+            'archived' => 'Item checklist offboarding diarsipkan.',
+            'completed' => 'Item checklist offboarding diselesaikan.',
+            'created' => 'Item checklist offboarding dibuat.',
+            'list' => 'Daftar checklist offboarding.',
+            'updated' => 'Item checklist offboarding diperbarui.',
+        ],
+        'completed' => 'Offboarding karyawan diselesaikan.',
+        'created' => 'Offboarding karyawan dimulai.',
+        'detail' => 'Detail offboarding karyawan.',
+        'incomplete_checklist' => 'Semua checklist offboarding harus selesai.',
+        'updated' => 'Offboarding karyawan diperbarui.',
+    ],
     'contracts' => [
         'approved' => 'Kontrak karyawan disetujui.',
         'archived' => 'Kontrak karyawan diarsipkan.',

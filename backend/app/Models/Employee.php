@@ -35,6 +35,8 @@ class Employee extends Model implements Archivable
 
     public const REJECTED = 'rejected';
 
+    public const INACTIVE = 'inactive';
+
     /**
      * @var list<string>
      */
@@ -133,6 +135,11 @@ class Employee extends Model implements Archivable
     public function notes(): HasMany
     {
         return $this->hasMany(EmployeeNote::class);
+    }
+
+    public function offboardings(): HasMany
+    {
+        return $this->hasMany(EmployeeOffboarding::class);
     }
 
     public function photo(): HasOne
