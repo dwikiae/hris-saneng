@@ -12,6 +12,23 @@ return [
         'list' => 'Employee document list.',
         'uploaded' => 'Employee document uploaded.',
     ],
+    'education' => [
+        'archived' => 'Employee education record archived.',
+        'created' => 'Employee education record created.',
+        'list' => 'Employee education list.',
+        'updated' => 'Employee education record updated.',
+    ],
+    'experience' => [
+        'archived' => 'Employee experience record archived.',
+        'created' => 'Employee experience record created.',
+        'current_end_date_conflict' => 'Current work experience cannot have an end date.',
+        'list' => 'Employee experience list.',
+        'updated' => 'Employee experience record updated.',
+    ],
+    'notes' => [
+        'created' => 'Employee note created.',
+        'list' => 'Employee notes list.',
+    ],
     'contracts' => [
         'approved' => 'Employee contract approved.',
         'archived' => 'Employee contract archived.',

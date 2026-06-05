@@ -12,6 +12,23 @@ return [
         'list' => 'Daftar dokumen karyawan.',
         'uploaded' => 'Dokumen karyawan diunggah.',
     ],
+    'education' => [
+        'archived' => 'Riwayat pendidikan karyawan diarsipkan.',
+        'created' => 'Riwayat pendidikan karyawan dibuat.',
+        'list' => 'Daftar riwayat pendidikan karyawan.',
+        'updated' => 'Riwayat pendidikan karyawan diperbarui.',
+    ],
+    'experience' => [
+        'archived' => 'Riwayat pengalaman kerja karyawan diarsipkan.',
+        'created' => 'Riwayat pengalaman kerja karyawan dibuat.',
+        'current_end_date_conflict' => 'Pengalaman kerja yang masih berlangsung tidak boleh memiliki tanggal selesai.',
+        'list' => 'Daftar pengalaman kerja karyawan.',
+        'updated' => 'Pengalaman kerja karyawan diperbarui.',
+    ],
+    'notes' => [
+        'created' => 'Catatan karyawan dibuat.',
+        'list' => 'Daftar catatan karyawan.',
+    ],
     'contracts' => [
         'approved' => 'Kontrak karyawan disetujui.',
         'archived' => 'Kontrak karyawan diarsipkan.',

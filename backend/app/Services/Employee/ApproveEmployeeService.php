@@ -11,7 +11,10 @@ use InvalidArgumentException;
 
 class ApproveEmployeeService
 {
-    public function __construct(private readonly EmployeeRepositoryInterface $employees) {}
+    public function __construct(
+        private readonly EmployeeRepositoryInterface $employees,
+        private readonly EmployeeNoteService $notes
+    ) {}
 
     public function approve(Employee $employee): Employee
     {
@@ -25,6 +28,8 @@ class ApproveEmployeeService
             'approved_at' => now(),
             'rejection_reason' => null,
         ]);
+
+        $this->notes->storeSystemForEmployee($updated, 'Disetujui oleh '.$this->actorName());
 
         NotifyApprovalResultJob::dispatch((int) $updated->getKey(), Employee::APPROVED);
 
@@ -44,6 +49,8 @@ class ApproveEmployeeService
             'rejection_reason' => $reason,
         ]);
 
+        $this->notes->storeSystemForEmployee($updated, 'Ditolak: '.($reason ?: '-'));
+
         NotifyApprovalResultJob::dispatch((int) $updated->getKey(), Employee::REJECTED);
 
         return $updated;
@@ -54,5 +61,12 @@ class ApproveEmployeeService
         if (! $employee->canTransitionTo($status)) {
             throw new InvalidArgumentException('employee.invalid_status_transition');
         }
+    }
+
+    private function actorName(): string
+    {
+        $user = Auth::user();
+
+        return $user?->getAttribute('name') ?: 'System';
     }
 }

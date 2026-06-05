@@ -120,6 +120,21 @@ class Employee extends Model implements Archivable
         return $this->hasMany(EmployeeFamily::class);
     }
 
+    public function education(): HasMany
+    {
+        return $this->hasMany(EmployeeEducation::class);
+    }
+
+    public function experience(): HasMany
+    {
+        return $this->hasMany(EmployeeExperience::class);
+    }
+
+    public function notes(): HasMany
+    {
+        return $this->hasMany(EmployeeNote::class);
+    }
+
     public function photo(): HasOne
     {
         return $this->hasOne(EmployeePhoto::class)->latestOfMany();

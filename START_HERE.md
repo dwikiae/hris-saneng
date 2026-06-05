@@ -2,10 +2,10 @@
 Fase: 1
 Status: Fase 1 - retrofit sedang berjalan
 Terakhir dikerjakan: 5 Juni 2026
-Task terakhir selesai: Phase D2-4a Backend Employee Detail Profile, Contract, Family
-Task berikutnya: Phase D2-4b Frontend Detail Karyawan memakai DetailPageTemplate dan tab Profile/Kontrak/Keluarga
-Known issues: Backend GET /api/v1/employees belum support archived, sort_by, sort_dir, contract_type, employee export, dan module-specific restore; halaman arsip frontend tidak menampilkan data aktif sambil menunggu endpoint archived. Status kontrak `terminated` sudah tersedia sebagai enum/status reserved, tetapi prosedur termination/PHK khusus belum dibuat dan tidak dipakai untuk replace kontrak. Tabel attendance/leave belum ada, sehingga present_today, absent_today, dan leave_today masih 0. npm audit di /frontend melaporkan 5 vulnerability dari dependency tree; belum diperbaiki karena npm audit fix --force berpotensi breaking. PHP GD extension belum aktif, sehingga test employee photo variant di-skip sampai extension tersedia.
-Instruksi sesi ini: Baca START_HERE.md -> Baca AGENTS.md -> Baca docs/UIUX_SPEC.md -> Baca docs/PLATFORM_UI_SPEC.md -> Lanjutkan Phase D2-4b Frontend Detail Karyawan setelah approval.
+Task terakhir selesai: Phase D2-4b Backend Employee Detail Education, Experience, Notes/Chatter
+Task berikutnya: Phase D2-4c Frontend Detail Karyawan memakai DetailPageTemplate dan tab Profile/Kontrak/Keluarga/Pendidikan/Pengalaman/Catatan
+Known issues: Backend GET /api/v1/employees belum support archived, sort_by, sort_dir, contract_type, employee export, dan module-specific restore; halaman arsip frontend tidak menampilkan data aktif sambil menunggu endpoint archived. `employee_notes` sengaja append-only tanpa archived_at/archived_by/updated_by sebagai approved exception karena berfungsi sebagai chatter/audit timeline. Status kontrak `terminated` sudah tersedia sebagai enum/status reserved, tetapi prosedur termination/PHK khusus belum dibuat dan tidak dipakai untuk replace kontrak. Tabel attendance/leave belum ada, sehingga present_today, absent_today, dan leave_today masih 0. npm audit di /frontend melaporkan 5 vulnerability dari dependency tree; belum diperbaiki karena npm audit fix --force berpotensi breaking. PHP GD extension belum aktif, sehingga test employee photo variant di-skip sampai extension tersedia.
+Instruksi sesi ini: Baca START_HERE.md -> Baca AGENTS.md -> Baca docs/UIUX_SPEC.md -> Baca docs/PLATFORM_UI_SPEC.md -> Lanjutkan Phase D2-4c Frontend Detail Karyawan setelah approval.
 ---
 
 # Start Here
@@ -50,4 +50,6 @@ Phase D2-3 Frontend List Karyawan selesai: `/dashboard/employees` dan `/dashboar
 
 Phase D2-4a Backend Employee Detail selesai: migration modul Karyawan menambah kolom profil karyawan, tabel `employee_contracts`, dan tabel `employee_family`. Endpoint nested `/api/v1/employees/{id}/contracts` dan `/api/v1/employees/{id}/family` tersedia dengan permission `employee.*`, response resource, repository/service layer, archive tanpa hard delete, audit log model, dan test feature. Rule kontrak: PKWT wajib `end_date`, create selalu `draft`, approve menjadikan kontrak baru `active`, lalu kontrak aktif lama menjadi `superseded` dan diarsipkan. `passport_number` sudah encrypted cast dan mengikuti aturan akses field identitas.
 
-Mulai sesi berikutnya dari Phase D2-4b Frontend Detail Karyawan setelah approval. Keputusan tambahan di `docs/UIUX_SPEC.md` sudah final: light mode only, onboarding wizard, language switcher ID/EN, notifikasi WebSocket via Soketi, dan company branding per company.
+Phase D2-4b Backend Employee Detail selesai: migration modul Karyawan menambah `employee_education`, `employee_experience`, dan `employee_notes`. Endpoint nested `/api/v1/employees/{id}/education`, `/experience`, dan `/notes` tersedia dengan permission `employee.*`, repository/service layer, FormRequest, Resource, audit log model, dan test feature. Education dan experience memakai archive tanpa hard delete. Notes/chatter append-only tanpa edit/archive, manual note selalu `type=manual`, dan system note otomatis dibuat saat employee approve/reject serta kontrak approve/superseded.
+
+Mulai sesi berikutnya dari Phase D2-4c Frontend Detail Karyawan setelah approval. Keputusan tambahan di `docs/UIUX_SPEC.md` sudah final: light mode only, onboarding wizard, language switcher ID/EN, notifikasi WebSocket via Soketi, dan company branding per company.

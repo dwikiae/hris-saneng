@@ -32,6 +32,7 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [x] Kalender — manifest mandatory tersedia dan tidak bisa di-toggle/uninstall melalui lifecycle guard.
 - [ ] Karyawan — lanjutkan implementasi domain lengkap PKWT/PKWTT sesuai compliance.
   - [x] Phase D2-4a — backend foundation profil karyawan, kontrak PKWT/PKWTT, dan data keluarga.
+  - [x] Phase D2-4b — backend foundation pendidikan, pengalaman kerja, dan notes/chatter append-only.
   - [ ] Phase berikutnya — prosedur termination/PHK kontrak dan expiry natural PKWT.
 - [ ] Kalender — lanjutkan implementasi fitur operasional kalender.
 
@@ -76,6 +77,7 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [x] Backend — Phase D1 Grup 4 Audit Log: `/api/v1/instance/audit` dan `/api/v1/instance/audit/export`.
 - [x] Backend — Phase D2-1 Settings Modul Karyawan: master lokasi kerja, level karyawan, konfigurasi Karyawan, wilayah Indonesia, negara ISO, dan command sync offline.
 - [x] Backend — Phase D2-4a Employee Detail foundation: kolom profil tambahan employees, endpoint kontrak nested, endpoint keluarga nested, encrypted passport, dan test feature.
+- [x] Backend — Phase D2-4b Employee Detail foundation: endpoint pendidikan, pengalaman kerja, notes/chatter append-only, dan system note approval/kontrak.
 - [ ] Backend — lengkapi `GET /api/v1/employees` untuk filter `archived`, `contract_type`, sort server-side `sort_by/sort_dir`, dan response meta summary agar List Karyawan tidak perlu fallback frontend.
 - [ ] Backend — sediakan endpoint export karyawan ter-audit untuk filter aktif dan selected IDs.
 - [ ] Backend — sediakan endpoint restore karyawan module-specific atau selaraskan permission restore arsip dengan UX Karyawan.

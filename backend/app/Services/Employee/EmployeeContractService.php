@@ -14,7 +14,8 @@ class EmployeeContractService
 {
     public function __construct(
         private readonly EmployeeRepositoryInterface $employees,
-        private readonly EmployeeContractRepositoryInterface $contracts
+        private readonly EmployeeContractRepositoryInterface $contracts,
+        private readonly EmployeeNoteService $notes
     ) {}
 
     /**
@@ -81,14 +82,19 @@ class EmployeeContractService
                     'updated_by' => Auth::id(),
                 ]);
                 $this->contracts->archive($superseded);
+                $this->notes->storeSystemForEmployee($employee, 'Kontrak '.$this->contractLabel($superseded).' digantikan');
             }
 
-            return $this->contracts->update($contract, [
+            $approved = $this->contracts->update($contract, [
                 'status' => EmployeeContract::STATUS_ACTIVE,
                 'approved_by' => Auth::id(),
                 'approved_at' => now(),
                 'updated_by' => Auth::id(),
             ]);
+
+            $this->notes->storeSystemForEmployee($employee, 'Kontrak '.$this->contractLabel($approved).' diaktifkan');
+
+            return $approved;
         });
     }
 
@@ -127,5 +133,14 @@ class EmployeeContractService
         if (! array_key_exists('end_date', $data) || $data['end_date'] === null || $data['end_date'] === '') {
             throw new InvalidArgumentException('employee.contracts.pkwt_end_date_required');
         }
+    }
+
+    private function contractLabel(EmployeeContract $contract): string
+    {
+        $number = $contract->getAttribute('contract_number');
+
+        return is_string($number) && $number !== ''
+            ? $number
+            : '#'.$contract->getKey();
     }
 }

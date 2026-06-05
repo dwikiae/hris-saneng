@@ -2,6 +2,14 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-05 - Phase D2-4b Backend Employee Detail Education Experience Notes
+
+- Menambahkan migration modul Karyawan untuk `employee_education`, `employee_experience`, dan `employee_notes`.
+- Menambahkan model, repository, service, controller, FormRequest, Resource, route, dan binding provider untuk endpoint pendidikan, pengalaman kerja, dan notes/chatter karyawan.
+- Menambahkan rule pengalaman kerja: record yang masih berjalan tidak boleh punya `end_date`, dan `is_current` memaksa `end_date` kosong.
+- Menambahkan notes/chatter append-only: manual note selalu `type=manual`, tidak ada update/archive, dan system note dibuat otomatis saat employee approve/reject serta kontrak approve/superseded.
+- Menambahkan feature test untuk education, experience, notes, regression kontrak, workflow approval, dan guardrail no hard delete.
+
 ## 2026-06-05 - Phase D2-4a Backend Employee Detail Profile Contract Family
 
 - Menambahkan migration modul Karyawan untuk kolom profil tambahan di `employees`, tabel `employee_contracts`, dan tabel `employee_family`.
