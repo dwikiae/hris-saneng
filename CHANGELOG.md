@@ -2,6 +2,13 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-08 - Reliable Next Dev Build Guard
+
+- Menambahkan guard `prebuild` frontend agar `npm run build` gagal cepat saat `next dev` masih aktif dan tidak menimpa `.next/` dev server.
+- Menambahkan `npm run build:verify` yang menjalankan `next build` ke `.next-verify` untuk verifikasi update tanpa merusak styling localhost.
+- Mengatur `next.config.mjs` agar `distDir` bisa membaca `NEXT_DIST_DIR`, serta mengabaikan `.next-verify` sebagai build artifact.
+- Mencatat workflow baru di `VIBE_CODING_CONTEXT.md`: saat dev server aktif, gunakan `npm run build:verify`.
+
 ## 2026-06-08 - Fix Platform Admin Company Assignment
 
 - Menambahkan `PlatformAdministratorAssignmentService` untuk membuat/menstandarkan role company-scoped `system_admin` bernama `Platform Administrator`, menyinkronkan semua permission company, dan attach idempotent ke Platform Administrator (`users.company_id = null`).

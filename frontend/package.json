@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/guard-next-build.mjs",
     "build": "next build",
+    "build:verify": "node scripts/build-verify.mjs",
     "start": "next start",
     "lint": "next lint"
   },

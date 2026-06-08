@@ -5,6 +5,7 @@ const apiV1BaseUrl = apiBaseUrl.endsWith("/api/v1") ? apiBaseUrl : `${apiBaseUrl
 
 const nextConfig = {
   reactStrictMode: true,
+  distDir: process.env.NEXT_DIST_DIR ?? ".next",
   images: {
     remotePatterns: [
       {

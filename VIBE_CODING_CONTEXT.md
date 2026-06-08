@@ -139,6 +139,7 @@ Exit gate:
 - Tidak ada TODO di flow kritis
 - Semua secret di env variable
 - CI lulus: test + lint + build hijau
+- Saat Next dev server lokal sedang aktif, verifikasi frontend wajib pakai `npm run build:verify`; `npm run build` hanya dipakai ketika dev server sudah berhenti agar `.next/` dev tidak tertimpa production build.
 
 ### Fase 3 — Product Ready
 Staging dulu, baru production. Rollback hanya relevan di production.
