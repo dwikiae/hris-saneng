@@ -402,6 +402,66 @@
       "failed": "The action could not be processed."
     }
   },
+  "employeesForm": {
+    "new": {
+      "title": "Add Employee"
+    },
+    "edit": {
+      "title": "Edit {{name}}",
+      "shortTitle": "Edit"
+    },
+    "tabs": {
+      "profil": "Profile",
+      "kepegawaian": "Employment",
+      "kontrak": "Contract",
+      "data-sensitif": "Sensitive Data"
+    },
+    "sections": {
+      "personal": "Personal Data",
+      "identity": "Identity Data",
+      "additional": "Additional Data",
+      "ktpAddress": "KTP Address",
+      "domicileAddress": "Domicile Address",
+      "emergency": "Emergency Contact",
+      "employment": "Employment Data",
+      "contract": "Contract Data",
+      "finance": "Financial Data"
+    },
+    "fields": {
+      "photo": "Employee photo",
+      "emergencyName": "Emergency contact name",
+      "emergencyRelationship": "Relationship",
+      "emergencyPhone": "Emergency contact phone"
+    },
+    "options": {
+      "male": "Male",
+      "female": "Female"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "saveDraft": "Save Draft",
+      "submitApproval": "Submit Approval",
+      "saveActivate": "Save & Activate"
+    },
+    "cancel": {
+      "title": "Cancel changes?",
+      "description": "Unsaved changes will be lost."
+    },
+    "validation": {
+      "required": "This field is required.",
+      "nik": "NIK must be 16 digits.",
+      "npwp": "NPWP format must be XX.XXX.XXX.X-XXX.XXX.",
+      "contractEndDate": "Contract end date must be after the start date.",
+      "probationEndDate": "Probation end date must be after the join date."
+    },
+    "empty": {
+      "companyTitle": "Company context is unavailable",
+      "companyDescription": "Select or activate a company before creating employee data."
+    },
+    "toast": {
+      "saved": "Employee data saved."
+    }
+  },
   "employeesSettings": {
     "title": "Employee Settings",
     "description": "Manage employee module master data and configuration per company.",

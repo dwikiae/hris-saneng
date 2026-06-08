@@ -2,6 +2,14 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-08 - Phase D2-5 Frontend Form Tambah/Edit Karyawan
+
+- Menambahkan halaman `/dashboard/employees/new` dan `/dashboard/employees/{id}/edit` memakai `FormPageTemplate` dengan breadcrumb, tab URL `?tab=`, sticky footer, dirty-state confirmation, dan tab Profil, Kepegawaian, Kontrak, serta Data Sensitif.
+- Menambahkan form Karyawan terpecah per tab dengan validasi lintas tab, badge error tab, scroll ke field error, upload foto setelah save, dropdown master data/wilayah, probasi otomatis dari setting, kontrak PKWT/PKWTT, dan guard `employee.view_sensitive`.
+- Memperluas `employee.service.ts` dengan `create`, `update`, `submitForApproval`, `saveDraft`, dan lookup bank; menambahkan payload type frontend untuk create/update employee.
+- Memperluas `FormPageTemplate` secara backward-compatible agar mendukung breadcrumb, tab horizontal, badge error tab, dan action custom di sticky footer.
+- Mencatat gap backend form: auto-generate nomor karyawan, submit approval HR Staff, Simpan & Aktifkan Administrator, Kontak Darurat, dan Nama Pemilik Rekening belum punya kontrak backend penuh.
+
 ## 2026-06-05 - Phase D2-4d Frontend Detail Karyawan
 
 - Menambahkan halaman `/dashboard/employees/{id}` memakai `DetailPageTemplate` dengan breadcrumb, entity header, status badge, action Edit/Arsipkan, dan approval panel untuk karyawan pending.

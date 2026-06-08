@@ -99,6 +99,49 @@ export interface EmployeeDetail extends EmployeeListItem {
   supervisor?: EmployeeLookup | null;
 }
 
+export interface EmployeePayload {
+  employee_number?: string;
+  name: string;
+  nickname?: string | null;
+  email: string;
+  phone: string;
+  address: string;
+  province_id?: string | null;
+  city_id?: string | null;
+  domicile_address?: string | null;
+  domicile_province_id?: string | null;
+  domicile_city_id?: string | null;
+  birth_date: string;
+  birth_place: string;
+  country_of_birth?: string | null;
+  gender: string;
+  religion_id?: string | number | null;
+  marital_status_id?: string | number | null;
+  blood_type_id?: string | number | null;
+  nationality?: string | null;
+  passport_number?: string | null;
+  department_id: string | number;
+  position_id: string | number;
+  employment_type_id: string | number;
+  employee_level_id?: string | number | null;
+  work_location_id?: string | number | null;
+  supervisor_id?: string | number | null;
+  join_date: string;
+  probation_end_date?: string | null;
+  end_date?: string | null;
+  nik: string;
+  npwp?: string | null;
+  bank_name?: string | null;
+  bank_account_number?: string | null;
+  salary?: string | number | null;
+  allowances?: string | number | null;
+  deductions?: string | number | null;
+  consent_at?: string;
+  approver_id?: string | number | null;
+}
+
+export type EmployeeUpdatePayload = Partial<EmployeePayload>;
+
 export interface EmployeePhotoUrls {
   original?: string | null;
   medium?: string | null;

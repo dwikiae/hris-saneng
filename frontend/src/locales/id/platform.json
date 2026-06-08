@@ -402,6 +402,66 @@
       "failed": "Aksi gagal diproses."
     }
   },
+  "employeesForm": {
+    "new": {
+      "title": "Tambah Karyawan"
+    },
+    "edit": {
+      "title": "Edit {{name}}",
+      "shortTitle": "Edit"
+    },
+    "tabs": {
+      "profil": "Profil",
+      "kepegawaian": "Kepegawaian",
+      "kontrak": "Kontrak",
+      "data-sensitif": "Data Sensitif"
+    },
+    "sections": {
+      "personal": "Data Personal",
+      "identity": "Data Identitas",
+      "additional": "Data Tambahan",
+      "ktpAddress": "Alamat KTP",
+      "domicileAddress": "Alamat Domisili",
+      "emergency": "Kontak Darurat",
+      "employment": "Data Kepegawaian",
+      "contract": "Data Kontrak",
+      "finance": "Data Keuangan"
+    },
+    "fields": {
+      "photo": "Foto karyawan",
+      "emergencyName": "Nama kontak darurat",
+      "emergencyRelationship": "Hubungan",
+      "emergencyPhone": "Nomor HP kontak darurat"
+    },
+    "options": {
+      "male": "Laki-laki",
+      "female": "Perempuan"
+    },
+    "actions": {
+      "cancel": "Batal",
+      "saveDraft": "Simpan Draft",
+      "submitApproval": "Ajukan Approval",
+      "saveActivate": "Simpan & Aktifkan"
+    },
+    "cancel": {
+      "title": "Batalkan perubahan?",
+      "description": "Perubahan yang belum disimpan akan hilang."
+    },
+    "validation": {
+      "required": "Field ini wajib diisi.",
+      "nik": "NIK harus 16 digit angka.",
+      "npwp": "Format NPWP harus XX.XXX.XXX.X-XXX.XXX.",
+      "contractEndDate": "Tanggal akhir kontrak harus setelah tanggal mulai.",
+      "probationEndDate": "Masa probasi berakhir harus setelah tanggal masuk."
+    },
+    "empty": {
+      "companyTitle": "Company context belum tersedia",
+      "companyDescription": "Pilih atau aktifkan company terlebih dahulu sebelum membuat data karyawan."
+    },
+    "toast": {
+      "saved": "Data karyawan berhasil disimpan."
+    }
+  },
   "employeesSettings": {
     "title": "Pengaturan Karyawan",
     "description": "Kelola master data dan konfigurasi modul Karyawan per company.",

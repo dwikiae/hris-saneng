@@ -7,7 +7,8 @@ import { AlertCircle, ChevronDown, ChevronRight, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { TemplateAction } from "./types";
+import { buttonVariantFor } from "./TemplateParts";
+import type { BreadcrumbItem, TemplateAction } from "./types";
 
 export interface FormFieldSlot {
   id: string;
@@ -26,11 +27,22 @@ export interface FormTemplateSection {
   initiallyOpen?: boolean;
 }
 
+export interface FormTemplateTab {
+  slug: string;
+  label: string;
+  href: string;
+  hasError?: boolean;
+  visible?: boolean;
+}
+
 interface FormPageTemplateProps {
   title: string;
   description?: string;
   backUrl: string;
   backLabel: string;
+  breadcrumbs?: BreadcrumbItem[];
+  tabs?: FormTemplateTab[];
+  activeTab?: string;
   sections: FormTemplateSection[];
   footerActions: TemplateAction[];
   isDirty: boolean;
@@ -42,11 +54,16 @@ export function FormPageTemplate({
   description,
   backUrl,
   backLabel,
+  breadcrumbs = [],
+  tabs = [],
+  activeTab,
   sections,
   footerActions,
   isDirty,
   isSubmitting
 }: FormPageTemplateProps) {
+  const visibleTabs = tabs.filter((tab) => tab.visible ?? true);
+
   return (
     <section className="pb-24">
       <div className="mb-6 flex flex-col gap-2">
@@ -56,6 +73,16 @@ export function FormPageTemplate({
         >
           {backLabel}
         </Link>
+        {breadcrumbs.length > 0 ? (
+          <nav className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+            {breadcrumbs.map((item, index) => (
+              <span key={`${item.label}-${index}`} className="flex items-center gap-2">
+                {item.href ? <Link href={item.href}>{item.label}</Link> : <span>{item.label}</span>}
+                {index < breadcrumbs.length - 1 ? <span>/</span> : null}
+              </span>
+            ))}
+          </nav>
+        ) : null}
         <div>
           <h1 className="text-2xl font-semibold text-foreground">{title}</h1>
           {description ? (
@@ -63,6 +90,29 @@ export function FormPageTemplate({
           ) : null}
         </div>
       </div>
+
+      {visibleTabs.length > 0 ? (
+        <div className="mb-5 overflow-x-auto border-b border-border">
+          <div className="flex min-w-max gap-4">
+            {visibleTabs.map((tab) => (
+              <Link
+                key={tab.slug}
+                href={tab.href}
+                className={cn(
+                  "inline-flex items-center gap-2 border-b-2 px-1 pb-3 text-sm font-medium transition",
+                  tab.slug === activeTab
+                    ? "border-primary text-primary"
+                    : "border-transparent text-muted-foreground hover:text-foreground",
+                  tab.hasError && "text-destructive"
+                )}
+              >
+                {tab.label}
+                {tab.hasError ? <span className="h-2 w-2 rounded-full bg-destructive" /> : null}
+              </Link>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       <div className="space-y-4">
         {sections.map((section) => (
@@ -145,22 +195,43 @@ function StickyFooter({
           {isDirty ? t("templates.form.unsavedChanges") : t("templates.form.noChanges")}
         </p>
         <div className="flex flex-wrap justify-end gap-2">
-          {actions.map((action) => (
-            <Button
-              key={action.id}
-              type="button"
-              variant={action.variant === "primary" ? "default" : action.variant === "danger" ? "destructive" : "outline"}
-              disabled={action.disabled || isSubmitting || (action.variant === "primary" && !isDirty)}
-              onClick={action.onClick}
-            >
-              {isSubmitting && action.variant === "primary" ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : action.icon ? (
-                <span className="mr-2">{action.icon}</span>
-              ) : null}
-              {action.label}
-            </Button>
-          ))}
+          {actions.map((action) => {
+            if (action.custom) {
+              return <div key={action.id}>{action.custom}</div>;
+            }
+
+            const disabled = action.disabled || isSubmitting || (action.variant === "primary" && !isDirty);
+            const content = (
+              <>
+                {isSubmitting && action.variant === "primary" ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : action.icon ? (
+                  <span className="mr-2">{action.icon}</span>
+                ) : null}
+                {action.label}
+              </>
+            );
+
+            if (action.href) {
+              return (
+                <Button key={action.id} asChild variant={buttonVariantFor(action)} aria-disabled={disabled}>
+                  <Link href={disabled ? "#" : action.href}>{content}</Link>
+                </Button>
+              );
+            }
+
+            return (
+              <Button
+                key={action.id}
+                type="button"
+                variant={buttonVariantFor(action)}
+                disabled={disabled}
+                onClick={action.onClick}
+              >
+                {content}
+              </Button>
+            );
+          })}
         </div>
       </div>
     </div>

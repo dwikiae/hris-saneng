@@ -66,10 +66,10 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [x] `/frontend` — Phase D1 Sub-task 3 Users & Access di `/dashboard/settings/users`.
 - [x] `/frontend` — Phase D1 Sub-task 4 Platform Config, Audit Log, dan Module Registry.
 - [x] `/frontend` — Phase D2-2 Settings Modul Karyawan di `/dashboard/employees/settings`.
-- [ ] `/frontend` — Phase D2 Modul Karyawan memakai ListPageTemplate, DetailPageTemplate, dan FormPageTemplate.
+- [x] `/frontend` — Phase D2 Modul Karyawan memakai ListPageTemplate, DetailPageTemplate, dan FormPageTemplate.
   - [x] Phase D2-3 — List Karyawan di `/dashboard/employees` dan `/dashboard/employees/archived` memakai ListPageTemplate.
   - [x] Phase D2-4d — Detail Karyawan di `/dashboard/employees/{id}` memakai DetailPageTemplate dan tab lazy-load.
-  - [ ] Phase D2 berikutnya — Form tambah/edit Karyawan memakai FormPageTemplate.
+  - [x] Phase D2-5 — Form tambah/edit Karyawan di `/dashboard/employees/new` dan `/dashboard/employees/{id}/edit` memakai FormPageTemplate.
 - [x] Backend — buat endpoint auth password recovery: `forgot-password`, `reset-password`, dan `set-password` invitation.
 - [x] Backend — Phase D1 Grup 1 Company Management: `/api/v1/instance/companies`.
 - [x] Backend — Phase D1 Grup 5 Module Registry: `/api/v1/instance/modules` dan lifecycle install/uninstall/export.
@@ -84,6 +84,7 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [ ] Backend — sediakan endpoint export karyawan ter-audit untuk filter aktif dan selected IDs.
 - [ ] Backend — sediakan endpoint restore karyawan module-specific atau selaraskan permission restore arsip dengan UX Karyawan.
 - [ ] Backend — selaraskan permission sensitif employee antara spec `employee.view_sensitive`, resource identitas, dan `employee.view_salary`.
+- [ ] Backend — selaraskan flow form tambah/edit Karyawan: auto-generate `employee_number`, submit approval HR Staff, Simpan & Aktifkan Administrator, field Kontak Darurat, dan Nama Pemilik Rekening.
 - [ ] Backend — sediakan signed download URL untuk dokumen karyawan agar tab Dokumen bisa mengunduh file via endpoint resmi.
 - [ ] Backend — sediakan activity log endpoint khusus employee untuk sub-tab Log Aktivitas pada ChatLog detail karyawan.
 - [ ] Backend — ubah read permission photo/document employee dari `employee.update` ke kontrak read yang sesuai, jika role read-only harus bisa melihat detail.

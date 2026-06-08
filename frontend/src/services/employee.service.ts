@@ -12,6 +12,7 @@ import type {
   EmployeeExperiencePayload,
   EmployeeFamily,
   EmployeeFamilyPayload,
+  EmployeePayload,
   EmployeeListItem,
   EmployeeListParams,
   EmployeeListResponse,
@@ -20,6 +21,7 @@ import type {
   EmployeeOffboardingPayload,
   EmployeeOffboardingState,
   EmployeePhotoUrls,
+  EmployeeUpdatePayload,
   OffboardingChecklistItem,
   OffboardingChecklistPayload,
   MasterDataOption
@@ -134,6 +136,27 @@ export const employeeService = {
   },
   listArchived(params: EmployeeListParams = {}): Promise<EmployeeListResponse> {
     return requestEmployeeList(`/employees${queryString({ ...params, archived: true })}`);
+  },
+  create(payload: EmployeePayload): Promise<EmployeeDetail> {
+    return requestEmployeeJson<EmployeeDetail>("/employees", {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+  },
+  update(employeeId: string | number, payload: EmployeeUpdatePayload): Promise<EmployeeDetail> {
+    return requestEmployeeJson<EmployeeDetail>(`/employees/${employeeId}`, {
+      method: "PUT",
+      body: JSON.stringify(payload)
+    });
+  },
+  submitForApproval(employeeId: string | number): Promise<EmployeeDetail> {
+    return requestEmployeeJson<EmployeeDetail>(`/employees/${employeeId}/approve`, { method: "POST" });
+  },
+  saveDraft(payload: EmployeePayload): Promise<EmployeeDetail> {
+    return requestEmployeeJson<EmployeeDetail>("/employees", {
+      method: "POST",
+      body: JSON.stringify({ ...payload, status: "draft" })
+    });
   },
   archive(employeeId: string | number): Promise<null> {
     return requestEmployeeJson<null>(`/employees/${employeeId}/archive`, { method: "POST" });
@@ -360,6 +383,9 @@ export const employeeLookupService = {
   },
   bloodTypes(): Promise<MasterDataOption[]> {
     return requestEmployeeJson<MasterDataOption[]>("/master-data/blood-types?is_active=1");
+  },
+  banks(): Promise<MasterDataOption[]> {
+    return requestEmployeeJson<MasterDataOption[]>("/master-data/banks?is_active=1");
   },
   documentTypes(): Promise<MasterDataOption[]> {
     return requestEmployeeJson<MasterDataOption[]>("/master-data/document-types?is_active=1");
