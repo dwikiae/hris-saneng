@@ -84,6 +84,7 @@ export interface EmployeeDetail extends EmployeeListItem {
   npwp?: string | null;
   passport_number?: string | null;
   bank_account_number?: string | null;
+  bank_account_holder_name?: string | null;
   salary?: string | number | null;
   allowances?: string | number | null;
   deductions?: string | number | null;
@@ -100,12 +101,12 @@ export interface EmployeeDetail extends EmployeeListItem {
 }
 
 export interface EmployeePayload {
-  employee_number?: string;
+  employee_number?: string | null;
   name: string;
   nickname?: string | null;
-  email: string;
+  email?: string | null;
   phone: string;
-  address: string;
+  address?: string | null;
   province_id?: string | null;
   city_id?: string | null;
   domicile_address?: string | null;
@@ -122,7 +123,8 @@ export interface EmployeePayload {
   passport_number?: string | null;
   department_id: string | number;
   position_id: string | number;
-  employment_type_id: string | number;
+  employment_type_id?: string | number | null;
+  contract_type?: "pkwt" | "pkwtt";
   employee_level_id?: string | number | null;
   work_location_id?: string | number | null;
   supervisor_id?: string | number | null;
@@ -133,11 +135,14 @@ export interface EmployeePayload {
   npwp?: string | null;
   bank_name?: string | null;
   bank_account_number?: string | null;
+  bank_account_holder_name?: string | null;
   salary?: string | number | null;
   allowances?: string | number | null;
   deductions?: string | number | null;
   consent_at?: string;
   approver_id?: string | number | null;
+  contract?: EmployeeContractPayload;
+  emergency_contact?: EmployeeEmergencyContactPayload;
 }
 
 export type EmployeeUpdatePayload = Partial<EmployeePayload>;
@@ -175,6 +180,15 @@ export interface EmployeeFamily {
   occupation?: string | null;
   phone?: string | null;
   is_dependent?: boolean | null;
+}
+
+export interface EmployeeEmergencyContact {
+  id: number | string;
+  employee_id: number | string;
+  name: string;
+  relationship?: string | null;
+  phone?: string | null;
+  archived_at?: string | null;
 }
 
 export interface EmployeeEducation {
@@ -258,6 +272,12 @@ export interface EmployeeContractPayload {
   start_date: string;
   end_date?: string | null;
   notes?: string | null;
+}
+
+export interface EmployeeEmergencyContactPayload {
+  name: string;
+  relationship?: string | null;
+  phone?: string | null;
 }
 
 export interface EmployeeFamilyPayload {

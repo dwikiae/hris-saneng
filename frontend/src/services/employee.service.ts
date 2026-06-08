@@ -8,6 +8,8 @@ import type {
   EmployeeDocument,
   EmployeeEducation,
   EmployeeEducationPayload,
+  EmployeeEmergencyContact,
+  EmployeeEmergencyContactPayload,
   EmployeeExperience,
   EmployeeExperiencePayload,
   EmployeeFamily,
@@ -150,7 +152,7 @@ export const employeeService = {
     });
   },
   submitForApproval(employeeId: string | number): Promise<EmployeeDetail> {
-    return requestEmployeeJson<EmployeeDetail>(`/employees/${employeeId}/approve`, { method: "POST" });
+    return requestEmployeeJson<EmployeeDetail>(`/employees/${employeeId}/submit`, { method: "POST" });
   },
   saveDraft(payload: EmployeePayload): Promise<EmployeeDetail> {
     return requestEmployeeJson<EmployeeDetail>("/employees", {
@@ -174,6 +176,28 @@ export const employeeService = {
     return requestEmployeeJson<EmployeeDetail>(`/employees/${employeeId}/reject`, {
       method: "POST",
       body: JSON.stringify({ reason })
+    });
+  },
+  getEmergencyContacts(employeeId: string | number): Promise<EmployeeEmergencyContact[]> {
+    return requestEmployeeJson<EmployeeEmergencyContact[]>(`/employees/${employeeId}/emergency-contacts`);
+  },
+  createEmergencyContact(
+    employeeId: string | number,
+    payload: EmployeeEmergencyContactPayload
+  ): Promise<EmployeeEmergencyContact> {
+    return requestEmployeeJson<EmployeeEmergencyContact>(`/employees/${employeeId}/emergency-contacts`, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+  },
+  updateEmergencyContact(
+    employeeId: string | number,
+    contactId: string | number,
+    payload: EmployeeEmergencyContactPayload
+  ): Promise<EmployeeEmergencyContact> {
+    return requestEmployeeJson<EmployeeEmergencyContact>(`/employees/${employeeId}/emergency-contacts/${contactId}`, {
+      method: "PATCH",
+      body: JSON.stringify(payload)
     });
   },
   getPhoto(employeeId: string | number): Promise<EmployeePhotoUrls> {

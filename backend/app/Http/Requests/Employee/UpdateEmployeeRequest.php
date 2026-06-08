@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Employee;
 
+use App\Models\EmployeeContract;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateEmployeeRequest extends FormRequest
 {
@@ -39,7 +41,8 @@ class UpdateEmployeeRequest extends FormRequest
             'passport_number' => ['sometimes', 'nullable', 'string', 'max:100'],
             'department_id' => ['sometimes', 'integer', 'exists:departments,id'],
             'position_id' => ['sometimes', 'integer', 'exists:positions,id'],
-            'employment_type_id' => ['sometimes', 'integer', 'exists:employment_types,id'],
+            'employment_type_id' => ['sometimes', 'nullable', 'integer', 'exists:employment_types,id'],
+            'contract_type' => ['sometimes', 'nullable', 'string', Rule::in([EmployeeContract::TYPE_PKWT, EmployeeContract::TYPE_PKWTT])],
             'employee_level_id' => ['sometimes', 'nullable', 'integer', 'exists:employee_levels,id'],
             'work_location_id' => ['sometimes', 'nullable', 'integer', 'exists:work_locations,id'],
             'supervisor_id' => ['sometimes', 'nullable', 'integer', 'exists:employees,id'],
@@ -50,6 +53,7 @@ class UpdateEmployeeRequest extends FormRequest
             'npwp' => ['sometimes', 'nullable', 'string', 'max:50'],
             'bank_name' => ['sometimes', 'nullable', 'string', 'max:255'],
             'bank_account_number' => ['sometimes', 'nullable', 'string', 'max:100'],
+            'bank_account_holder_name' => ['sometimes', 'nullable', 'string', 'max:255'],
             'salary' => ['sometimes', 'nullable', 'numeric', 'min:0'],
             'allowances' => ['sometimes', 'nullable', 'numeric', 'min:0'],
             'deductions' => ['sometimes', 'nullable', 'numeric', 'min:0'],

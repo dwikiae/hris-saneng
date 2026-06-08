@@ -78,6 +78,20 @@ class EmployeeController extends Controller
         return $this->success(EmployeeResource::make($updated)->resolve($request), 'employee.updated');
     }
 
+    public function submit(int $id): JsonResponse
+    {
+        try {
+            $employee = $this->employees->show($id);
+            $updated = $this->approver->submit($employee);
+        } catch (ModelNotFoundException) {
+            return $this->notFound();
+        } catch (InvalidArgumentException $exception) {
+            return $this->error($exception->getMessage(), 422);
+        }
+
+        return $this->success(EmployeeResource::make($updated)->resolve(request()), 'employee.submitted');
+    }
+
     public function approve(int $id): JsonResponse
     {
         try {
@@ -96,7 +110,7 @@ class EmployeeController extends Controller
     {
         try {
             $employee = $this->employees->show($id);
-            $updated = $this->approver->reject($employee, $request->string('reason')->toString() ?: null);
+            $updated = $this->approver->reject($employee, $request->string('reason')->toString());
         } catch (ModelNotFoundException) {
             return $this->notFound();
         } catch (InvalidArgumentException $exception) {

@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\V1\Employee\EmployeeContractController;
 use App\Http\Controllers\Api\V1\Employee\EmployeeController;
 use App\Http\Controllers\Api\V1\Employee\EmployeeDocumentController;
 use App\Http\Controllers\Api\V1\Employee\EmployeeEducationController;
+use App\Http\Controllers\Api\V1\Employee\EmployeeEmergencyContactController;
 use App\Http\Controllers\Api\V1\Employee\EmployeeExperienceController;
 use App\Http\Controllers\Api\V1\Employee\EmployeeFamilyController;
 use App\Http\Controllers\Api\V1\Employee\EmployeeNoteController;
@@ -235,6 +236,10 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(functio
             Route::post('{id}/education', [EmployeeEducationController::class, 'store']);
             Route::put('{id}/education/{eduId}', [EmployeeEducationController::class, 'update']);
             Route::post('{id}/education/{eduId}/archive', [EmployeeEducationController::class, 'archive']);
+            Route::get('{id}/emergency-contacts', [EmployeeEmergencyContactController::class, 'index']);
+            Route::post('{id}/emergency-contacts', [EmployeeEmergencyContactController::class, 'store']);
+            Route::patch('{id}/emergency-contacts/{contactId}', [EmployeeEmergencyContactController::class, 'update']);
+            Route::delete('{id}/emergency-contacts/{contactId}', [EmployeeEmergencyContactController::class, 'archive']);
             Route::get('{id}/experience', [EmployeeExperienceController::class, 'index']);
             Route::post('{id}/experience', [EmployeeExperienceController::class, 'store']);
             Route::put('{id}/experience/{expId}', [EmployeeExperienceController::class, 'update']);
@@ -265,6 +270,7 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(functio
             Route::delete('{id}/documents/{docId}', [EmployeeDocumentController::class, 'archive']);
             Route::get('{id}/photo', [EmployeePhotoController::class, 'show']);
             Route::post('{id}/photo', [EmployeePhotoController::class, 'store']);
+            Route::post('{id}/submit', [EmployeeController::class, 'submit']);
             Route::post('{id}/approve', [EmployeeController::class, 'approve']);
             Route::post('{id}/reject', [EmployeeController::class, 'reject']);
             Route::post('{id}/archive', [EmployeeController::class, 'archive']);

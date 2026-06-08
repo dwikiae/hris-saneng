@@ -25,6 +25,8 @@ interface EmployeeContractRepositoryInterface
      */
     public function update(EmployeeContract $contract, array $data): EmployeeContract;
 
+    public function latestDraftForEmployee(Employee $employee): ?EmployeeContract;
+
     /**
      * @return Collection<int, EmployeeContract>
      */

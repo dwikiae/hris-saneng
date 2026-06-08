@@ -75,6 +75,7 @@ class Employee extends Model implements Archivable
         'npwp',
         'bank_name',
         'bank_account_number',
+        'bank_account_holder_name',
         'salary',
         'allowances',
         'deductions',
@@ -120,6 +121,11 @@ class Employee extends Model implements Archivable
     public function family(): HasMany
     {
         return $this->hasMany(EmployeeFamily::class);
+    }
+
+    public function emergencyContacts(): HasMany
+    {
+        return $this->hasMany(EmployeeEmergencyContact::class);
     }
 
     public function education(): HasMany
@@ -227,6 +233,7 @@ class Employee extends Model implements Archivable
             'npwp',
             'passport_number',
             'bank_account_number',
+            'bank_account_holder_name',
             'salary',
             'allowances',
             'deductions',
@@ -240,9 +247,7 @@ class Employee extends Model implements Archivable
     {
         return [
             self::DRAFT => [self::PENDING],
-            self::PENDING => [self::APPROVED, self::REJECTED],
-            self::REJECTED => [self::PENDING],
-            self::APPROVED => [self::ACTIVE],
+            self::PENDING => [self::ACTIVE, self::DRAFT],
             self::ACTIVE => [self::PENDING],
         ];
     }
@@ -261,6 +266,7 @@ class Employee extends Model implements Archivable
             'npwp' => 'encrypted',
             'passport_number' => 'encrypted',
             'bank_account_number' => 'encrypted',
+            'bank_account_holder_name' => 'encrypted',
             'salary' => 'encrypted',
             'allowances' => 'encrypted',
             'deductions' => 'encrypted',

@@ -64,7 +64,7 @@ it('returns forbidden when a user does not have the required permission', functi
         ->assertForbidden();
 });
 
-it('allows system admin role for permission-style abilities', function () {
+it('does not allow system admin role without synced permissions', function () {
     $user = User::create([
         'company_id' => $this->company->id,
         'name' => 'Platform Administrator',
@@ -77,6 +77,38 @@ it('allows system admin role for permission-style abilities', function () {
         'code' => 'system_admin',
         'name' => 'Platform Administrator',
     ]);
+
+    $user->roles()->attach($role->id);
+
+    expect(Gate::forUser($user)->allows('settings.update'))->toBeFalse();
+    expect(Gate::forUser($user)->allows('employee.view_sensitive'))->toBeFalse();
+});
+
+it('allows system admin role through explicit synced permissions', function () {
+    $user = User::create([
+        'company_id' => $this->company->id,
+        'name' => 'Platform Administrator',
+        'email' => 'synced.admin@saneng.co.id',
+        'password' => 'password',
+    ]);
+
+    $role = Role::create([
+        'company_id' => $this->company->id,
+        'code' => 'system_admin',
+        'name' => 'Platform Administrator',
+    ]);
+
+    foreach (['settings.update', 'employee.view_sensitive'] as $code) {
+        [$module, $action] = explode('.', $code, 2);
+        $permission = Permission::create([
+            'company_id' => $this->company->id,
+            'code' => $code,
+            'module' => $module,
+            'action' => $action,
+            'name' => $code,
+        ]);
+        $role->permissions()->attach($permission->id);
+    }
 
     $user->roles()->attach($role->id);
 

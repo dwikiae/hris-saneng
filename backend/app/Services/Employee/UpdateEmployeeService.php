@@ -2,8 +2,8 @@
 
 namespace App\Services\Employee;
 
-use App\Jobs\NotifyApproverJob;
 use App\Models\Employee;
+use App\Models\EmployeeContract;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -11,15 +11,6 @@ use InvalidArgumentException;
 
 class UpdateEmployeeService
 {
-    private const CRITICAL_FIELDS = [
-        'nik',
-        'npwp',
-        'bank_account_number',
-        'salary',
-        'department_id',
-        'position_id',
-    ];
-
     public function __construct(private readonly EmployeeRepositoryInterface $employees) {}
 
     /**
@@ -29,42 +20,48 @@ class UpdateEmployeeService
     {
         Gate::authorize('employee.update');
 
-        $requiresApproval = $this->hasCriticalChange($employee, $data);
+        $payload = $this->employeePayload($employee, $data);
 
-        if ($requiresApproval) {
-            if (! $employee->canTransitionTo(Employee::PENDING)) {
-                throw new InvalidArgumentException('employee.invalid_status_transition');
-            }
-
-            $data['status'] = Employee::PENDING;
-        }
-
-        $updated = $this->employees->update($employee, array_merge($data, [
+        return $this->employees->update($employee, array_merge($payload, [
             'updated_by' => Auth::id(),
         ]));
-
-        if ($requiresApproval) {
-            NotifyApproverJob::dispatch((int) $updated->getKey());
-        }
-
-        return $updated;
     }
 
     /**
      * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
      */
-    private function hasCriticalChange(Employee $employee, array $data): bool
+    private function employeePayload(Employee $employee, array $data): array
     {
-        foreach (self::CRITICAL_FIELDS as $field) {
-            if (! array_key_exists($field, $data)) {
-                continue;
-            }
-
-            if ($employee->getAttribute($field) !== $data[$field]) {
-                return true;
-            }
+        if (array_key_exists('employee_number', $data) && ! Gate::allows('employee.override_number')) {
+            throw new InvalidArgumentException('employee.employee_number_locked');
         }
 
-        return false;
+        $contractType = $data['contract_type'] ?? null;
+        unset($data['contract_type'], $data['consent_at'], $data['consent_by']);
+
+        if (empty($data['employment_type_id'])) {
+            $this->mapContractType($data, (int) $employee->getAttribute('company_id'), $contractType);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param  array<string, mixed>  $payload
+     */
+    private function mapContractType(array &$payload, int $companyId, mixed $contractType): void
+    {
+        if (! in_array($contractType, [EmployeeContract::TYPE_PKWT, EmployeeContract::TYPE_PKWTT], true)) {
+            return;
+        }
+
+        $employmentTypeId = $this->employees->employmentTypeIdForContractType($companyId, (string) $contractType);
+
+        if ($employmentTypeId === null) {
+            throw new InvalidArgumentException('employee.employment_type_not_found');
+        }
+
+        $payload['employment_type_id'] = $employmentTypeId;
     }
 }
