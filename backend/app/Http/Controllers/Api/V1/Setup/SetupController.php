@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Setup;
 
+use App\Application\Instance\PlatformAdministratorAssignmentService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Setup\CompleteSetupRequest;
 use App\Models\Company;
@@ -23,6 +24,7 @@ class SetupController extends Controller
         private readonly CompanyRepositoryInterface $companies,
         private readonly InstanceSettingsRepositoryInterface $instanceSettings,
         private readonly SettingsRepositoryInterface $companySettings,
+        private readonly PlatformAdministratorAssignmentService $platformAdministrators,
     ) {}
 
     public function status(): JsonResponse
@@ -45,6 +47,7 @@ class SetupController extends Controller
         $adminData = $validated['admin'] ?? [];
         $company = $this->firstOrCreateCompany($companyData);
         $admin = $this->firstOrCreateInstanceAdmin($adminData);
+        $this->platformAdministrators->assignAllToCompany($company);
 
         $this->seedCompanySettings((int) $company->getKey());
         $this->instanceSettings->setMany([

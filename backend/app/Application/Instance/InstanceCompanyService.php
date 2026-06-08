@@ -57,7 +57,10 @@ class InstanceCompanyService
         'activeModuleCodes' => 'active_module_codes',
     ];
 
-    public function __construct(private readonly InstanceCompanyRepositoryInterface $companies) {}
+    public function __construct(
+        private readonly InstanceCompanyRepositoryInterface $companies,
+        private readonly PlatformAdministratorAssignmentService $platformAdministrators,
+    ) {}
 
     /**
      * @param  array<string, mixed>  $filters
@@ -79,6 +82,7 @@ class InstanceCompanyService
     {
         $company = $this->companies->create($this->corePayload($payload));
         $this->companies->syncSettings($company, $this->settingsPayload($payload));
+        $this->platformAdministrators->assignAllToCompany($company);
 
         return $this->companies->find((int) $company->getKey()) ?? $company;
     }

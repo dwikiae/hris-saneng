@@ -2,6 +2,14 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-08 - Fix Platform Admin Company Assignment
+
+- Menambahkan `PlatformAdministratorAssignmentService` untuk membuat/menstandarkan role company-scoped `system_admin` bernama `Platform Administrator`, menyinkronkan semua permission company, dan attach idempotent ke Platform Administrator (`users.company_id = null`).
+- Memanggil assignment otomatis setelah create company dari Settings Company Management dan setelah Setup Wizard selesai membuat company/admin.
+- Memperjelas bypass Gate berbasis role `system_admin` tanpa mengubah `ResolveCompany`, format permission string, struktur tabel, atau audit logging.
+- Menambahkan `PlatformAdministratorAssignmentSeeder`, memasukkannya ke `DatabaseSeeder`, dan menjalankan `php artisan db:seed --class=PlatformAdministratorAssignmentSeeder` untuk assignment retroaktif `admin@saneng.co.id` ke PT Saneng.
+- Menambahkan selector company shared di modul Karyawan berdasarkan role payload `/api/v1/auth/me`, termasuk auto-select assignment valid dan warning kecil jika assignment belum tersedia.
+
 ## 2026-06-08 - Phase D2-5 Frontend Form Tambah/Edit Karyawan
 
 - Menambahkan halaman `/dashboard/employees/new` dan `/dashboard/employees/{id}/edit` memakai `FormPageTemplate` dengan breadcrumb, tab URL `?tab=`, sticky footer, dirty-state confirmation, dan tab Profil, Kepegawaian, Kontrak, serta Data Sensitif.

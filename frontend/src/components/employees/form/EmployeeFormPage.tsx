@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ConfirmDialog } from "@/components/platform/ConfirmDialog";
 import { platformToast } from "@/components/platform/ToastProvider";
+import { EmployeeCompanyContextBar, useEmployeeCompanyContext } from "@/components/employees/EmployeeCompanyContextBar";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 import { Button } from "@/components/ui/button";
@@ -45,7 +46,7 @@ export function EmployeeFormPage({ mode, employeeId }: EmployeeFormPageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
-  const activeCompanyId = useAuthStore((state) => state.activeCompanyId);
+  const { activeCompanyId, hasCompanyContext } = useEmployeeCompanyContext();
   const canViewSensitive = useAuthStore((state) => state.hasPermission("employee.view_sensitive"));
   const canApprove = useAuthStore((state) => state.hasPermission("employee.approve"));
   const requestedTab = searchParams.get("tab") as EmployeeFormTab | null;
@@ -56,14 +57,14 @@ export function EmployeeFormPage({ mode, employeeId }: EmployeeFormPageProps) {
   const [errors, setErrors] = useState<EmployeeFormErrors>({});
 
   const detailQuery = useQuery({
-    queryKey: ["employees", "detail", employeeId],
+    queryKey: ["employees", activeCompanyId, "detail", employeeId],
     queryFn: () => employeeService.getDetail(employeeId ?? ""),
-    enabled: mode === "edit" && Boolean(employeeId)
+    enabled: mode === "edit" && Boolean(employeeId) && hasCompanyContext
   });
   const contractsQuery = useQuery({
-    queryKey: ["employees", "detail", employeeId, "contracts"],
+    queryKey: ["employees", activeCompanyId, "detail", employeeId, "contracts"],
     queryFn: () => employeeService.getContracts(employeeId ?? ""),
-    enabled: mode === "edit" && Boolean(employeeId)
+    enabled: mode === "edit" && Boolean(employeeId) && hasCompanyContext
   });
   const lookups = useEmployeeFormLookups(activeCompanyId, state.provinceId, state.domicileProvinceId);
   const isLoading = detailQuery.isLoading || contractsQuery.isLoading || lookups.isLoading;
@@ -87,8 +88,13 @@ export function EmployeeFormPage({ mode, employeeId }: EmployeeFormPageProps) {
     onError: () => platformToast.error(t("employeesDetail.toast.failed"))
   });
 
-  if (!activeCompanyId) {
-    return <EmptyState title={t("employeesForm.empty.companyTitle")} description={t("employeesForm.empty.companyDescription")} />;
+  if (!hasCompanyContext) {
+    return (
+      <>
+        <EmployeeCompanyContextBar />
+        <EmptyState title={t("employeesForm.empty.companyTitle")} description={t("employeesForm.empty.companyDescription")} />
+      </>
+    );
   }
 
   if (detailQuery.isError) {
@@ -111,27 +117,30 @@ export function EmployeeFormPage({ mode, employeeId }: EmployeeFormPageProps) {
   const sections = buildSections(activeTab, state, errors, t, update, lookups);
 
   return (
-    <FormPageTemplate
-      title={mode === "new" ? t("employeesForm.new.title") : t("employeesForm.edit.title", { name: employeeName })}
-      backUrl={backUrl}
-      backLabel={t("employeesForm.actions.cancel")}
-      breadcrumbs={breadcrumbs(mode, employeeName, t)}
-      tabs={visibleTabs.map((tab) => ({
-        slug: tab,
-        label: t(`employeesForm.tabs.${tab}`),
-        href: `${mode === "new" ? "/dashboard/employees/new" : `/dashboard/employees/${employeeId}/edit`}?tab=${tab}`,
-        hasError: tabHasError(tab, errors)
-      }))}
-      activeTab={activeTab}
-      sections={sections}
-      isDirty={isDirty}
-      isSubmitting={saveMutation.isPending}
-      footerActions={[
-        { id: "cancel", label: t("employeesForm.actions.cancel"), variant: "secondary", custom: cancelAction(isDirty, backUrl, t, router.push) },
-        { id: "draft", label: t("employeesForm.actions.saveDraft"), icon: <Save className="h-4 w-4" />, variant: "secondary", disabled: !isDirty, onClick: () => submit("draft") },
-        { id: "submit", label: canApprove ? t("employeesForm.actions.saveActivate") : t("employeesForm.actions.submitApproval"), icon: <Send className="h-4 w-4" />, variant: "primary", onClick: () => submit("submit") }
-      ]}
-    />
+    <>
+      <EmployeeCompanyContextBar />
+      <FormPageTemplate
+        title={mode === "new" ? t("employeesForm.new.title") : t("employeesForm.edit.title", { name: employeeName })}
+        backUrl={backUrl}
+        backLabel={t("employeesForm.actions.cancel")}
+        breadcrumbs={breadcrumbs(mode, employeeName, t)}
+        tabs={visibleTabs.map((tab) => ({
+          slug: tab,
+          label: t(`employeesForm.tabs.${tab}`),
+          href: `${mode === "new" ? "/dashboard/employees/new" : `/dashboard/employees/${employeeId}/edit`}?tab=${tab}`,
+          hasError: tabHasError(tab, errors)
+        }))}
+        activeTab={activeTab}
+        sections={sections}
+        isDirty={isDirty}
+        isSubmitting={saveMutation.isPending}
+        footerActions={[
+          { id: "cancel", label: t("employeesForm.actions.cancel"), variant: "secondary", custom: cancelAction(isDirty, backUrl, t, router.push) },
+          { id: "draft", label: t("employeesForm.actions.saveDraft"), icon: <Save className="h-4 w-4" />, variant: "secondary", disabled: !isDirty, onClick: () => submit("draft") },
+          { id: "submit", label: canApprove ? t("employeesForm.actions.saveActivate") : t("employeesForm.actions.submitApproval"), icon: <Send className="h-4 w-4" />, variant: "primary", onClick: () => submit("submit") }
+        ]}
+      />
+    </>
   );
 
   function update<K extends keyof EmployeeFormState>(field: K, value: EmployeeFormState[K]) {
@@ -186,14 +195,14 @@ export function EmployeeFormPage({ mode, employeeId }: EmployeeFormPageProps) {
 
 function useEmployeeFormLookups(companyId: string | null, provinceId: string, domicileProvinceId: string) {
   const queries = {
-    departments: useQuery({ queryKey: ["employees", "lookup", "departments"], queryFn: employeeLookupService.departments }),
-    positions: useQuery({ queryKey: ["employees", "lookup", "positions"], queryFn: employeeLookupService.positions }),
-    employmentTypes: useQuery({ queryKey: ["employees", "lookup", "employment-types"], queryFn: employeeLookupService.employmentTypes }),
-    religions: useQuery({ queryKey: ["employees", "lookup", "religions"], queryFn: employeeLookupService.religions }),
-    maritalStatuses: useQuery({ queryKey: ["employees", "lookup", "marital-statuses"], queryFn: employeeLookupService.maritalStatuses }),
-    bloodTypes: useQuery({ queryKey: ["employees", "lookup", "blood-types"], queryFn: employeeLookupService.bloodTypes }),
-    banks: useQuery({ queryKey: ["employees", "lookup", "banks"], queryFn: employeeLookupService.banks }),
-    supervisors: useQuery({ queryKey: ["employees", "lookup", "supervisors"], queryFn: () => employeeService.list({ status: "active", perPage: 100 }) }),
+    departments: useQuery({ queryKey: ["employees", companyId, "lookup", "departments"], queryFn: employeeLookupService.departments, enabled: Boolean(companyId) }),
+    positions: useQuery({ queryKey: ["employees", companyId, "lookup", "positions"], queryFn: employeeLookupService.positions, enabled: Boolean(companyId) }),
+    employmentTypes: useQuery({ queryKey: ["employees", companyId, "lookup", "employment-types"], queryFn: employeeLookupService.employmentTypes, enabled: Boolean(companyId) }),
+    religions: useQuery({ queryKey: ["employees", companyId, "lookup", "religions"], queryFn: employeeLookupService.religions, enabled: Boolean(companyId) }),
+    maritalStatuses: useQuery({ queryKey: ["employees", companyId, "lookup", "marital-statuses"], queryFn: employeeLookupService.maritalStatuses, enabled: Boolean(companyId) }),
+    bloodTypes: useQuery({ queryKey: ["employees", companyId, "lookup", "blood-types"], queryFn: employeeLookupService.bloodTypes, enabled: Boolean(companyId) }),
+    banks: useQuery({ queryKey: ["employees", companyId, "lookup", "banks"], queryFn: employeeLookupService.banks, enabled: Boolean(companyId) }),
+    supervisors: useQuery({ queryKey: ["employees", companyId, "lookup", "supervisors"], queryFn: () => employeeService.list({ status: "active", perPage: 100 }), enabled: Boolean(companyId) }),
     provinces: useQuery({ queryKey: ["wilayah", "provinces"], queryFn: wilayahService.provinces }),
     ktpCities: useQuery({ queryKey: ["wilayah", "cities", provinceId], queryFn: () => wilayahService.cities(provinceId), enabled: Boolean(provinceId) }),
     domicileCities: useQuery({ queryKey: ["wilayah", "cities", domicileProvinceId], queryFn: () => wilayahService.cities(domicileProvinceId), enabled: Boolean(domicileProvinceId) }),

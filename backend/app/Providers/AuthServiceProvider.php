@@ -22,7 +22,7 @@ class AuthServiceProvider extends ServiceProvider
                 return true;
             }
 
-            if ($user->roles()->where('code', 'system_admin')->exists()) {
+            if ($user->hasRoleCode('system_admin')) {
                 return true;
             }
 

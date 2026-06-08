@@ -462,6 +462,10 @@
       "saved": "Data karyawan berhasil disimpan."
     }
   },
+  "employeesCompanyContext": {
+    "emptyTitle": "Assignment company belum tersedia",
+    "emptyDescription": "Platform Administrator belum terhubung ke company mana pun. Jalankan seeder assignment atau buat ulang assignment dari backend."
+  },
   "employeesSettings": {
     "title": "Pengaturan Karyawan",
     "description": "Kelola master data dan konfigurasi modul Karyawan per company.",

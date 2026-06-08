@@ -23,6 +23,7 @@ it('seeds permissions and default role assignments idempotently', function () {
     $allPermissionCount = Permission::count();
 
     expect(Role::where('code', 'system_admin')->firstOrFail()->permissions()->count())->toBe($allPermissionCount);
+    expect(Role::where('code', 'system_admin')->firstOrFail()->name)->toBe('Platform Administrator');
     expect(Role::where('code', 'hr_manager')->firstOrFail()->permissions()->pluck('code')->sort()->values()->all())->toBe([
         'employee.approve',
         'employee.archive',

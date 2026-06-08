@@ -3,6 +3,7 @@
 use App\Models\Company;
 use App\Models\CompanySetting;
 use App\Models\InstanceSetting;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -38,6 +39,16 @@ it('completes first-time setup with company, instance admin, and baseline settin
             ->where('company_id', $company?->id)
             ->where('key', 'lockout_duration_minutes')
             ->value('value'))->toBe('15');
+
+    $role = Role::withoutCompanyScope()
+        ->where('company_id', $company?->id)
+        ->where('code', 'system_admin')
+        ->firstOrFail();
+
+    $this->assertDatabaseHas('user_roles', [
+        'user_id' => $admin?->id,
+        'role_id' => $role->id,
+    ]);
 });
 
 it('blocks setup completion after setup is already completed', function () {

@@ -81,6 +81,21 @@ it('creates a company from camelCase frontend payload and stores extended settin
         'log_name' => 'companies',
         'description' => 'companies.created',
     ]);
+    $this->assertDatabaseHas('roles', [
+        'company_id' => $companyId,
+        'code' => 'system_admin',
+        'name' => 'Platform Administrator',
+    ]);
+
+    $role = Role::withoutCompanyScope()
+        ->where('company_id', $companyId)
+        ->where('code', 'system_admin')
+        ->firstOrFail();
+
+    $this->assertDatabaseHas('user_roles', [
+        'user_id' => $admin->id,
+        'role_id' => $role->id,
+    ]);
 });
 
 it('shows detail with employee count, status, active modules, and extended fields', function () {

@@ -15,6 +15,7 @@ import {
   employeeColumns,
   type ConfirmAction
 } from "@/components/employees/EmployeeListParts";
+import { EmployeeCompanyContextBar, useEmployeeCompanyContext } from "@/components/employees/EmployeeCompanyContextBar";
 import { summaryItems } from "@/components/employees/employee-list-utils";
 import { ListPageTemplate } from "@/components/templates";
 import { employeeLookupService, employeeService } from "@/services/employee.service";
@@ -38,19 +39,23 @@ export function EmployeeListPage({ archived = false }: EmployeeListPageProps) {
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null);
+  const { activeCompanyId, hasCompanyContext } = useEmployeeCompanyContext();
 
   const params = { search, status, departmentId, contractType, page, perPage: defaultPerPage, sortBy, sortDir };
   const employeesQuery = useQuery({
-    queryKey: ["employees", archived ? "archived" : "active", params],
-    queryFn: () => (archived ? employeeService.listArchived(params) : employeeService.list(params))
+    queryKey: ["employees", activeCompanyId, archived ? "archived" : "active", params],
+    queryFn: () => (archived ? employeeService.listArchived(params) : employeeService.list(params)),
+    enabled: hasCompanyContext
   });
   const departmentsQuery = useQuery({
-    queryKey: ["employees", "departments"],
-    queryFn: employeeLookupService.departments
+    queryKey: ["employees", activeCompanyId, "departments"],
+    queryFn: employeeLookupService.departments,
+    enabled: hasCompanyContext
   });
   const employmentTypesQuery = useQuery({
-    queryKey: ["employees", "employment-types"],
-    queryFn: employeeLookupService.employmentTypes
+    queryKey: ["employees", activeCompanyId, "employment-types"],
+    queryFn: employeeLookupService.employmentTypes,
+    enabled: hasCompanyContext
   });
 
   const employmentTypes = employmentTypesQuery.data ?? [];
@@ -102,6 +107,7 @@ export function EmployeeListPage({ archived = false }: EmployeeListPageProps) {
 
   return (
     <>
+      <EmployeeCompanyContextBar />
       <ListPageTemplate
         title={t("employeesList.title")}
         breadcrumbs={[

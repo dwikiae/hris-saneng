@@ -69,6 +69,28 @@ it('returns platform settings permission for instance admin', function () {
         ->assertJsonPath('data.roles', []);
 });
 
+it('returns assigned company roles for platform administrator', function () {
+    $company = Company::query()->firstOrFail();
+    $this->user->update([
+        'company_id' => null,
+        'name' => 'Platform Administrator',
+    ]);
+    $role = Role::create([
+        'company_id' => $company->id,
+        'code' => 'system_admin',
+        'name' => 'Platform Administrator',
+    ]);
+    $this->user->roles()->attach($role->id);
+    $token = $this->user->createToken('test')->plainTextToken;
+
+    $this->getJson('/api/v1/auth/me', ['Authorization' => "Bearer $token"])
+        ->assertOk()
+        ->assertJsonPath('data.roles.0.code', 'system_admin')
+        ->assertJsonPath('data.roles.0.name', 'Platform Administrator')
+        ->assertJsonPath('data.roles.0.company_id', $company->id)
+        ->assertJsonPath('data.roles.0.company_name', 'PT Saneng');
+});
+
 it('returns 401 when unauthenticated', function () {
     $this->getJson('/api/v1/auth/me')->assertStatus(401);
 });

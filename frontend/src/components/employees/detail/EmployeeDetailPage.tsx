@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { ConfirmDialog } from "@/components/platform/ConfirmDialog";
 import { PermissionGate } from "@/components/platform/PermissionGate";
 import { platformToast } from "@/components/platform/ToastProvider";
+import { EmployeeCompanyContextBar, useEmployeeCompanyContext } from "@/components/employees/EmployeeCompanyContextBar";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { Button } from "@/components/ui/button";
 import { DetailPageTemplate } from "@/components/templates";
@@ -40,19 +41,21 @@ export function EmployeeDetailPage() {
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const employeeId = params.id;
+  const { activeCompanyId, hasCompanyContext } = useEmployeeCompanyContext();
   const requestedTab = searchParams.get("tab");
   const activeTab = requestedTab && baseTabs.includes(requestedTab) ? requestedTab : "profil";
   const employeeQuery = useQuery({
-    queryKey: ["employees", "detail", employeeId],
-    queryFn: () => employeeService.getDetail(employeeId)
+    queryKey: ["employees", activeCompanyId, "detail", employeeId],
+    queryFn: () => employeeService.getDetail(employeeId),
+    enabled: hasCompanyContext
   });
   const photoQuery = useQuery({
-    queryKey: ["employees", "detail", employeeId, "photo"],
+    queryKey: ["employees", activeCompanyId, "detail", employeeId, "photo"],
     queryFn: () => employeeService.getPhoto(employeeId),
     enabled: Boolean(employeeQuery.data)
   });
   const offboardingQuery = useQuery({
-    queryKey: ["employees", "detail", employeeId, "offboarding"],
+    queryKey: ["employees", activeCompanyId, "detail", employeeId, "offboarding"],
     queryFn: () => employeeService.getOffboarding(employeeId),
     enabled: Boolean(employeeQuery.data)
   });
@@ -86,106 +89,121 @@ export function EmployeeDetailPage() {
   });
   const employee = employeeQuery.data;
 
+  if (!hasCompanyContext) {
+    return (
+      <>
+        <EmployeeCompanyContextBar />
+        <EmptyState title={t("employeesForm.empty.companyTitle")} description={t("employeesForm.empty.companyDescription")} />
+      </>
+    );
+  }
+
   if (employeeQuery.isError) {
     return (
-      <EmptyState
-        title={t("employeesDetail.api.detailTitle")}
-        description={t("employeesDetail.api.detail")}
-        actionLabel={t("employeesDetail.actions.retry")}
-        onAction={() => void employeeQuery.refetch()}
-      />
+      <>
+        <EmployeeCompanyContextBar />
+        <EmptyState
+          title={t("employeesDetail.api.detailTitle")}
+          description={t("employeesDetail.api.detail")}
+          actionLabel={t("employeesDetail.actions.retry")}
+          onAction={() => void employeeQuery.refetch()}
+        />
+      </>
     );
   }
 
   return (
-    <DetailPageTemplate
-      backUrl="/dashboard/employees"
-      backLabel={t("employeesDetail.actions.back")}
-      breadcrumbs={[
-        { label: t("employeesList.breadcrumb.dashboard"), href: "/dashboard" },
-        { label: t("employeesList.breadcrumb.employees"), href: "/dashboard/employees" },
-        { label: employee?.name ?? t("employeesDetail.loading") }
-      ]}
-      actions={employee ? detailActions(employee.id, employee.name, t, () => archiveMutation.mutate()) : []}
-      avatarUrl={photoQuery.data?.thumbnail ?? photoQuery.data?.medium ?? employee?.photo_url ?? undefined}
-      avatarFallback={employee ? initials(employee.name) : undefined}
-      title={employee?.name ?? t("employeesDetail.loading")}
-      subtitle={employee ? employeeSubtitle(employee) : undefined}
-      entityId={employee?.employee_number ?? String(employeeId)}
-      metaInfo={[
-        { label: t("employeesDetail.meta.contractType"), value: lookupName(employee?.employment_type ?? employee?.employmentType) },
-        { label: t("employeesDetail.meta.workLocation"), value: lookupName(employee?.work_location) },
-        { label: t("employeesDetail.meta.joinDate"), value: formatDate(employee?.join_date) },
-        { label: t("employeesDetail.meta.status"), value: employee?.status ?? "-" }
-      ]}
-      status={
-        employee
-          ? {
-              label: t(`employeesList.status.${employee.status ?? "unknown"}`),
-              tone: statusTone(employee.status)
-            }
-          : undefined
-      }
-      approvalSlot={
-        employee?.status === "pending" ? (
-          <EmployeeApprovalPanel
-            entityName={employee.name}
-            t={t}
-            onApprove={() => approveMutation.mutate()}
-            onReject={(reason) => rejectMutation.mutate(reason)}
-          />
-        ) : null
-      }
-      tabs={[
-        {
-          slug: "profil",
-          label: t("employeesDetail.tabs.profile"),
-          content: employee ? <EmployeeProfileTab employee={employee} employeeId={employeeId} t={t} /> : null
-        },
-        {
-          slug: "kepegawaian",
-          label: t("employeesDetail.tabs.employment"),
-          content: employee ? <EmployeeEmploymentTab employee={employee} t={t} /> : null
-        },
-        {
-          slug: "kontrak",
-          label: t("employeesDetail.tabs.contracts"),
-          content: <EmployeeContractsTab employeeId={employeeId} enabled={activeTab === "kontrak"} t={t} />
-        },
-        {
-          slug: "keluarga",
-          label: t("employeesDetail.tabs.family"),
-          content: <EmployeeFamilyTab employeeId={employeeId} enabled={activeTab === "keluarga"} t={t} />
-        },
-        {
-          slug: "pendidikan-pengalaman",
-          label: t("employeesDetail.tabs.educationExperience"),
-          content: (
-            <EmployeeEducationExperienceTab
-              employeeId={employeeId}
-              enabled={activeTab === "pendidikan-pengalaman"}
-              t={t}
-            />
-          )
-        },
-        {
-          slug: "dokumen",
-          label: t("employeesDetail.tabs.documents"),
-          content: <EmployeeDocumentsTab employeeId={employeeId} enabled={activeTab === "dokumen"} t={t} />
-        },
-        {
-          slug: "offboarding",
-          label: t("employeesDetail.tabs.offboarding"),
-          visible: Boolean(offboardingQuery.data?.is_visible),
-          content: <EmployeeOffboardingTab employeeId={employeeId} enabled={activeTab === "offboarding"} t={t} />
+    <>
+      <EmployeeCompanyContextBar />
+      <DetailPageTemplate
+        backUrl="/dashboard/employees"
+        backLabel={t("employeesDetail.actions.back")}
+        breadcrumbs={[
+          { label: t("employeesList.breadcrumb.dashboard"), href: "/dashboard" },
+          { label: t("employeesList.breadcrumb.employees"), href: "/dashboard/employees" },
+          { label: employee?.name ?? t("employeesDetail.loading") }
+        ]}
+        actions={employee ? detailActions(employee.id, employee.name, t, () => archiveMutation.mutate()) : []}
+        avatarUrl={photoQuery.data?.thumbnail ?? photoQuery.data?.medium ?? employee?.photo_url ?? undefined}
+        avatarFallback={employee ? initials(employee.name) : undefined}
+        title={employee?.name ?? t("employeesDetail.loading")}
+        subtitle={employee ? employeeSubtitle(employee) : undefined}
+        entityId={employee?.employee_number ?? String(employeeId)}
+        metaInfo={[
+          { label: t("employeesDetail.meta.contractType"), value: lookupName(employee?.employment_type ?? employee?.employmentType) },
+          { label: t("employeesDetail.meta.workLocation"), value: lookupName(employee?.work_location) },
+          { label: t("employeesDetail.meta.joinDate"), value: formatDate(employee?.join_date) },
+          { label: t("employeesDetail.meta.status"), value: employee?.status ?? "-" }
+        ]}
+        status={
+          employee
+            ? {
+                label: t(`employeesList.status.${employee.status ?? "unknown"}`),
+                tone: statusTone(employee.status)
+              }
+            : undefined
         }
-      ]}
-      defaultTab="profil"
-      notesSlug="catatan"
-      notesLabel={t("employeesDetail.tabs.notes")}
-      notesContent={<EmployeeNotesTab employeeId={employeeId} />}
-      isLoading={employeeQuery.isLoading}
-    />
+        approvalSlot={
+          employee?.status === "pending" ? (
+            <EmployeeApprovalPanel
+              entityName={employee.name}
+              t={t}
+              onApprove={() => approveMutation.mutate()}
+              onReject={(reason) => rejectMutation.mutate(reason)}
+            />
+          ) : null
+        }
+        tabs={[
+          {
+            slug: "profil",
+            label: t("employeesDetail.tabs.profile"),
+            content: employee ? <EmployeeProfileTab employee={employee} employeeId={employeeId} t={t} /> : null
+          },
+          {
+            slug: "kepegawaian",
+            label: t("employeesDetail.tabs.employment"),
+            content: employee ? <EmployeeEmploymentTab employee={employee} t={t} /> : null
+          },
+          {
+            slug: "kontrak",
+            label: t("employeesDetail.tabs.contracts"),
+            content: <EmployeeContractsTab employeeId={employeeId} enabled={activeTab === "kontrak"} t={t} />
+          },
+          {
+            slug: "keluarga",
+            label: t("employeesDetail.tabs.family"),
+            content: <EmployeeFamilyTab employeeId={employeeId} enabled={activeTab === "keluarga"} t={t} />
+          },
+          {
+            slug: "pendidikan-pengalaman",
+            label: t("employeesDetail.tabs.educationExperience"),
+            content: (
+              <EmployeeEducationExperienceTab
+                employeeId={employeeId}
+                enabled={activeTab === "pendidikan-pengalaman"}
+                t={t}
+              />
+            )
+          },
+          {
+            slug: "dokumen",
+            label: t("employeesDetail.tabs.documents"),
+            content: <EmployeeDocumentsTab employeeId={employeeId} enabled={activeTab === "dokumen"} t={t} />
+          },
+          {
+            slug: "offboarding",
+            label: t("employeesDetail.tabs.offboarding"),
+            visible: Boolean(offboardingQuery.data?.is_visible),
+            content: <EmployeeOffboardingTab employeeId={employeeId} enabled={activeTab === "offboarding"} t={t} />
+          }
+        ]}
+        defaultTab="profil"
+        notesSlug="catatan"
+        notesLabel={t("employeesDetail.tabs.notes")}
+        notesContent={<EmployeeNotesTab employeeId={employeeId} />}
+        isLoading={employeeQuery.isLoading}
+      />
+    </>
   );
 }
 

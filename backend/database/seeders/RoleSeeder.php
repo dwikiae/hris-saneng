@@ -14,8 +14,8 @@ class RoleSeeder extends Seeder
      */
     private array $roles = [
         'system_admin' => [
-            'name' => 'System Admin',
-            'description' => 'Full system access',
+            'name' => 'Platform Administrator',
+            'description' => 'Full platform access',
             'permissions' => '*',
         ],
         'manager' => [
@@ -55,7 +55,7 @@ class RoleSeeder extends Seeder
         $company = Company::query()->where('name', 'PT Saneng')->firstOrFail();
 
         foreach ($this->roles as $code => $definition) {
-            $role = Role::withoutCompanyScope()->firstOrCreate(
+            $role = Role::withoutCompanyScope()->updateOrCreate(
                 [
                     'company_id' => $company->id,
                     'code' => $code,

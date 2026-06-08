@@ -114,6 +114,14 @@ class User extends Authenticatable implements Archivable
             ->contains(fn (Permission $userPermission) => $userPermission->code === $permission);
     }
 
+    public function hasRoleCode(string $code): bool
+    {
+        return $this->roles()
+            ->withoutGlobalScope('company')
+            ->where('code', $code)
+            ->exists();
+    }
+
     public function isLocked(): bool
     {
         return $this->locked_until !== null && $this->locked_until->isFuture();

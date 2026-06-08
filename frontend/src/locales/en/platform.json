@@ -462,6 +462,10 @@
       "saved": "Employee data saved."
     }
   },
+  "employeesCompanyContext": {
+    "emptyTitle": "Company assignment is unavailable",
+    "emptyDescription": "This Platform Administrator is not linked to any company yet. Run the assignment seeder or restore the backend assignment."
+  },
   "employeesSettings": {
     "title": "Employee Settings",
     "description": "Manage employee module master data and configuration per company.",

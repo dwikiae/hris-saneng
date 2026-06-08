@@ -67,7 +67,7 @@ it('returns forbidden when a user does not have the required permission', functi
 it('allows system admin role for permission-style abilities', function () {
     $user = User::create([
         'company_id' => $this->company->id,
-        'name' => 'System Admin',
+        'name' => 'Platform Administrator',
         'email' => 'admin@saneng.co.id',
         'password' => 'password',
     ]);
@@ -75,10 +75,11 @@ it('allows system admin role for permission-style abilities', function () {
     $role = Role::create([
         'company_id' => $this->company->id,
         'code' => 'system_admin',
-        'name' => 'System Admin',
+        'name' => 'Platform Administrator',
     ]);
 
     $user->roles()->attach($role->id);
 
     expect(Gate::forUser($user)->allows('settings.update'))->toBeTrue();
+    expect(Gate::forUser($user)->allows('employee.view_sensitive'))->toBeTrue();
 });

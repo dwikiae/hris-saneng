@@ -2,8 +2,10 @@
 
 use App\Models\Company;
 use App\Models\CompanySetting;
+use App\Models\Role;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\PlatformAdministratorAssignmentSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 
@@ -37,4 +39,16 @@ it('admin user password is correctly hashed', function () {
     $user = User::withoutCompanyScope()->where('email', 'admin@saneng.co.id')->firstOrFail();
 
     expect(Hash::check('Admin@12345', $user->password))->toBeTrue();
+});
+
+it('assigns platform administrator to PT Saneng idempotently', function () {
+    $this->seed(DatabaseSeeder::class);
+    $this->seed(PlatformAdministratorAssignmentSeeder::class);
+    $this->seed(PlatformAdministratorAssignmentSeeder::class);
+
+    $user = User::withoutCompanyScope()->where('email', 'admin@saneng.co.id')->firstOrFail();
+    $role = Role::withoutCompanyScope()->where('code', 'system_admin')->firstOrFail();
+
+    expect($role->name)->toBe('Platform Administrator')
+        ->and($user->roles()->where('roles.id', $role->id)->count())->toBe(1);
 });
