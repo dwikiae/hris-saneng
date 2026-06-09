@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Auth;
 use App\Application\Auth\UserPreferencesService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Auth\UpdateUserPreferencesRequest;
+use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -24,7 +25,11 @@ class LoginController extends Controller
         ]);
 
         /** @var User|null $user */
-        $user = User::query()->withoutGlobalScope('company')->where('email', $credentials['email'])->first();
+        $user = User::query()
+            ->withoutGlobalScope('company')
+            ->with(['roles' => fn ($q) => $q->withoutGlobalScope('company')->with('company')])
+            ->where('email', $credentials['email'])
+            ->first();
 
         if ($user === null) {
             return response()->json(['success' => false, 'message' => 'login.failed'], 401);
@@ -55,12 +60,15 @@ class LoginController extends Controller
 
         $token = $user->createToken('auth-token')->plainTextToken;
 
+        // Preload permissions from already-loaded roles (avoids N+1)
+        $roleIds = $user->roles->pluck('id');
+
         return response()->json([
             'success' => true,
             'data' => [
                 'token' => $token,
                 'user' => [
-                    ...$this->userPayload($user),
+                    ...$this->userPayload($user, $roleIds),
                 ],
             ],
             'message' => 'login.success',
@@ -114,11 +122,15 @@ class LoginController extends Controller
     public function me(Request $request): JsonResponse
     {
         /** @var User $user */
-        $user = $request->user();
+        $user = $request->user()->loadMissing([
+            'roles' => fn ($q) => $q->withoutGlobalScope('company')->with('company'),
+        ]);
+
+        $roleIds = $user->roles->pluck('id');
 
         return response()->json([
             'success' => true,
-            'data' => $this->userPayload($user),
+            'data' => $this->userPayload($user, $roleIds),
             'message' => 'auth.me',
             'meta' => [],
         ]);
@@ -145,12 +157,15 @@ class LoginController extends Controller
     }
 
     /**
+     * @param  Collection<int, int>  $roleIds
      * @return array<int, string>
      */
-    private function permissionCodes(User $user): array
+    private function permissionCodes(User $user, Collection $roleIds): array
     {
         /** @var Collection<int, string> $codes */
-        $codes = $user->permissions()->pluck('code');
+        $codes = Permission::query()
+            ->whereHas('roles', fn ($query) => $query->whereIn('roles.id', $roleIds))
+            ->pluck('code');
 
         if ($user->isInstanceAdmin() && ! $codes->contains(self::PLATFORM_SETTINGS_PERMISSION)) {
             $codes->push(self::PLATFORM_SETTINGS_PERMISSION);
@@ -160,9 +175,10 @@ class LoginController extends Controller
     }
 
     /**
+     * @param  Collection<int, int>  $roleIds
      * @return array<string, mixed>
      */
-    private function userPayload(User $user): array
+    private function userPayload(User $user, Collection $roleIds): array
     {
         return [
             'id' => $user->id,
@@ -170,7 +186,7 @@ class LoginController extends Controller
             'email' => $user->email,
             'language_preference' => $user->language_preference,
             'force_password_reset' => $user->force_password_reset,
-            'permissions' => $this->permissionCodes($user),
+            'permissions' => $this->permissionCodes($user, $roleIds),
             'roles' => $this->rolePayload($user),
         ];
     }
@@ -180,10 +196,7 @@ class LoginController extends Controller
      */
     private function rolePayload(User $user): array
     {
-        return $user->roles()
-            ->withoutGlobalScope('company')
-            ->with('company')
-            ->get()
+        return $user->roles
             ->map(fn ($role): array => [
                 'id' => $role->getAttribute('id'),
                 'code' => $role->getAttribute('code'),

@@ -21,7 +21,9 @@ class PlatformAdministratorAssignmentSeeder extends Seeder
 
         Company::query()
             ->orderBy('id')
-            ->each(fn (Company $company): void => app(PlatformAdministratorAssignmentService::class)
-                ->assignUserToCompany($admin, $company));
+            ->each(function (Company $company) use ($admin) {
+                app(PlatformAdministratorAssignmentService::class)
+                    ->assignUserToCompany($admin, $company);
+            });
     }
 }

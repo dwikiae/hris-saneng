@@ -239,6 +239,7 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(functio
             Route::get('{id}/emergency-contacts', [EmployeeEmergencyContactController::class, 'index']);
             Route::post('{id}/emergency-contacts', [EmployeeEmergencyContactController::class, 'store']);
             Route::patch('{id}/emergency-contacts/{contactId}', [EmployeeEmergencyContactController::class, 'update']);
+            Route::patch('{id}/emergency-contacts/{contactId}/archive', [EmployeeEmergencyContactController::class, 'archive']);
             Route::delete('{id}/emergency-contacts/{contactId}', [EmployeeEmergencyContactController::class, 'archive']);
             Route::get('{id}/experience', [EmployeeExperienceController::class, 'index']);
             Route::post('{id}/experience', [EmployeeExperienceController::class, 'store']);

@@ -38,12 +38,31 @@ it('creates lists updates and archives emergency contacts without hard delete', 
         ->assertJsonPath('message', 'employee.emergency_contacts.updated')
         ->assertJsonPath('data.relationship', 'Parent');
 
-    $this->deleteJson("/api/v1/employees/{$this->employee->id}/emergency-contacts/{$contactId}")
+    $this->patchJson("/api/v1/employees/{$this->employee->id}/emergency-contacts/{$contactId}/archive")
         ->assertOk()
         ->assertJsonPath('message', 'employee.emergency_contacts.archived');
 
     expect(EmployeeEmergencyContact::withArchived()->findOrFail($contactId)->archived_at)->not->toBeNull();
     expect(EmployeeEmergencyContact::whereKey($contactId)->exists())->toBeFalse();
+});
+
+it('keeps delete archive route for backward compatibility', function () {
+    $contact = EmployeeEmergencyContact::create([
+        'company_id' => $this->company->id,
+        'employee_id' => $this->employee->id,
+        'name' => 'Legacy Archive Contact',
+        'relationship' => 'Sibling',
+        'phone' => '081200008888',
+        'created_by' => $this->user->id,
+        'updated_by' => $this->user->id,
+    ]);
+
+    $this->deleteJson("/api/v1/employees/{$this->employee->id}/emergency-contacts/{$contact->id}")
+        ->assertOk()
+        ->assertJsonPath('message', 'employee.emergency_contacts.archived');
+
+    expect(EmployeeEmergencyContact::withArchived()->findOrFail($contact->id)->archived_at)->not->toBeNull();
+    expect(EmployeeEmergencyContact::whereKey($contact->id)->exists())->toBeFalse();
 });
 
 function employeeEmergencyContactUser(Company $company): User

@@ -2,6 +2,11 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-09 - Repair Backend Alignment Form Karyawan
+
+- Menambahkan alias `PATCH /api/v1/employees/{id}/emergency-contacts/{contactId}/archive` untuk kontrak archive kontak darurat, sambil mempertahankan route `DELETE` lama.
+- Menyelaraskan test seeder RBAC dengan permission `karyawan.settings` yang sudah ada dan menambah coverage route archive kontak darurat baru.
+
 ## 2026-06-08 - Reliable Next Dev Build Guard
 
 - Menambahkan guard `prebuild` frontend agar `npm run build` gagal cepat saat `next dev` masih aktif dan tidak menimpa `.next/` dev server.

@@ -21,6 +21,7 @@ class PermissionSeeder extends Seeder
         ['code' => 'employee.view_salary', 'name' => 'View Employee Salary', 'description' => 'View employee salary fields'],
         ['code' => 'employee.approve', 'name' => 'Approve Employee', 'description' => 'Approve employee data changes'],
         ['code' => 'employee.override_number', 'name' => 'Override Employee Number', 'description' => 'Override generated employee numbers'],
+        ['code' => 'karyawan.settings', 'name' => 'Karyawan Settings', 'description' => 'Manage employee module settings, work locations, and employee levels'],
         ['code' => 'recruitment.view', 'name' => 'View Recruitment', 'description' => 'View recruitment records'],
         ['code' => 'recruitment.create', 'name' => 'Create Recruitment', 'description' => 'Create recruitment records'],
         ['code' => 'recruitment.publish', 'name' => 'Publish Recruitment', 'description' => 'Publish recruitment vacancies'],
@@ -46,7 +47,11 @@ class PermissionSeeder extends Seeder
 
     public function run(): void
     {
-        $company = Company::query()->where('name', 'PT Saneng')->firstOrFail();
+        $company = Company::query()->first();
+
+        if (! $company) {
+            return;
+        }
 
         foreach ($this->permissions as $permission) {
             [$module, $action] = explode('.', $permission['code'], 2);
