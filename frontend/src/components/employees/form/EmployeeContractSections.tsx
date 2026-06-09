@@ -1,7 +1,9 @@
 import { SelectField, TextAreaField, TextField } from "./EmployeeFormControls";
 import type { EmployeeFormSectionBuilder } from "./employee-form-section-types";
+import type { EmployeeMasterRecord } from "@/types/employee-settings";
 
-export const contractSections: EmployeeFormSectionBuilder = ({ state, errors, t, update }) => [
+export function contractSections(contractTypes: EmployeeMasterRecord[]): EmployeeFormSectionBuilder {
+  return ({ state, errors, t, update }) => [
   {
     id: "contract",
     title: t("employeesForm.sections.contract"),
@@ -16,10 +18,7 @@ export const contractSections: EmployeeFormSectionBuilder = ({ state, errors, t,
             field="contractType"
             value={state.contractType}
             placeholder={t("employeesDetail.values.choose")}
-            options={[
-              { value: "pkwt", label: t("employeesList.contract.pkwt") },
-              { value: "pkwtt", label: t("employeesList.contract.pkwtt") }
-            ]}
+            options={contractTypeOptions(contractTypes, t)}
             onChange={(value) => update("contractType", value === "pkwtt" ? "pkwtt" : "pkwt")}
           />
         )
@@ -36,4 +35,21 @@ export const contractSections: EmployeeFormSectionBuilder = ({ state, errors, t,
       { id: "employee-form-contractNotes", label: t("employeesDetail.fields.notes"), span: 2, content: <TextAreaField field="contractNotes" value={state.contractNotes} onChange={(value) => update("contractNotes", value)} /> }
     ]
   }
-];
+  ];
+}
+
+function contractTypeOptions(contractTypes: EmployeeMasterRecord[], t: (key: string) => string) {
+  const options = contractTypes
+    .filter((item) => "type" in item)
+    .map((item) => ({
+      value: item.type === "pkwtt" ? "pkwtt" : "pkwt",
+      label: item.name
+    }));
+
+  return options.length > 0
+    ? options
+    : [
+        { value: "pkwt", label: t("employeesList.contract.pkwt") },
+        { value: "pkwtt", label: t("employeesList.contract.pkwtt") }
+      ];
+}

@@ -128,6 +128,7 @@ export function EmployeeMasterSection({
       {section.masterKind ? (
         <EmployeeMasterModal
           open={isModalOpen}
+          company={company}
           kind={section.masterKind}
           entityLabel={entityLabel}
           record={editingRecord}
@@ -162,6 +163,41 @@ function columnsFor(
   ];
 
   if (section.masterKind === "employee-levels") {
+    columns.push({ key: "order", header: t("employeesSettings.columns.order"), cell: (record) => "order" in record ? record.order : "-" });
+  }
+  if (section.masterKind === "departments") {
+    columns.push({
+      key: "totalEmployees",
+      header: t("employeesSettings.columns.totalEmployees"),
+      cell: (record) => ("totalEmployees" in record ? record.totalEmployees ?? 0 : 0)
+    });
+  }
+  if (section.masterKind === "job-positions") {
+    columns.push({
+      key: "department",
+      header: t("employeesSettings.columns.department"),
+      cell: (record) => ("departmentId" in record ? record.departmentId ?? "-" : "-")
+    });
+  }
+  if (section.masterKind === "contract-types") {
+    columns.push({ key: "type", header: t("employeesSettings.columns.type"), cell: (record) => "type" in record ? record.type.toUpperCase() : "-" });
+    columns.push({
+      key: "maxDuration",
+      header: t("employeesSettings.columns.maxDuration"),
+      cell: (record) => ("maxDurationMonths" in record ? record.maxDurationMonths ?? "-" : "-")
+    });
+  }
+  if (section.masterKind === "banks") {
+    columns.push({ key: "swift", header: t("employeesSettings.columns.swift"), cell: (record) => "swift" in record ? record.swift ?? "-" : "-" });
+  }
+  if (section.masterKind === "document-types") {
+    columns.push({
+      key: "mandatory",
+      header: t("employeesSettings.columns.mandatory"),
+      cell: (record) => ("isMandatory" in record && record.isMandatory ? t("employeesSettings.values.yes") : t("employeesSettings.values.no"))
+    });
+  }
+  if (section.masterKind === "education-levels") {
     columns.push({ key: "order", header: t("employeesSettings.columns.order"), cell: (record) => "order" in record ? record.order : "-" });
   }
   if (section.masterKind === "work-locations") {

@@ -2,6 +2,13 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-09 - Backend Master Data Modul Karyawan
+
+- Menambahkan endpoint company-scoped `/employees/master/*` untuk Departemen, Jabatan, Tipe Kontrak, Agama, Bank, Jenis Dokumen, dan Pendidikan dengan permission `karyawan.settings`.
+- Melengkapi schema master data Karyawan, termasuk `contract_types`, metadata departemen/jabatan, SWIFT bank, mandatory dokumen, dan order pendidikan.
+- Menambahkan default master data per company untuk Agama, Bank, Tipe Kontrak, Jenis Dokumen, dan Pendidikan, dipanggil saat company dibuat dan dari setup wizard.
+- Menyambungkan Settings Modul Karyawan dan form karyawan ke endpoint master baru, termasuk filter Jabatan berdasarkan Departemen.
+
 ## 2026-06-09 - Fix Hydration Form Karyawan
 
 - Memindahkan render awal halaman `/dashboard/employees/new` dan `/dashboard/employees/{id}/edit` ke client-only dynamic import untuk mencegah mismatch SVG/icon dari state auth/company context saat SSR.

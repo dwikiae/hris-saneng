@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Setup\CompleteSetupRequest;
 use App\Models\Company;
 use App\Models\User;
+use App\Modules\Karyawan\Application\EmployeeDefaultMasterDataService;
 use App\Repositories\Contracts\CompanyRepositoryInterface;
 use App\Repositories\Contracts\InstanceSettingsRepositoryInterface;
 use App\Repositories\Contracts\SettingsRepositoryInterface;
@@ -25,6 +26,7 @@ class SetupController extends Controller
         private readonly InstanceSettingsRepositoryInterface $instanceSettings,
         private readonly SettingsRepositoryInterface $companySettings,
         private readonly PlatformAdministratorAssignmentService $platformAdministrators,
+        private readonly EmployeeDefaultMasterDataService $employeeDefaults,
     ) {}
 
     public function status(): JsonResponse
@@ -48,6 +50,7 @@ class SetupController extends Controller
         $company = $this->firstOrCreateCompany($companyData);
         $admin = $this->firstOrCreateInstanceAdmin($adminData);
         $this->platformAdministrators->assignAllToCompany($company);
+        $this->employeeDefaults->seedForCompany((int) $company->getKey());
 
         $this->seedCompanySettings((int) $company->getKey());
         $this->instanceSettings->setMany([

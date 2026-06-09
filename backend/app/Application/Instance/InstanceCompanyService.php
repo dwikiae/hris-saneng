@@ -3,6 +3,7 @@
 namespace App\Application\Instance;
 
 use App\Models\Company;
+use App\Modules\Karyawan\Application\EmployeeDefaultMasterDataService;
 use App\Repositories\Contracts\InstanceCompanyRepositoryInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -60,6 +61,7 @@ class InstanceCompanyService
     public function __construct(
         private readonly InstanceCompanyRepositoryInterface $companies,
         private readonly PlatformAdministratorAssignmentService $platformAdministrators,
+        private readonly EmployeeDefaultMasterDataService $employeeDefaults,
     ) {}
 
     /**
@@ -83,6 +85,7 @@ class InstanceCompanyService
         $company = $this->companies->create($this->corePayload($payload));
         $this->companies->syncSettings($company, $this->settingsPayload($payload));
         $this->platformAdministrators->assignAllToCompany($company);
+        $this->employeeDefaults->seedForCompany((int) $company->getKey());
 
         return $this->companies->find((int) $company->getKey()) ?? $company;
     }

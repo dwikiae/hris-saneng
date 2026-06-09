@@ -5,12 +5,9 @@ namespace App\Modules\Karyawan\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Karyawan\Application\EmployeeMasterService;
 use App\Modules\Karyawan\Http\Requests\ListEmployeeMasterRequest;
-use App\Modules\Karyawan\Http\Requests\StoreEmployeeLevelRequest;
-use App\Modules\Karyawan\Http\Requests\StoreWorkLocationRequest;
-use App\Modules\Karyawan\Http\Requests\UpdateEmployeeLevelRequest;
-use App\Modules\Karyawan\Http\Requests\UpdateWorkLocationRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -27,6 +24,9 @@ abstract class EmployeeMasterController extends Controller
         }
         if ($request->filled('search')) {
             $filters['search'] = (string) $request->query('search');
+        }
+        if ($request->filled('department_id')) {
+            $filters['department_id'] = (int) $request->query('department_id');
         }
 
         $items = $this->service->list($this->companyId($request), $filters)
@@ -71,7 +71,7 @@ abstract class EmployeeMasterController extends Controller
         return $this->success(null, $this->messageKey('restored'));
     }
 
-    protected function create(StoreWorkLocationRequest|StoreEmployeeLevelRequest $request): JsonResponse
+    protected function create(FormRequest $request): JsonResponse
     {
         $record = $this->service->create(
             $this->companyId($request),
@@ -82,7 +82,7 @@ abstract class EmployeeMasterController extends Controller
         return $this->success($this->resource($record), $this->messageKey('created'), 201);
     }
 
-    protected function replace(UpdateWorkLocationRequest|UpdateEmployeeLevelRequest $request, int $id): JsonResponse
+    protected function replace(FormRequest $request, int $id): JsonResponse
     {
         try {
             $record = $this->service->update(

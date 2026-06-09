@@ -23,25 +23,50 @@ export const employeeSettingsGroups: Array<{ labelKey: string; items: EmployeeSe
   {
     labelKey: "employeesSettings.nav.masterData",
     items: [
-      { slug: "departemen", labelKey: "employeesSettings.sections.departemen", entityKey: "departemen" },
-      { slug: "jabatan", labelKey: "employeesSettings.sections.jabatan", entityKey: "jabatan" },
+      {
+        slug: "departemen",
+        labelKey: "employeesSettings.sections.departemen",
+        entityKey: "departemen",
+        masterKind: "departments"
+      },
+      {
+        slug: "jabatan",
+        labelKey: "employeesSettings.sections.jabatan",
+        entityKey: "jabatan",
+        masterKind: "job-positions"
+      },
       {
         slug: "level-grade",
         labelKey: "employeesSettings.sections.levelGrade",
         entityKey: "levelGrade",
         masterKind: "employee-levels"
       },
-      { slug: "tipe-kontrak", labelKey: "employeesSettings.sections.tipeKontrak", entityKey: "tipeKontrak" },
+      {
+        slug: "tipe-kontrak",
+        labelKey: "employeesSettings.sections.tipeKontrak",
+        entityKey: "tipeKontrak",
+        masterKind: "contract-types"
+      },
       {
         slug: "lokasi-kerja",
         labelKey: "employeesSettings.sections.lokasiKerja",
         entityKey: "lokasiKerja",
         masterKind: "work-locations"
       },
-      { slug: "agama", labelKey: "employeesSettings.sections.agama", entityKey: "agama" },
-      { slug: "bank", labelKey: "employeesSettings.sections.bank", entityKey: "bank" },
-      { slug: "jenis-dokumen", labelKey: "employeesSettings.sections.jenisDokumen", entityKey: "jenisDokumen" },
-      { slug: "pendidikan", labelKey: "employeesSettings.sections.pendidikan", entityKey: "pendidikan" }
+      { slug: "agama", labelKey: "employeesSettings.sections.agama", entityKey: "agama", masterKind: "religions" },
+      { slug: "bank", labelKey: "employeesSettings.sections.bank", entityKey: "bank", masterKind: "banks" },
+      {
+        slug: "jenis-dokumen",
+        labelKey: "employeesSettings.sections.jenisDokumen",
+        entityKey: "jenisDokumen",
+        masterKind: "document-types"
+      },
+      {
+        slug: "pendidikan",
+        labelKey: "employeesSettings.sections.pendidikan",
+        entityKey: "pendidikan",
+        masterKind: "education-levels"
+      }
     ]
   },
   {

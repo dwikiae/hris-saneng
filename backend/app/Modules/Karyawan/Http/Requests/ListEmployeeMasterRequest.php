@@ -19,6 +19,7 @@ class ListEmployeeMasterRequest extends FormRequest
         return [
             'search' => ['nullable', 'string', 'max:100'],
             'is_active' => ['nullable', 'boolean'],
+            'department_id' => ['nullable', 'integer'],
         ];
     }
 }

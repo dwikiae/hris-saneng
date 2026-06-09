@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Modules\Karyawan\Database\Seeders\CitySeeder;
 use App\Modules\Karyawan\Database\Seeders\CountrySeeder;
+use App\Modules\Karyawan\Database\Seeders\EmployeeDefaultMasterDataSeeder;
 use App\Modules\Karyawan\Database\Seeders\ProvinceSeeder;
 use Illuminate\Database\Seeder;
 
@@ -20,20 +21,14 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             CountrySeeder::class,
             CompanySeeder::class,
+            EmployeeDefaultMasterDataSeeder::class,
             CompanySettingsSeeder::class,
             PermissionSeeder::class,
             RoleSeeder::class,
             AdminUserSeeder::class,
             PlatformAdministratorAssignmentSeeder::class,
-            DepartmentSeeder::class,
-            PositionSeeder::class,
-            EmploymentTypeSeeder::class,
-            EducationLevelSeeder::class,
-            ReligionSeeder::class,
             MaritalStatusSeeder::class,
             BloodTypeSeeder::class,
-            BankSeeder::class,
-            DocumentTypeSeeder::class,
             EmployeeSeeder::class,
         ]);
     }

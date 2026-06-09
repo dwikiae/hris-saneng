@@ -2,6 +2,8 @@
 
 namespace App\Modules\Karyawan\Repositories\Eloquent;
 
+use App\Models\Department;
+use App\Models\Employee;
 use App\Modules\Karyawan\Repositories\Contracts\EmployeeMasterRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -25,8 +27,18 @@ class EmployeeMasterRepository implements EmployeeMasterRepositoryInterface
             ->orderBy($this->orderColumn())
             ->orderBy('name');
 
+        if ($this->modelClass === Department::class) {
+            $query->withCount([
+                'employees as total_employees' => fn ($query) => $query->where('status', Employee::ACTIVE),
+            ]);
+        }
+
         if (array_key_exists('is_active', $filters)) {
             $query->where('is_active', (bool) $filters['is_active']);
+        }
+
+        if (array_key_exists('department_id', $filters) && $this->hasFillable('department_id')) {
+            $query->where('department_id', (int) $filters['department_id']);
         }
 
         if (($filters['search'] ?? '') !== '') {
@@ -103,6 +115,11 @@ class EmployeeMasterRepository implements EmployeeMasterRepositoryInterface
 
     private function orderColumn(): string
     {
-        return in_array('order', (new $this->modelClass)->getFillable(), true) ? 'order' : 'code';
+        return $this->hasFillable('order') ? 'order' : 'code';
+    }
+
+    private function hasFillable(string $field): bool
+    {
+        return in_array($field, (new $this->modelClass)->getFillable(), true);
     }
 }

@@ -515,6 +515,12 @@
       "code": "Code",
       "name": "Name",
       "order": "Order",
+      "totalEmployees": "Active Employees",
+      "department": "Department",
+      "type": "Type",
+      "maxDuration": "Max Duration",
+      "swift": "SWIFT",
+      "mandatory": "Mandatory",
       "city": "City",
       "address": "Address",
       "status": "Status",
@@ -525,6 +531,12 @@
       "name": "Name",
       "description": "Description",
       "order": "Order",
+      "parentDepartment": "Parent department",
+      "department": "Department",
+      "type": "Contract type",
+      "maxDurationMonths": "Maximum duration (months)",
+      "swift": "SWIFT",
+      "isMandatory": "Mandatory",
       "city": "City code",
       "cityPlaceholder": "Example: 3171",
       "address": "Address",
@@ -538,6 +550,10 @@
     "status": {
       "active": "Active",
       "inactive": "Inactive"
+    },
+    "values": {
+      "yes": "Yes",
+      "no": "No"
     },
     "actions": {
       "new": "Add {{entity}}",

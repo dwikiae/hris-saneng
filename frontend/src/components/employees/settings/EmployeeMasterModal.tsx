@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,16 +12,17 @@ import {
   DialogTitle
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import type {
-  EmployeeLevel,
-  EmployeeMasterKind,
-  EmployeeMasterPayload,
-  EmployeeMasterRecord,
-  WorkLocation
-} from "@/types/employee-settings";
+import type { EmployeeMasterKind, EmployeeMasterPayload, EmployeeMasterRecord } from "@/types/employee-settings";
+import {
+  EmployeeMasterSpecificFields,
+  Field,
+  stateFromRecord,
+  type EmployeeMasterFormState
+} from "./EmployeeMasterModalFields";
 
 interface EmployeeMasterModalProps {
   open: boolean;
+  company: string;
   kind: EmployeeMasterKind;
   entityLabel: string;
   record?: EmployeeMasterRecord | null;
@@ -31,38 +31,9 @@ interface EmployeeMasterModalProps {
   onSubmit: (payload: EmployeeMasterPayload) => void;
 }
 
-interface FormState {
-  code: string;
-  name: string;
-  description: string;
-  order: string;
-  cityId: string;
-  address: string;
-  isActive: boolean;
-}
-
-function stateFromRecord(record?: EmployeeMasterRecord | null): FormState {
-  return {
-    code: record?.code ?? "",
-    name: record?.name ?? "",
-    description: isEmployeeLevel(record) ? String(record.description ?? "") : "",
-    order: isEmployeeLevel(record) ? String(record.order ?? 0) : "0",
-    cityId: isWorkLocation(record) ? String(record.cityId ?? "") : "",
-    address: isWorkLocation(record) ? String(record.address ?? "") : "",
-    isActive: record?.isActive ?? true
-  };
-}
-
-function isEmployeeLevel(record?: EmployeeMasterRecord | null): record is EmployeeLevel {
-  return Boolean(record && "order" in record);
-}
-
-function isWorkLocation(record?: EmployeeMasterRecord | null): record is WorkLocation {
-  return Boolean(record && "cityId" in record);
-}
-
 export function EmployeeMasterModal({
   open,
+  company,
   kind,
   entityLabel,
   record,
@@ -71,7 +42,7 @@ export function EmployeeMasterModal({
   onSubmit
 }: EmployeeMasterModalProps) {
   const { t } = useTranslation("platform");
-  const [state, setState] = useState<FormState>(() => stateFromRecord(record));
+  const [state, setState] = useState<EmployeeMasterFormState>(() => stateFromRecord(record));
   const isEditing = Boolean(record);
 
   useEffect(() => {
@@ -80,29 +51,8 @@ export function EmployeeMasterModal({
     }
   }, [open, record]);
 
-  const update = (key: keyof FormState, value: string | boolean) => {
+  const update = (key: keyof EmployeeMasterFormState, value: string | boolean) => {
     setState((current) => ({ ...current, [key]: value }));
-  };
-
-  const submit = () => {
-    if (kind === "employee-levels") {
-      onSubmit({
-        code: state.code,
-        name: state.name,
-        description: state.description.trim() || null,
-        order: Number(state.order || 0),
-        is_active: state.isActive
-      });
-      return;
-    }
-
-    onSubmit({
-      code: state.code,
-      name: state.name,
-      city_id: state.cityId.trim() || null,
-      address: state.address.trim() || null,
-      is_active: state.isActive
-    });
   };
 
   return (
@@ -119,58 +69,12 @@ export function EmployeeMasterModal({
 
         <div className="grid gap-4">
           <Field label={t("employeesSettings.fields.code")} htmlFor="employee-master-code" required>
-            <Input
-              id="employee-master-code"
-              value={state.code}
-              onChange={(event) => update("code", event.target.value)}
-            />
+            <Input id="employee-master-code" value={state.code} onChange={(event) => update("code", event.target.value)} />
           </Field>
           <Field label={t("employeesSettings.fields.name")} htmlFor="employee-master-name" required>
-            <Input
-              id="employee-master-name"
-              value={state.name}
-              onChange={(event) => update("name", event.target.value)}
-            />
+            <Input id="employee-master-name" value={state.name} onChange={(event) => update("name", event.target.value)} />
           </Field>
-          {kind === "employee-levels" ? (
-            <>
-              <Field label={t("employeesSettings.fields.order")} htmlFor="employee-master-order">
-                <Input
-                  id="employee-master-order"
-                  type="number"
-                  min={0}
-                  value={state.order}
-                  onChange={(event) => update("order", event.target.value)}
-                />
-              </Field>
-              <Field label={t("employeesSettings.fields.description")} htmlFor="employee-master-description">
-                <Input
-                  id="employee-master-description"
-                  value={state.description}
-                  onChange={(event) => update("description", event.target.value)}
-                />
-              </Field>
-            </>
-          ) : null}
-          {kind === "work-locations" ? (
-            <>
-              <Field label={t("employeesSettings.fields.city")} htmlFor="employee-master-city">
-                <Input
-                  id="employee-master-city"
-                  value={state.cityId}
-                  placeholder={t("employeesSettings.fields.cityPlaceholder")}
-                  onChange={(event) => update("cityId", event.target.value)}
-                />
-              </Field>
-              <Field label={t("employeesSettings.fields.address")} htmlFor="employee-master-address">
-                <Input
-                  id="employee-master-address"
-                  value={state.address}
-                  onChange={(event) => update("address", event.target.value)}
-                />
-              </Field>
-            </>
-          ) : null}
+          <EmployeeMasterSpecificFields company={company} kind={kind} record={record} state={state} update={update} t={t} />
           <label className="flex items-center gap-2 text-sm font-medium text-foreground">
             <input
               type="checkbox"
@@ -186,7 +90,7 @@ export function EmployeeMasterModal({
           <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
             {t("employeesSettings.actions.cancel")}
           </Button>
-          <Button type="button" disabled={isSubmitting || !state.code || !state.name} onClick={submit}>
+          <Button type="button" disabled={isSubmitting || !state.code || !state.name} onClick={() => onSubmit(payloadFor(kind, state))}>
             {t("employeesSettings.actions.save")}
           </Button>
         </DialogFooter>
@@ -195,24 +99,75 @@ export function EmployeeMasterModal({
   );
 }
 
-function Field({
-  label,
-  htmlFor,
-  required = false,
-  children
-}: {
-  label: string;
-  htmlFor: string;
-  required?: boolean;
-  children: ReactNode;
-}) {
-  return (
-    <div className="space-y-2">
-      <label className="text-sm font-medium text-foreground" htmlFor={htmlFor}>
-        {label}
-        {required ? <span className="text-destructive"> *</span> : null}
-      </label>
-      {children}
-    </div>
-  );
+function payloadFor(kind: EmployeeMasterKind, state: EmployeeMasterFormState): EmployeeMasterPayload {
+  if (kind === "employee-levels" || kind === "education-levels") {
+    return {
+      code: state.code,
+      name: state.name,
+      ...(kind === "employee-levels" ? { description: nullable(state.description) } : {}),
+      order: Number(state.order || 0),
+      is_active: state.isActive
+    };
+  }
+
+  if (kind === "departments") {
+    return {
+      code: state.code,
+      name: state.name,
+      description: nullable(state.description),
+      parent_id: state.parentId || null,
+      is_active: state.isActive
+    };
+  }
+
+  if (kind === "job-positions") {
+    return {
+      code: state.code,
+      name: state.name,
+      department_id: state.departmentId || null,
+      description: nullable(state.description),
+      is_active: state.isActive
+    };
+  }
+
+  if (kind === "contract-types") {
+    return {
+      code: state.code,
+      name: state.name,
+      type: state.type,
+      description: nullable(state.description),
+      max_duration_months: state.maxDurationMonths ? Number(state.maxDurationMonths) : null,
+      is_active: state.isActive
+    };
+  }
+
+  if (kind === "banks") {
+    return { code: state.code, name: state.name, swift: nullable(state.swift), is_active: state.isActive };
+  }
+
+  if (kind === "document-types") {
+    return {
+      code: state.code,
+      name: state.name,
+      is_mandatory: state.isMandatory,
+      description: nullable(state.description),
+      is_active: state.isActive
+    };
+  }
+
+  if (kind === "religions") {
+    return { code: state.code, name: state.name, is_active: state.isActive };
+  }
+
+  return {
+    code: state.code,
+    name: state.name,
+    city_id: nullable(state.cityId),
+    address: nullable(state.address),
+    is_active: state.isActive
+  };
+}
+
+function nullable(value: string): string | null {
+  return value.trim() === "" ? null : value.trim();
 }

@@ -22,6 +22,7 @@ class EducationLevel extends Model implements Archivable
         'company_id',
         'code',
         'name',
+        'order',
         'is_active',
         'created_by',
         'updated_by',
@@ -30,6 +31,7 @@ class EducationLevel extends Model implements Archivable
     ];
 
     protected $casts = [
+        'order' => 'integer',
         'is_active' => 'boolean',
     ];
 }

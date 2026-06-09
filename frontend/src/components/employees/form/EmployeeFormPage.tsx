@@ -18,6 +18,7 @@ import { employeeLookupService, employeeService } from "@/services/employee.serv
 import { wilayahService } from "@/services/wilayah.service";
 import { useAuthStore } from "@/stores/auth.store";
 import type { EmployeeContractPayload, EmployeeDetail } from "@/types/employee";
+import type { EmployeeMasterRecord } from "@/types/employee-settings";
 import { contractSections } from "./EmployeeContractSections";
 import { employmentSections } from "./EmployeeEmploymentSections";
 import { profileSections } from "./EmployeeProfileSections";
@@ -71,7 +72,7 @@ export function EmployeeFormPage({ mode, employeeId }: EmployeeFormPageProps) {
     queryFn: () => employeeService.getEmergencyContacts(employeeId ?? ""),
     enabled: mode === "edit" && Boolean(employeeId) && hasCompanyContext
   });
-  const lookups = useEmployeeFormLookups(activeCompanyId, state.provinceId, state.domicileProvinceId);
+  const lookups = useEmployeeFormLookups(activeCompanyId, state.departmentId, state.provinceId, state.domicileProvinceId);
   const isLoading = detailQuery.isLoading || contractsQuery.isLoading || emergencyContactsQuery.isLoading || lookups.isLoading;
   const isDirty = JSON.stringify(state) !== initialSnapshot;
 
@@ -152,6 +153,9 @@ export function EmployeeFormPage({ mode, employeeId }: EmployeeFormPageProps) {
   function update<K extends keyof EmployeeFormState>(field: K, value: EmployeeFormState[K]) {
     setState((current) => {
       const next = { ...current, [field]: value };
+      if (field === "departmentId") {
+        next.positionId = "";
+      }
       return field === "joinDate" ? applyProbationDefault(next, lookups.settings) : next;
     });
   }
@@ -225,15 +229,16 @@ export function EmployeeFormPage({ mode, employeeId }: EmployeeFormPageProps) {
   }
 }
 
-function useEmployeeFormLookups(companyId: string | null, provinceId: string, domicileProvinceId: string) {
+function useEmployeeFormLookups(companyId: string | null, departmentId: string, provinceId: string, domicileProvinceId: string) {
   const queries = {
-    departments: useQuery({ queryKey: ["employees", companyId, "lookup", "departments"], queryFn: employeeLookupService.departments, enabled: Boolean(companyId) }),
-    positions: useQuery({ queryKey: ["employees", companyId, "lookup", "positions"], queryFn: employeeLookupService.positions, enabled: Boolean(companyId) }),
+    departments: useQuery({ queryKey: ["employees", "master", companyId, "departments"], queryFn: () => employeeMasterService.list(companyId ?? "", "departments", { isActive: true }), enabled: Boolean(companyId) }),
+    positions: useQuery({ queryKey: ["employees", "master", companyId, "job-positions", departmentId], queryFn: () => employeeMasterService.list(companyId ?? "", "job-positions", { isActive: true, departmentId: departmentId || null }), enabled: Boolean(companyId) }),
+    contractTypes: useQuery({ queryKey: ["employees", "master", companyId, "contract-types"], queryFn: () => employeeMasterService.list(companyId ?? "", "contract-types", { isActive: true }), enabled: Boolean(companyId) }),
     employmentTypes: useQuery({ queryKey: ["employees", companyId, "lookup", "employment-types"], queryFn: employeeLookupService.employmentTypes, enabled: Boolean(companyId) }),
-    religions: useQuery({ queryKey: ["employees", companyId, "lookup", "religions"], queryFn: employeeLookupService.religions, enabled: Boolean(companyId) }),
+    religions: useQuery({ queryKey: ["employees", "master", companyId, "religions"], queryFn: () => employeeMasterService.list(companyId ?? "", "religions", { isActive: true }), enabled: Boolean(companyId) }),
     maritalStatuses: useQuery({ queryKey: ["employees", companyId, "lookup", "marital-statuses"], queryFn: employeeLookupService.maritalStatuses, enabled: Boolean(companyId) }),
     bloodTypes: useQuery({ queryKey: ["employees", companyId, "lookup", "blood-types"], queryFn: employeeLookupService.bloodTypes, enabled: Boolean(companyId) }),
-    banks: useQuery({ queryKey: ["employees", companyId, "lookup", "banks"], queryFn: employeeLookupService.banks, enabled: Boolean(companyId) }),
+    banks: useQuery({ queryKey: ["employees", "master", companyId, "banks"], queryFn: () => employeeMasterService.list(companyId ?? "", "banks", { isActive: true }), enabled: Boolean(companyId) }),
     supervisors: useQuery({ queryKey: ["employees", companyId, "lookup", "supervisors"], queryFn: () => employeeService.list({ status: "active", perPage: 100 }), enabled: Boolean(companyId) }),
     provinces: useQuery({ queryKey: ["wilayah", "provinces"], queryFn: wilayahService.provinces }),
     ktpCities: useQuery({ queryKey: ["wilayah", "cities", provinceId], queryFn: () => wilayahService.cities(provinceId), enabled: Boolean(provinceId) }),
@@ -247,13 +252,14 @@ function useEmployeeFormLookups(companyId: string | null, provinceId: string, do
 
   return {
     isLoading,
-    departments: queries.departments.data ?? [],
-    positions: queries.positions.data ?? [],
+    departments: toLookupOptions(queries.departments.data ?? []),
+    positions: toLookupOptions(queries.positions.data ?? []),
+    contractTypes: queries.contractTypes.data ?? [],
     employmentTypes: queries.employmentTypes.data ?? [],
-    religions: queries.religions.data ?? [],
+    religions: toLookupOptions(queries.religions.data ?? []),
     maritalStatuses: queries.maritalStatuses.data ?? [],
     bloodTypes: queries.bloodTypes.data ?? [],
-    banks: queries.banks.data ?? [],
+    banks: toLookupOptions(queries.banks.data ?? []),
     supervisors: queries.supervisors.data?.items ?? [],
     provinces: queries.provinces.data ?? [],
     ktpCities: queries.ktpCities.data ?? [],
@@ -275,7 +281,7 @@ function buildSections(
 ): FormTemplateSection[] {
   const context = { state, errors, t, update };
   if (tab === "kepegawaian") return employmentSections(lookups)(context);
-  if (tab === "kontrak") return contractSections(context);
+  if (tab === "kontrak") return contractSections(lookups.contractTypes)(context);
   if (tab === "data-sensitif") return sensitiveSections(lookups.banks)(context);
   return profileSections(lookups)(context);
 }
@@ -312,4 +318,8 @@ function cancelAction(isDirty: boolean, backUrl: string, t: (key: string) => str
       </Button>
     </ConfirmDialog>
   );
+}
+
+function toLookupOptions(items: EmployeeMasterRecord[]) {
+  return items.map((item) => ({ id: item.id, code: item.code, name: item.name }));
 }

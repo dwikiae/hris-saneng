@@ -515,6 +515,12 @@
       "code": "Kode",
       "name": "Nama",
       "order": "Urutan",
+      "totalEmployees": "Karyawan Aktif",
+      "department": "Departemen",
+      "type": "Tipe",
+      "maxDuration": "Durasi Maks.",
+      "swift": "SWIFT",
+      "mandatory": "Wajib",
       "city": "Kota",
       "address": "Alamat",
       "status": "Status",
@@ -525,6 +531,12 @@
       "name": "Nama",
       "description": "Deskripsi",
       "order": "Urutan",
+      "parentDepartment": "Induk departemen",
+      "department": "Departemen",
+      "type": "Tipe kontrak",
+      "maxDurationMonths": "Durasi maksimal (bulan)",
+      "swift": "SWIFT",
+      "isMandatory": "Wajib",
       "city": "Kode kota",
       "cityPlaceholder": "Contoh: 3171",
       "address": "Alamat",
@@ -538,6 +550,10 @@
     "status": {
       "active": "Aktif",
       "inactive": "Nonaktif"
+    },
+    "values": {
+      "yes": "Ya",
+      "no": "Tidak"
     },
     "actions": {
       "new": "Tambah {{entity}}",

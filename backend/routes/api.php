@@ -48,8 +48,15 @@ use App\Http\Controllers\Api\V1\Recruitment\JobPostingController;
 use App\Http\Controllers\Api\V1\Recruitment\TestController;
 use App\Http\Controllers\Api\V1\Settings\SettingsController;
 use App\Http\Controllers\Api\V1\Setup\SetupController;
+use App\Modules\Karyawan\Http\Controllers\BankMasterController;
+use App\Modules\Karyawan\Http\Controllers\ContractTypeController;
+use App\Modules\Karyawan\Http\Controllers\DepartmentMasterController;
+use App\Modules\Karyawan\Http\Controllers\DocumentTypeMasterController;
+use App\Modules\Karyawan\Http\Controllers\EducationLevelMasterController;
 use App\Modules\Karyawan\Http\Controllers\EmployeeLevelController;
 use App\Modules\Karyawan\Http\Controllers\EmployeeModuleSettingsController;
+use App\Modules\Karyawan\Http\Controllers\JobPositionController;
+use App\Modules\Karyawan\Http\Controllers\ReligionMasterController;
 use App\Modules\Karyawan\Http\Controllers\WilayahController;
 use App\Modules\Karyawan\Http\Controllers\WorkLocationController;
 use Illuminate\Support\Facades\Route;
@@ -170,6 +177,69 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(functio
             Route::post('{id}', [EmployeeLevelController::class, 'postUpdate']);
             Route::post('{id}/archive', [EmployeeLevelController::class, 'archive']);
             Route::post('{id}/restore', [EmployeeLevelController::class, 'restore']);
+        });
+
+        Route::prefix('master/departments')->group(function () {
+            Route::get('/', [DepartmentMasterController::class, 'index']);
+            Route::post('/', [DepartmentMasterController::class, 'store']);
+            Route::get('{id}', [DepartmentMasterController::class, 'show']);
+            Route::patch('{id}', [DepartmentMasterController::class, 'update']);
+            Route::patch('{id}/archive', [DepartmentMasterController::class, 'archive']);
+            Route::patch('{id}/restore', [DepartmentMasterController::class, 'restore']);
+        });
+
+        Route::prefix('master/job-positions')->group(function () {
+            Route::get('/', [JobPositionController::class, 'index']);
+            Route::post('/', [JobPositionController::class, 'store']);
+            Route::get('{id}', [JobPositionController::class, 'show']);
+            Route::patch('{id}', [JobPositionController::class, 'update']);
+            Route::patch('{id}/archive', [JobPositionController::class, 'archive']);
+            Route::patch('{id}/restore', [JobPositionController::class, 'restore']);
+        });
+
+        Route::prefix('master/contract-types')->group(function () {
+            Route::get('/', [ContractTypeController::class, 'index']);
+            Route::post('/', [ContractTypeController::class, 'store']);
+            Route::get('{id}', [ContractTypeController::class, 'show']);
+            Route::patch('{id}', [ContractTypeController::class, 'update']);
+            Route::patch('{id}/archive', [ContractTypeController::class, 'archive']);
+            Route::patch('{id}/restore', [ContractTypeController::class, 'restore']);
+        });
+
+        Route::prefix('master/religions')->group(function () {
+            Route::get('/', [ReligionMasterController::class, 'index']);
+            Route::post('/', [ReligionMasterController::class, 'store']);
+            Route::get('{id}', [ReligionMasterController::class, 'show']);
+            Route::patch('{id}', [ReligionMasterController::class, 'update']);
+            Route::patch('{id}/archive', [ReligionMasterController::class, 'archive']);
+            Route::patch('{id}/restore', [ReligionMasterController::class, 'restore']);
+        });
+
+        Route::prefix('master/banks')->group(function () {
+            Route::get('/', [BankMasterController::class, 'index']);
+            Route::post('/', [BankMasterController::class, 'store']);
+            Route::get('{id}', [BankMasterController::class, 'show']);
+            Route::patch('{id}', [BankMasterController::class, 'update']);
+            Route::patch('{id}/archive', [BankMasterController::class, 'archive']);
+            Route::patch('{id}/restore', [BankMasterController::class, 'restore']);
+        });
+
+        Route::prefix('master/document-types')->group(function () {
+            Route::get('/', [DocumentTypeMasterController::class, 'index']);
+            Route::post('/', [DocumentTypeMasterController::class, 'store']);
+            Route::get('{id}', [DocumentTypeMasterController::class, 'show']);
+            Route::patch('{id}', [DocumentTypeMasterController::class, 'update']);
+            Route::patch('{id}/archive', [DocumentTypeMasterController::class, 'archive']);
+            Route::patch('{id}/restore', [DocumentTypeMasterController::class, 'restore']);
+        });
+
+        Route::prefix('master/education-levels')->group(function () {
+            Route::get('/', [EducationLevelMasterController::class, 'index']);
+            Route::post('/', [EducationLevelMasterController::class, 'store']);
+            Route::get('{id}', [EducationLevelMasterController::class, 'show']);
+            Route::patch('{id}', [EducationLevelMasterController::class, 'update']);
+            Route::patch('{id}/archive', [EducationLevelMasterController::class, 'archive']);
+            Route::patch('{id}/restore', [EducationLevelMasterController::class, 'restore']);
         });
     });
 

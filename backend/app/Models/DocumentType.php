@@ -22,6 +22,8 @@ class DocumentType extends Model implements Archivable
         'company_id',
         'code',
         'name',
+        'is_mandatory',
+        'description',
         'is_active',
         'created_by',
         'updated_by',
@@ -30,6 +32,7 @@ class DocumentType extends Model implements Archivable
     ];
 
     protected $casts = [
+        'is_mandatory' => 'boolean',
         'is_active' => 'boolean',
     ];
 }
