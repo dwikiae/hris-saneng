@@ -150,6 +150,7 @@ Route::prefix('v1')->middleware(['auth:sanctum', 'ip.whitelist'])->group(functio
     Route::prefix('{company}/employees')->middleware('company.resolve')->group(function () {
         Route::get('settings', [EmployeeModuleSettingsController::class, 'show']);
         Route::put('settings', [EmployeeModuleSettingsController::class, 'update']);
+        Route::post('settings/number-format/preview', [EmployeeModuleSettingsController::class, 'previewNumberFormat']);
 
         Route::prefix('master/work-locations')->group(function () {
             Route::get('/', [WorkLocationController::class, 'index']);

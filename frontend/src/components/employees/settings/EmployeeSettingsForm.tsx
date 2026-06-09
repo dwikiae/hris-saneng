@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Save } from "lucide-react";
+import { Eye, Loader2, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { platformToast } from "@/components/platform/ToastProvider";
@@ -10,17 +10,19 @@ import { LoadingSkeleton } from "@/components/shared/LoadingSkeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { employeeSettingsService } from "@/services/employee-settings.service";
-import type { EmployeeModuleSettings } from "@/types/employee-settings";
+import type { EmployeeModuleSettings, EmployeeNumberFormatPreview, EmployeeNumberFormatToken } from "@/types/employee-settings";
 
 const defaultSettings: EmployeeModuleSettings = {
-  employee_number_format: "EMP-{YYYY}-{SEQ}",
+  employee_number_format: "EMP-{SEQ:3}",
   probation_days: 90,
   contract_expiry_notify_days: 30,
   pkwt_max_months: 24
 };
 
+const defaultNumberFormat = "EMP-{SEQ:3}";
+
 export function EmployeeSettingsForm({ company }: { company: string }) {
-  const { t } = useTranslation("platform");
+  const { t, i18n } = useTranslation("platform");
   const queryClient = useQueryClient();
   const query = useQuery({
     queryKey: ["employees", "settings", company, "configuration"],
@@ -28,26 +30,48 @@ export function EmployeeSettingsForm({ company }: { company: string }) {
   });
   const [state, setState] = useState<EmployeeModuleSettings>(defaultSettings);
   const [isDirty, setIsDirty] = useState(false);
+  const [preview, setPreview] = useState<EmployeeNumberFormatPreview | null>(null);
+  const [formatError, setFormatError] = useState<string | null>(null);
 
   useEffect(() => {
     if (query.data) {
       setState({
         ...defaultSettings,
         ...query.data,
+        employee_number_format: query.data.number_format ?? query.data.employee_number_format ?? defaultNumberFormat,
         pkwt_max_months: Number(query.data.pkwt_max_months ?? defaultSettings.pkwt_max_months)
       });
+      setPreview(null);
+      setFormatError(null);
       setIsDirty(false);
     }
   }, [query.data]);
 
   const mutation = useMutation({
-    mutationFn: () => employeeSettingsService.update(company, state),
+    mutationFn: () => employeeSettingsService.update(company, normalizedPayload(state)),
     onSuccess: (data) => {
       queryClient.setQueryData(["employees", "settings", company, "configuration"], data);
       setIsDirty(false);
+      setFormatError(null);
       platformToast.success(t("employeesSettings.toast.settingsSaved"));
     },
-    onError: (error) => platformToast.error(error instanceof Error ? error.message : t("employeesSettings.toast.failed"))
+    onError: (error) => {
+      const message = error instanceof Error ? error.message : t("employeesSettings.toast.failed");
+      setFormatError(message);
+      platformToast.error(message);
+    }
+  });
+
+  const previewMutation = useMutation({
+    mutationFn: () => employeeSettingsService.previewNumberFormat(company, numberFormatValue(state.employee_number_format)),
+    onSuccess: (data) => {
+      setPreview(data);
+      setFormatError(null);
+    },
+    onError: (error) => {
+      setPreview(null);
+      setFormatError(error instanceof Error ? error.message : t("employeesSettings.toast.failed"));
+    }
   });
 
   const update = (key: keyof EmployeeModuleSettings, value: string) => {
@@ -56,6 +80,15 @@ export function EmployeeSettingsForm({ company }: { company: string }) {
       [key]: key === "employee_number_format" ? value : Number(value)
     }));
     setIsDirty(true);
+    if (key === "employee_number_format") {
+      setPreview(null);
+      setFormatError(null);
+    }
+  };
+
+  const tokens = preview?.tokens_available ?? query.data?.number_format_tokens_available ?? [];
+  const appendToken = (token: string) => {
+    update("employee_number_format", `${state.employee_number_format}${token}`);
   };
 
   if (query.isLoading) {
@@ -86,13 +119,26 @@ export function EmployeeSettingsForm({ company }: { company: string }) {
           <Input
             id="employee-number-format"
             value={state.employee_number_format}
-            placeholder="EMP-{YYYY}-{SEQ}"
+            placeholder={defaultNumberFormat}
             onChange={(event) => update("employee_number_format", event.target.value)}
           />
           <p className="text-xs text-muted-foreground">{t("employeesSettings.settings.formatHelper")}</p>
-          <p className="rounded-md border border-border bg-slate-50 px-3 py-2 text-sm text-foreground">
-            {t("employeesSettings.settings.preview")}: {previewEmployeeNumber(state.employee_number_format)}
-          </p>
+          <TokenChips tokens={tokens} language={i18n.language.startsWith("en") ? "en" : "id"} onSelect={appendToken} />
+          {formatError ? <p className="text-sm text-destructive">{formatError}</p> : null}
+          <div className="flex flex-col gap-3 rounded-md border border-border bg-slate-50 px-3 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-medium text-foreground">
+                {t("employeesSettings.settings.preview")}: {preview?.preview ?? "-"}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {t("employeesSettings.settings.nextSequence")}: {preview?.next_sequence ?? "-"}
+              </p>
+            </div>
+            <Button type="button" variant="outline" disabled={previewMutation.isPending} onClick={() => previewMutation.mutate()}>
+              {previewMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
+              {t("employeesSettings.actions.preview")}
+            </Button>
+          </div>
         </div>
         <NumberField
           id="probation-days"
@@ -127,6 +173,36 @@ export function EmployeeSettingsForm({ company }: { company: string }) {
   );
 }
 
+function TokenChips({
+  tokens,
+  language,
+  onSelect
+}: {
+  tokens: EmployeeNumberFormatToken[];
+  language: "id" | "en";
+  onSelect: (token: string) => void;
+}) {
+  if (tokens.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {tokens.map((token) => (
+        <button
+          key={token.token}
+          type="button"
+          title={token.description[language]}
+          className="rounded-md border border-border bg-background px-2.5 py-1 text-xs font-medium text-foreground transition hover:border-primary hover:text-primary"
+          onClick={() => onSelect(token.token)}
+        >
+          {token.token}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function NumberField({
   id,
   label,
@@ -153,11 +229,17 @@ function NumberField({
   );
 }
 
-function previewEmployeeNumber(format: string): string {
-  const year = String(new Date().getFullYear());
+function numberFormatValue(format: string): string {
+  const trimmed = format.trim();
 
-  return format
-    .replaceAll("{YYYY}", year)
-    .replaceAll("{SEQ4}", "0001")
-    .replaceAll("{SEQ}", "001");
+  return trimmed === "" ? defaultNumberFormat : trimmed;
+}
+
+function normalizedPayload(state: EmployeeModuleSettings): EmployeeModuleSettings {
+  return {
+    employee_number_format: numberFormatValue(state.employee_number_format),
+    probation_days: Number(state.probation_days),
+    contract_expiry_notify_days: Number(state.contract_expiry_notify_days),
+    pkwt_max_months: Number(state.pkwt_max_months)
+  };
 }

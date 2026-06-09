@@ -544,6 +544,7 @@
       "edit": "Edit",
       "archive": "Archive",
       "cancel": "Cancel",
+      "preview": "Show Preview",
       "save": "Save"
     },
     "modal": {
@@ -558,7 +559,8 @@
     "settings": {
       "description": "Configure employee numbers, probation, contract reminders, and PKWT limits.",
       "employeeNumberFormat": "Employee number format",
-      "formatHelper": "{YYYY} = year, {SEQ} = sequence number",
+      "formatHelper": "Compose the format from the tokens above. Example: {DEPT_CODE}-{JOIN:YYYY}-{SEQ:4}",
+      "nextSequence": "Next sequence",
       "preview": "Preview",
       "probationDays": "Default probation period",
       "contractExpiryNotifyDays": "Contract expiry notification",

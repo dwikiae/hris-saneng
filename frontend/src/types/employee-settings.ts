@@ -48,9 +48,28 @@ export type EmployeeMasterPayload = EmployeeLevelPayload | WorkLocationPayload;
 
 export interface EmployeeModuleSettings {
   employee_number_format: string;
+  number_format?: string;
+  number_format_tokens_available?: EmployeeNumberFormatToken[];
   probation_days: number;
   contract_expiry_notify_days: number;
   pkwt_max_months: number;
+}
+
+export interface EmployeeNumberFormatToken {
+  token: string;
+  description: {
+    id: string;
+    en: string;
+  };
+  example: string;
+  requires_employee_data: boolean;
+}
+
+export interface EmployeeNumberFormatPreview {
+  preview: string;
+  next_sequence: number;
+  tokens_used: string[];
+  tokens_available: EmployeeNumberFormatToken[];
 }
 
 export interface WilayahProvince {

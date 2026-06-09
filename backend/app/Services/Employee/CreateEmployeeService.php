@@ -4,6 +4,9 @@ namespace App\Services\Employee;
 
 use App\Models\Employee;
 use App\Models\EmployeeContract;
+use App\Models\Company;
+use App\Models\Department;
+use App\Modules\Karyawan\Domain\EmployeeNumberTokenEngine;
 use App\Modules\Karyawan\Repositories\Contracts\EmployeeModuleSettingsRepositoryInterface;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
@@ -13,8 +16,6 @@ use InvalidArgumentException;
 
 class CreateEmployeeService
 {
-    private const DEFAULT_NUMBER_FORMAT = 'EMP-{SEQ}';
-
     /**
      * @var list<string>
      */
@@ -62,7 +63,8 @@ class CreateEmployeeService
         private readonly EmployeeRepositoryInterface $employees,
         private readonly EmployeeModuleSettingsRepositoryInterface $settings,
         private readonly EmployeeContractService $contracts,
-        private readonly EmployeeEmergencyContactService $emergencyContacts
+        private readonly EmployeeEmergencyContactService $emergencyContacts,
+        private readonly EmployeeNumberTokenEngine $numberTokenEngine
     ) {}
 
     /**
@@ -106,7 +108,7 @@ class CreateEmployeeService
 
         return array_merge($payload, [
             'company_id' => $companyId,
-            'employee_number' => $this->generateEmployeeNumber($companyId),
+            'employee_number' => $this->generateEmployeeNumber($payload, $data, $companyId),
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
             'consent_at' => now(),
@@ -140,12 +142,26 @@ class CreateEmployeeService
         $payload['employment_type_id'] = $employmentTypeId;
     }
 
-    private function generateEmployeeNumber(int $companyId): string
+    /**
+     * @param  array<string, mixed>  $payload
+     * @param  array<string, mixed>  $data
+     */
+    private function generateEmployeeNumber(array $payload, array $data, int $companyId): string
     {
         $format = $this->numberFormat($companyId);
-        $sequence = $this->nextSequence($companyId, $format);
+        $employee = new Employee(array_merge($payload, [
+            'company_id' => $companyId,
+        ]));
+        $employee->setRelation('department', $this->departmentForPayload($payload, $companyId));
+        $employee->setAttribute(
+            EmployeeNumberTokenEngine::TEMP_CONTRACT_TYPE_ATTRIBUTE,
+            $data['contract_type'] ?? ($data['contract']['contract_type'] ?? null)
+        );
 
-        return $this->renderNumber($format, $sequence);
+        /** @var Company $company */
+        $company = Company::query()->findOrFail($companyId);
+
+        return $this->numberTokenEngine->resolve($format, $employee, $company);
     }
 
     private function numberFormat(int $companyId): string
@@ -153,64 +169,21 @@ class CreateEmployeeService
         $settings = $this->settings->valuesForCompany($companyId);
         $format = trim((string) ($settings['employee_number_format'] ?? ''));
 
-        return $format === '' ? self::DEFAULT_NUMBER_FORMAT : $format;
+        return $this->numberTokenEngine->normalizeFormat($format);
     }
 
-    private function nextSequence(int $companyId, string $format): int
+    /**
+     * @param  array<string, mixed>  $payload
+     */
+    private function departmentForPayload(array $payload, int $companyId): ?Department
     {
-        $max = 0;
-
-        foreach ($this->employees->employeeNumbersForCompanyIncludingArchived($companyId) as $number) {
-            $sequence = $this->sequenceFromFormattedNumber($format, $number)
-                ?? $this->sequenceFromLastNumericSegment($number);
-
-            if ($sequence !== null) {
-                $max = max($max, $sequence);
-            }
-        }
-
-        return $max + 1;
-    }
-
-    private function sequenceFromFormattedNumber(string $format, string $number): ?int
-    {
-        $regex = preg_quote($format, '/');
-        $regex = preg_replace('/\\\\\{SEQ(?:\d+)?\\\\\}/', '(?<seq>\d+)', $regex);
-        $regex = str_replace(['\{YYYY\}', '\{MM\}', '\{DD\}'], ['\d{4}', '\d{2}', '\d{2}'], (string) $regex);
-
-        if (preg_match('/^'.$regex.'$/', $number, $matches) !== 1) {
+        if (empty($payload['department_id'])) {
             return null;
         }
 
-        return isset($matches['seq']) ? (int) $matches['seq'] : null;
-    }
-
-    private function sequenceFromLastNumericSegment(string $number): ?int
-    {
-        if (preg_match_all('/\d+/', $number, $matches) === 0) {
-            return null;
-        }
-
-        return (int) end($matches[0]);
-    }
-
-    private function renderNumber(string $format, int $sequence): string
-    {
-        $now = now();
-        $rendered = str_replace([
-            '{YYYY}',
-            '{MM}',
-            '{DD}',
-        ], [
-            $now->format('Y'),
-            $now->format('m'),
-            $now->format('d'),
-        ], $format);
-
-        return preg_replace_callback('/\{SEQ(\d*)\}/', function (array $matches) use ($sequence): string {
-            $padding = $matches[1] === '' ? 3 : (int) $matches[1];
-
-            return str_pad((string) $sequence, max(1, $padding), '0', STR_PAD_LEFT);
-        }, $rendered) ?? $rendered;
+        return Department::query()
+            ->withoutGlobalScope('company')
+            ->where('company_id', $companyId)
+            ->find((int) $payload['department_id']);
     }
 }

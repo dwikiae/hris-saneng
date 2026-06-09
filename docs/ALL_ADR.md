@@ -27,6 +27,7 @@
 | ADR-013 | Adapter Pattern untuk Semua External API | ACCEPTED |
 | ADR-014 | Queue + Retry untuk Semua Notifikasi | ACCEPTED |
 | ADR-015 | Docker Compose untuk Deployment | ACCEPTED |
+| ADR-016 | Employee Number Token Engine | ACCEPTED |
 
 ---
 
@@ -476,6 +477,56 @@ Docker Compose sebagai deployment method utama. Satu `docker-compose up` menjala
 - `docker-compose.prod.yml` untuk production (SMTP real, tanpa Mailpit)
 - Installer wizard dijalankan pertama kali setelah `docker-compose up`
 - Minimum server spec didokumentasikan di README
+
+---
+
+## ADR-016 - Employee Number Token Engine
+
+**Status:** ACCEPTED
+
+### Konteks
+Platform multi-company membutuhkan format nomor karyawan yang fleksibel per company tanpa deploy ulang. Setiap company bisa punya aturan penomoran berbeda sesuai kebijakan internal.
+
+### Keputusan
+Nomor karyawan menggunakan token engine dengan pembagian peran yang jelas:
+- Developer/vendor menentukan token yang tersedia, validasi backend, dan menjaga keunikan nomor.
+- HR/Admin dengan permission `karyawan.settings` menyusun format dari token yang tersedia, melihat preview sebelum simpan, dan tidak perlu coding.
+
+Format disimpan di `employee_module_settings` per company. Backend generate nomor saat karyawan dibuat.
+
+Token v1 yang tersedia:
+- `{SEQ:N}`: sequence N digit, per company, tidak reset saat arsip.
+- `{JOIN:format}`: tanggal join karyawan, format `DDMMYYYY`, `YYYY`, `MM`, atau `DD`.
+- `{YYYY}`: tahun saat generate.
+- `{MM}`: bulan saat generate.
+- `{DEPT_CODE}`: kode departemen karyawan.
+- `{CONTRACT_TYPE}`: `PKWT` atau `PKWTT`.
+
+Token yang ditunda ke v2:
+- `{BIRTH:format}`: butuh tanggal lahir sebagai dependency eksplisit.
+- `{COMPANY_CODE}`: butuh field kode di company settings.
+
+### Edge Case
+- Jika format memakai token yang butuh data karyawan (`DEPT_CODE`, `CONTRACT_TYPE`, `JOIN`) tetapi data belum diisi saat create, save ditolak dengan pesan jelas field apa yang harus diisi dulu.
+- Sequence per company dan tidak reset saat karyawan diarsipkan.
+- Nomor yang sudah di-generate tidak bisa diubah kecuali oleh user dengan permission `employee.update`.
+
+### Alasan
+- Pola ini mengikuti model Odoo sequence engine dan SAP number range yang proven di enterprise.
+- Multi-company friendly: tiap company bisa punya aturan nomor sendiri.
+- Aman: tidak ada `eval()` atau arbitrary code execution.
+- Bisa diaudit: format tersimpan di settings, nomor final tersimpan di employee record.
+- Variasi format tidak butuh deploy ulang.
+
+### Konsekuensi
+- Developer wajib mendokumentasikan token baru di UI sebagai help text.
+- Setiap token baru butuh implementasi di backend token resolver.
+- Format lama tetap valid selama token yang dipakai masih terdaftar.
+
+### Aturan Turunan
+- Token vocabulary didefinisikan di backend sebagai whitelist.
+- Preview dihasilkan dari data nyata company untuk tahun sekarang dan next sequence, serta dummy aman untuk token employee-data.
+- Permission pengelolaan format: `karyawan.settings`.
 
 ---
 

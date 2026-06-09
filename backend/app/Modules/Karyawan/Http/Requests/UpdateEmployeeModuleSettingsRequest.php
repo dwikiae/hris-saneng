@@ -18,6 +18,7 @@ class UpdateEmployeeModuleSettingsRequest extends FormRequest
     {
         return [
             'employee_number_format' => ['sometimes', 'string', 'max:100'],
+            'number_format' => ['sometimes', 'nullable', 'string', 'max:100'],
             'probation_days' => ['sometimes', 'integer', 'min:0', 'max:365'],
             'contract_expiry_notify_days' => ['sometimes', 'integer', 'min:0', 'max:365'],
             'pkwt_max_months' => ['sometimes', 'integer', 'min:1', 'max:60'],

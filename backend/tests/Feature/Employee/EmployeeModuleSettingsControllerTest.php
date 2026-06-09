@@ -15,7 +15,9 @@ it('returns default employee module settings when no override exists', function 
     $this->actingAs($user)
         ->getJson("/api/v1/{$company->id}/employees/settings")
         ->assertOk()
-        ->assertJsonPath('data.employee_number_format', 'EMP-{YYYY}-{SEQ4}')
+        ->assertJsonPath('data.employee_number_format', 'EMP-{SEQ:3}')
+        ->assertJsonPath('data.number_format', 'EMP-{SEQ:3}')
+        ->assertJsonPath('data.number_format_tokens_available.0.token', '{SEQ:N}')
         ->assertJsonPath('data.probation_days', 90)
         ->assertJsonPath('data.contract_expiry_notify_days', 30)
         ->assertJsonPath('data.pkwt_max_months', 60);
@@ -40,7 +42,7 @@ it('updates employee module settings per company', function () {
     $this->actingAs($secondUser)
         ->getJson("/api/v1/{$secondCompany->id}/employees/settings")
         ->assertOk()
-        ->assertJsonPath('data.employee_number_format', 'EMP-{YYYY}-{SEQ4}');
+        ->assertJsonPath('data.employee_number_format', 'EMP-{SEQ:3}');
 
     expect(EmployeeModuleSetting::forCompany((int) $firstCompany->id)->count())->toBe(4)
         ->and(EmployeeModuleSetting::forCompany((int) $secondCompany->id)->count())->toBe(0);
@@ -57,6 +59,43 @@ it('validates employee module settings payload', function () {
         ])
         ->assertUnprocessable()
         ->assertJsonValidationErrors(['probation_days', 'contract_expiry_notify_days', 'pkwt_max_months']);
+});
+
+it('previews employee number format with token metadata', function () {
+    [$company, $user] = employeeSettingsUser();
+
+    $this->travelTo(now()->setDate(2026, 6, 9));
+
+    $this->actingAs($user)
+        ->postJson("/api/v1/{$company->id}/employees/settings/number-format/preview", [
+            'format' => '{DEPT_CODE}-{YYYY}-{SEQ:4}',
+        ])
+        ->assertOk()
+        ->assertJsonPath('message', 'karyawan.settings.number_format_preview')
+        ->assertJsonPath('data.preview', 'OPS-2026-0001')
+        ->assertJsonPath('data.next_sequence', 1)
+        ->assertJsonPath('data.tokens_used', ['DEPT_CODE', 'YYYY', 'SEQ'])
+        ->assertJsonPath('data.tokens_available.0.token', '{SEQ:N}');
+});
+
+it('rejects invalid employee number format tokens', function () {
+    [$company, $user] = employeeSettingsUser();
+
+    $this->actingAs($user)
+        ->postJson("/api/v1/{$company->id}/employees/settings/number-format/preview", [
+            'format' => 'EMP-{UNKNOWN}-{SEQ:3}',
+        ])
+        ->assertUnprocessable()
+        ->assertJsonPath('success', false)
+        ->assertJsonPath('message', 'Employee number token UNKNOWN is not recognized.');
+
+    $this->actingAs($user)
+        ->putJson("/api/v1/{$company->id}/employees/settings", [
+            'employee_number_format' => 'EMP-{YYYY}',
+        ])
+        ->assertUnprocessable()
+        ->assertJsonPath('success', false)
+        ->assertJsonPath('message', 'Employee number format must contain a sequence token.');
 });
 
 /**

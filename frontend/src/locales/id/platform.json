@@ -544,6 +544,7 @@
       "edit": "Edit",
       "archive": "Arsipkan",
       "cancel": "Batal",
+      "preview": "Lihat Preview",
       "save": "Simpan"
     },
     "modal": {
@@ -558,7 +559,8 @@
     "settings": {
       "description": "Atur format nomor karyawan, masa probasi, pengingat kontrak, dan batas PKWT.",
       "employeeNumberFormat": "Format nomor karyawan",
-      "formatHelper": "{YYYY} = tahun, {SEQ} = nomor urut",
+      "formatHelper": "Susun format dari token di atas. Contoh: {DEPT_CODE}-{JOIN:YYYY}-{SEQ:4}",
+      "nextSequence": "Sequence berikutnya",
       "preview": "Preview",
       "probationDays": "Masa probasi default",
       "contractExpiryNotifyDays": "Notifikasi kontrak berakhir",

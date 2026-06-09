@@ -2,6 +2,13 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-09 - Employee Number Token Engine
+
+- Menambahkan ADR-016 dan `RULE-B6` untuk menetapkan format nomor entity berbasis token engine aman tanpa `eval()` atau arbitrary code.
+- Memindahkan generate nomor karyawan ke token engine whitelist dengan default `EMP-{SEQ:3}`, token v1 untuk sequence, tanggal join, tanggal generate, departemen, dan tipe kontrak, serta kompatibilitas format lama seperti `{SEQ4}`.
+- Menambahkan endpoint preview format nomor karyawan dan metadata token di Settings Modul Karyawan agar HR/Admin bisa menyusun format dari UI.
+- Menyelaraskan UI Pengaturan Karyawan dengan token chips, preview backend, inline error, dan next sequence.
+
 ## 2026-06-09 - Repair Backend Alignment Form Karyawan
 
 - Menambahkan alias `PATCH /api/v1/employees/{id}/emergency-contacts/{contactId}/archive` untuk kontrak archive kontak darurat, sambil mempertahankan route `DELETE` lama.

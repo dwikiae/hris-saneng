@@ -94,6 +94,11 @@ RULE-B4: Sebelum enable modul di company, sistem WAJIB cek semua dependencies su
 
 RULE-B5: Sebelum uninstall modul di instance, sistem WAJIB generate export data per company.
          Uninstall tidak bisa dilanjutkan tanpa konfirmasi Instance Admin + warning UU PDP.
+
+RULE-B6: Format nomor entity (karyawan, dll) menggunakan token engine.
+         Developer mendefinisikan token yang tersedia. Admin menyusun format dari
+         token tersebut. Tidak ada eval() atau arbitrary code execution untuk
+         generate nomor.
 ```
 
 ### C. Archive Policy — ZERO Hard Delete

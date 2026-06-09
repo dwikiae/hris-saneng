@@ -10,6 +10,7 @@ use App\Models\Permission;
 use App\Models\Position;
 use App\Models\Role;
 use App\Models\User;
+use App\Modules\Karyawan\Models\EmployeeModuleSetting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 
@@ -129,6 +130,51 @@ it('auto fills consent when creating employee', function () {
         ->assertJsonPath('data.consent_by', $actor->id);
 
     expect(Employee::firstOrFail()->consent_at)->not->toBeNull();
+});
+
+it('generates employee number from department join date and sequence tokens', function () {
+    $actor = employeeWorkflowUser($this->company, 'hr_manager_token_number', $this->permissions->values()->all());
+    EmployeeModuleSetting::create([
+        'company_id' => $this->company->id,
+        'key' => 'employee_number_format',
+        'value' => '{DEPT_CODE}-{JOIN:YYYY}-{SEQ:4}',
+    ]);
+
+    $this->actingAs($actor)
+        ->postJson('/api/v1/employees', employeeWorkflowPayload($this))
+        ->assertCreated()
+        ->assertJsonPath('data.employee_number', 'HRD-2024-0001');
+});
+
+it('returns clear validation error when required token data is missing', function () {
+    $actor = employeeWorkflowUser($this->company, 'hr_manager_missing_token_data', $this->permissions->values()->all());
+    EmployeeModuleSetting::create([
+        'company_id' => $this->company->id,
+        'key' => 'employee_number_format',
+        'value' => '{CONTRACT_TYPE}-{SEQ:3}',
+    ]);
+    $payload = employeeWorkflowPayload($this);
+    unset($payload['contract'], $payload['contract_type']);
+
+    $this->actingAs($actor)
+        ->postJson('/api/v1/employees', $payload)
+        ->assertUnprocessable()
+        ->assertJsonPath('message', 'Contract type is required for this employee number format.');
+});
+
+it('keeps legacy sequence token format compatible', function () {
+    $actor = employeeWorkflowUser($this->company, 'hr_manager_legacy_number', $this->permissions->values()->all());
+    $this->travelTo(now()->setDate(2026, 6, 9));
+    EmployeeModuleSetting::create([
+        'company_id' => $this->company->id,
+        'key' => 'employee_number_format',
+        'value' => 'EMP-{YYYY}-{SEQ4}',
+    ]);
+
+    $this->actingAs($actor)
+        ->postJson('/api/v1/employees', employeeWorkflowPayload($this))
+        ->assertCreated()
+        ->assertJsonPath('data.employee_number', 'EMP-2026-0001');
 });
 
 it('uses highest existing employee number including archived rows for the next sequence', function () {
