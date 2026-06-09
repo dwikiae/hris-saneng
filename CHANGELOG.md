@@ -2,6 +2,11 @@
 
 Semua perubahan penting project dicatat di file ini.
 
+## 2026-06-09 - Fix Hydration Form Karyawan
+
+- Memindahkan render awal halaman `/dashboard/employees/new` dan `/dashboard/employees/{id}/edit` ke client-only dynamic import untuk mencegah mismatch SVG/icon dari state auth/company context saat SSR.
+- Mempertahankan business logic form Karyawan tanpa perubahan, dengan fallback skeleton saat bundle form dimuat di client.
+
 ## 2026-06-09 - Employee Number Token Engine
 
 - Menambahkan ADR-016 dan `RULE-B6` untuk menetapkan format nomor entity berbasis token engine aman tanpa `eval()` atau arbitrary code.
