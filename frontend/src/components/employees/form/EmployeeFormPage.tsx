@@ -66,17 +66,23 @@ export function EmployeeFormPage({ mode, employeeId }: EmployeeFormPageProps) {
     queryFn: () => employeeService.getContracts(employeeId ?? ""),
     enabled: mode === "edit" && Boolean(employeeId) && hasCompanyContext
   });
+  const emergencyContactsQuery = useQuery({
+    queryKey: ["employees", activeCompanyId, "detail", employeeId, "emergency-contacts"],
+    queryFn: () => employeeService.getEmergencyContacts(employeeId ?? ""),
+    enabled: mode === "edit" && Boolean(employeeId) && hasCompanyContext
+  });
   const lookups = useEmployeeFormLookups(activeCompanyId, state.provinceId, state.domicileProvinceId);
-  const isLoading = detailQuery.isLoading || contractsQuery.isLoading || lookups.isLoading;
+  const isLoading = detailQuery.isLoading || contractsQuery.isLoading || emergencyContactsQuery.isLoading || lookups.isLoading;
   const isDirty = JSON.stringify(state) !== initialSnapshot;
 
   useEffect(() => {
     if (mode !== "edit" || !detailQuery.data) return;
     const contract = contractsQuery.data?.find((item) => item.status === "active") ?? contractsQuery.data?.[0] ?? null;
-    const nextState = stateFromEmployee(detailQuery.data, contract);
+    const emergencyContact = emergencyContactsQuery.data?.[0] ?? null;
+    const nextState = stateFromEmployee(detailQuery.data, contract, emergencyContact);
     setState(nextState);
     setInitialSnapshot(JSON.stringify(nextState));
-  }, [contractsQuery.data, detailQuery.data, mode]);
+  }, [contractsQuery.data, detailQuery.data, emergencyContactsQuery.data, mode]);
 
   const saveMutation = useMutation({
     mutationFn: (intent: "draft" | "submit") => saveEmployee(intent),
@@ -162,15 +168,24 @@ export function EmployeeFormPage({ mode, employeeId }: EmployeeFormPageProps) {
   }
 
   async function saveEmployee(intent: "draft" | "submit"): Promise<EmployeeDetail> {
-    const employee =
+    let employee =
       mode === "new"
         ? intent === "draft"
           ? await employeeService.saveDraft(toEmployeePayload(state, lookups.employmentTypes, "new"))
           : await employeeService.create(toEmployeePayload(state, lookups.employmentTypes, "new"))
         : await employeeService.update(employeeId ?? "", toEmployeePayload(state, lookups.employmentTypes, "edit"));
 
-    await saveContract(employee.id);
+    if (mode === "edit") {
+      await saveContract(employee.id);
+      await saveEmergencyContact(employee.id);
+    }
+
     if (state.photoFile) await employeeService.uploadPhoto(employee.id, state.photoFile);
+
+    if (intent === "submit") {
+      employee = await employeeService.submitForApproval(employee.id);
+      if (canApprove) employee = await employeeService.approve(employee.id);
+    }
 
     return employee;
   }
@@ -190,6 +205,23 @@ export function EmployeeFormPage({ mode, employeeId }: EmployeeFormPageProps) {
     }
 
     await employeeService.createContract(targetEmployeeId, payload);
+  }
+
+  async function saveEmergencyContact(targetEmployeeId: string | number) {
+    if (!state.emergencyName.trim()) return;
+
+    const payload = {
+      name: state.emergencyName.trim(),
+      relationship: state.emergencyRelationship || null,
+      phone: state.emergencyPhone || null
+    };
+
+    if (state.emergencyContactId) {
+      await employeeService.updateEmergencyContact(targetEmployeeId, state.emergencyContactId, payload);
+      return;
+    }
+
+    await employeeService.createEmergencyContact(targetEmployeeId, payload);
   }
 }
 

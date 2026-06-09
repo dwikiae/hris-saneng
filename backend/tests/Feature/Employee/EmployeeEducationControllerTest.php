@@ -77,6 +77,7 @@ function employeeEducationUser(Company $company): User
         'code' => 'system_admin',
         'name' => 'System Admin',
     ]);
+    grantTestPermissions($role, $company, ['employee.view', 'employee.update', 'employee.archive']);
 
     $user->roles()->attach($role->id);
 

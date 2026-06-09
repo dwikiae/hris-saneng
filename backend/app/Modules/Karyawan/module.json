@@ -24,7 +24,9 @@
                 "employee.archive",
                 "employee.export",
                 "employee.approve",
-                "employee.view_salary"
+                "employee.view_sensitive",
+                "employee.view_salary",
+                "employee.override_number"
             ]
         }
     ]

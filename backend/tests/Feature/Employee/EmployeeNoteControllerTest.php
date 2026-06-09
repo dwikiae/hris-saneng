@@ -67,11 +67,11 @@ it('creates system notes when employee is approved and rejected', function () {
 
     expect(EmployeeNote::where('employee_id', $approvedEmployee->id)
         ->where('type', EmployeeNote::TYPE_SYSTEM)
-        ->where('content', 'Disetujui oleh '.$this->user->name)
+        ->where('content', __('employee.notes.approved', ['actor' => $this->user->name]))
         ->exists())->toBeTrue();
     expect(EmployeeNote::where('employee_id', $rejectedEmployee->id)
         ->where('type', EmployeeNote::TYPE_SYSTEM)
-        ->where('content', 'Ditolak: Data belum lengkap')
+        ->where('content', __('employee.notes.rejected', ['actor' => $this->user->name, 'reason' => 'Data belum lengkap']))
         ->exists())->toBeTrue();
 });
 
@@ -123,6 +123,7 @@ function employeeNoteUser(Company $company): User
         'code' => 'system_admin',
         'name' => 'System Admin',
     ]);
+    grantTestPermissions($role, $company, ['employee.view', 'employee.update', 'employee.approve']);
 
     $user->roles()->attach($role->id);
 

@@ -34,6 +34,7 @@ beforeEach(function () {
         'code' => 'system_admin',
         'name' => 'System Admin',
     ]);
+    grantTestPermissions($role, $this->company, ['employee.view', 'employee.update']);
 
     $this->user->roles()->attach($role->id);
     $this->actingAs($this->user);

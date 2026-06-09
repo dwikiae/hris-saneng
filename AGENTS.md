@@ -124,6 +124,10 @@ RULE-D3: Rate limiting wajib di:
          - Semua /api/v1/public/* endpoint
 
 RULE-D4: Login lockout: 3 kali gagal → lockout sesuai setting company.
+
+RULE-D5: Platform Administrator punya semua permission karena role-nya mencakup
+         semua permission — bukan karena bypass logic atau kondisi khusus di kode.
+         Flow bisnis proses tetap sama untuk semua role.
 ```
 
 ### E. Layered Architecture

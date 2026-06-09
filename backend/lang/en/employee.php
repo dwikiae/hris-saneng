@@ -7,6 +7,8 @@ return [
     'created' => 'Employee data created.',
     'detail' => 'Employee detail.',
     'document_invalid_mime' => 'Document format is not supported.',
+    'employee_number_locked' => 'Employee number cannot be changed without Administrator permission.',
+    'employment_type_not_found' => 'Employee type for the contract type was not found.',
     'documents' => [
         'archived' => 'Employee document archived.',
         'list' => 'Employee document list.',
@@ -26,8 +28,23 @@ return [
         'updated' => 'Employee experience record updated.',
     ],
     'notes' => [
+        'approved' => ':actor approved the employee',
         'created' => 'Employee note created.',
         'list' => 'Employee notes list.',
+        'rejected' => ':actor rejected: :reason',
+        'submitted' => ':actor submitted the employee for approval',
+    ],
+    'notifications' => [
+        'approval_requested' => [
+            'title' => 'Employee approval pending',
+            'body' => 'Employee data is waiting for approval.',
+        ],
+    ],
+    'emergency_contacts' => [
+        'archived' => 'Employee emergency contact archived.',
+        'created' => 'Employee emergency contact created.',
+        'list' => 'Employee emergency contact list.',
+        'updated' => 'Employee emergency contact updated.',
     ],
     'offboarding' => [
         'active_exists' => 'Employee already has an active offboarding process.',
@@ -70,5 +87,7 @@ return [
     'photo_invalid_mime' => 'Photo format is not supported.',
     'photo_processor_unavailable' => 'Photo processor is unavailable.',
     'rejected' => 'Employee data rejected.',
+    'rejection_reason_required' => 'Rejection note is required.',
+    'submitted' => 'Employee data submitted for approval.',
     'updated' => 'Employee data updated.',
 ];

@@ -84,7 +84,7 @@ Status ini disusun dari ringkasan `CHANGELOG.md` dan entry-point retrofit terbar
 - [ ] Backend — sediakan endpoint export karyawan ter-audit untuk filter aktif dan selected IDs.
 - [ ] Backend — sediakan endpoint restore karyawan module-specific atau selaraskan permission restore arsip dengan UX Karyawan.
 - [ ] Backend — selaraskan permission sensitif employee antara spec `employee.view_sensitive`, resource identitas, dan `employee.view_salary`.
-- [ ] Backend — selaraskan flow form tambah/edit Karyawan: auto-generate `employee_number`, submit approval HR Staff, Simpan & Aktifkan Administrator, field Kontak Darurat, dan Nama Pemilik Rekening.
+- [x] Backend — selaraskan flow form tambah/edit Karyawan: auto-generate `employee_number`, submit approval HR Staff, Simpan & Aktifkan Administrator, field Kontak Darurat, dan Nama Pemilik Rekening.
 - [ ] Backend — sediakan signed download URL untuk dokumen karyawan agar tab Dokumen bisa mengunduh file via endpoint resmi.
 - [ ] Backend — sediakan activity log endpoint khusus employee untuk sub-tab Log Aktivitas pada ChatLog detail karyawan.
 - [ ] Backend — ubah read permission photo/document employee dari `employee.update` ke kontrak read yang sesuai, jika role read-only harus bisa melihat detail.

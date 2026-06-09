@@ -34,6 +34,7 @@ export interface EmployeeFormState {
   domicileProvinceId: string;
   domicileCityId: string;
   domicileAddress: string;
+  emergencyContactId: string;
   emergencyName: string;
   emergencyRelationship: string;
   emergencyPhone: string;
@@ -86,6 +87,7 @@ export const initialEmployeeFormState: EmployeeFormState = {
   domicileProvinceId: "",
   domicileCityId: "",
   domicileAddress: "",
+  emergencyContactId: "",
   emergencyName: "",
   emergencyRelationship: "",
   emergencyPhone: "",
@@ -112,7 +114,11 @@ export const initialEmployeeFormState: EmployeeFormState = {
   deductions: ""
 };
 
-export function stateFromEmployee(employee?: EmployeeDetail, contract?: EmployeeContract | null): EmployeeFormState {
+export function stateFromEmployee(
+  employee?: EmployeeDetail,
+  contract?: EmployeeContract | null,
+  emergencyContact?: { id?: string | number; name?: string | null; relationship?: string | null; phone?: string | null } | null
+): EmployeeFormState {
   if (!employee) {
     return initialEmployeeFormState;
   }
@@ -141,6 +147,10 @@ export function stateFromEmployee(employee?: EmployeeDetail, contract?: Employee
     domicileProvinceId: value(employee.domicile_province_id),
     domicileCityId: value(employee.domicile_city_id),
     domicileAddress: value(employee.domicile_address),
+    emergencyContactId: value(emergencyContact?.id),
+    emergencyName: value(emergencyContact?.name),
+    emergencyRelationship: value(emergencyContact?.relationship),
+    emergencyPhone: value(emergencyContact?.phone),
     departmentId: value(employee.department_id),
     positionId: value(employee.position_id),
     employeeLevelId: value(employee.employee_level_id),
@@ -158,6 +168,7 @@ export function stateFromEmployee(employee?: EmployeeDetail, contract?: Employee
     npwp: value(employee.npwp),
     bankName: value(employee.bank_name),
     bankAccountNumber: value(employee.bank_account_number),
+    bankAccountOwner: value(employee.bank_account_holder_name),
     salary: value(employee.salary),
     allowances: value(employee.allowances),
     deductions: value(employee.deductions)
@@ -192,12 +203,11 @@ export function toEmployeePayload(
 ): EmployeePayload | EmployeeUpdatePayload {
   const employmentTypeId = state.employmentTypeId || resolveEmploymentTypeId(state.contractType, employmentTypes);
   const payload: EmployeePayload = {
-    employee_number: state.employeeNumber || draftEmployeeNumber(),
     name: state.name.trim(),
     nickname: nullable(state.nickname),
-    email: state.personalEmail.trim(),
+    email: nullable(state.personalEmail),
     phone: state.phone.trim(),
-    address: state.address.trim(),
+    address: nullable(state.address),
     province_id: nullable(state.provinceId),
     city_id: nullable(state.cityId),
     domicile_address: state.domicileSameAsKtp ? null : nullable(state.domicileAddress),
@@ -214,7 +224,8 @@ export function toEmployeePayload(
     passport_number: nullable(state.passportNumber),
     department_id: state.departmentId,
     position_id: state.positionId,
-    employment_type_id: employmentTypeId,
+    employment_type_id: employmentTypeId || null,
+    contract_type: state.contractType,
     employee_level_id: nullable(state.employeeLevelId),
     work_location_id: nullable(state.workLocationId),
     supervisor_id: nullable(state.supervisorId),
@@ -224,15 +235,34 @@ export function toEmployeePayload(
     npwp: nullable(state.npwp),
     bank_name: nullable(state.bankName),
     bank_account_number: nullable(state.bankAccountNumber),
+    bank_account_holder_name: nullable(state.bankAccountOwner),
     salary: nullable(state.salary),
     allowances: nullable(state.allowances),
-    deductions: nullable(state.deductions),
-    consent_at: new Date().toISOString()
+    deductions: nullable(state.deductions)
   };
+
+  if (mode === "new") {
+    payload.contract = {
+      contract_type: state.contractType,
+      contract_number: nullable(state.contractNumber),
+      start_date: state.contractStartDate,
+      end_date: state.contractType === "pkwt" ? nullable(state.contractEndDate) : null,
+      notes: nullable(state.contractNotes)
+    };
+
+    if (state.emergencyName.trim()) {
+      payload.emergency_contact = {
+        name: state.emergencyName.trim(),
+        relationship: nullable(state.emergencyRelationship),
+        phone: nullable(state.emergencyPhone)
+      };
+    }
+  }
 
   if (mode === "edit") {
     const editablePayload = { ...payload };
-    delete editablePayload.consent_at;
+    delete editablePayload.contract;
+    delete editablePayload.emergency_contact;
     return stripEmptyUpdate(editablePayload as EmployeePayload);
   }
 
@@ -281,10 +311,6 @@ function value(input: unknown): string {
 
 function nullable(input: string): string | null {
   return input.trim() === "" ? null : input.trim();
-}
-
-function draftEmployeeNumber(): string {
-  return `DRAFT-${Date.now()}`;
 }
 
 function resolveEmploymentTypeId(contractType: string, options: MasterDataOption[]): string | number {

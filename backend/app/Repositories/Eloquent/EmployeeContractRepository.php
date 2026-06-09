@@ -57,6 +57,18 @@ class EmployeeContractRepository implements EmployeeContractRepositoryInterface
         return $contract->refresh()->load('approver');
     }
 
+    public function latestDraftForEmployee(Employee $employee): ?EmployeeContract
+    {
+        /** @var EmployeeContract|null $contract */
+        $contract = $employee->contracts()
+            ->where('status', EmployeeContract::STATUS_DRAFT)
+            ->orderByDesc('start_date')
+            ->orderByDesc('id')
+            ->first();
+
+        return $contract;
+    }
+
     /**
      * @return Collection<int, EmployeeContract>
      */

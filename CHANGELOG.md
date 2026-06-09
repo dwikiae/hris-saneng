@@ -9,6 +9,15 @@ Semua perubahan penting project dicatat di file ini.
 - Mengatur `next.config.mjs` agar `distDir` bisa membaca `NEXT_DIST_DIR`, serta mengabaikan `.next-verify` sebagai build artifact.
 - Mencatat workflow baru di `VIBE_CODING_CONTEXT.md`: saat dev server aktif, gunakan `npm run build:verify`.
 
+## 2026-06-08 - Backend Alignment Form Karyawan
+
+- Menghapus bypass Gate untuk Platform Administrator dan role `system_admin`; Platform Administrator sekarang mendapat akses karena role company-scoped punya semua permission yang disinkronkan dari seeder/service.
+- Menambahkan permission `employee.view_sensitive` dan `employee.override_number`, rule `RULE-D5` di `AGENTS.md`, serta seeder assignment platform admin yang idempotent untuk semua company.
+- Menyelaraskan create/update Karyawan: nomor karyawan auto-generate dari settings, consent otomatis, email/alamat opsional, `contract_type` bisa memetakan `employment_type_id`, dan nomor karyawan hanya bisa diubah oleh permission override.
+- Menambahkan penyimpanan nama pemilik rekening terenkripsi dan endpoint/tabel kontak darurat karyawan dengan archive-only policy.
+- Mengubah workflow menjadi eksplisit `Draft -> Ajukan Approval -> Pending -> Approve -> Aktif`, dengan reject kembali ke Draft, system note, dan notifikasi in-app ke approver.
+- Menyelaraskan frontend form Karyawan agar mengirim payload kontrak/kontak darurat, memakai endpoint submit baru, dan menjalankan Simpan & Aktifkan melalui submit lalu approve.
+
 ## 2026-06-08 - Fix Platform Admin Company Assignment
 
 - Menambahkan `PlatformAdministratorAssignmentService` untuk membuat/menstandarkan role company-scoped `system_admin` bernama `Platform Administrator`, menyinkronkan semua permission company, dan attach idempotent ke Platform Administrator (`users.company_id = null`).

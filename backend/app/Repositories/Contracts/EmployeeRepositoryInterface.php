@@ -30,6 +30,13 @@ interface EmployeeRepositoryInterface
     public function archive(Employee $employee): void;
 
     /**
+     * @return array<int, string>
+     */
+    public function employeeNumbersForCompanyIncludingArchived(int $companyId): array;
+
+    public function employmentTypeIdForContractType(int $companyId, string $contractType): ?int;
+
+    /**
      * @return Collection<int, EmployeeDocument>
      */
     public function documents(Employee $employee): Collection;

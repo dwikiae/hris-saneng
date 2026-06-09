@@ -7,6 +7,8 @@ return [
     'created' => 'Data karyawan dibuat.',
     'detail' => 'Detail karyawan.',
     'document_invalid_mime' => 'Format dokumen tidak didukung.',
+    'employee_number_locked' => 'Nomor karyawan tidak bisa diubah tanpa permission Administrator.',
+    'employment_type_not_found' => 'Tipe karyawan untuk jenis kontrak tidak ditemukan.',
     'documents' => [
         'archived' => 'Dokumen karyawan diarsipkan.',
         'list' => 'Daftar dokumen karyawan.',
@@ -26,8 +28,23 @@ return [
         'updated' => 'Pengalaman kerja karyawan diperbarui.',
     ],
     'notes' => [
+        'approved' => ':actor menyetujui karyawan',
         'created' => 'Catatan karyawan dibuat.',
         'list' => 'Daftar catatan karyawan.',
+        'rejected' => ':actor menolak: :reason',
+        'submitted' => ':actor mengajukan approval karyawan',
+    ],
+    'notifications' => [
+        'approval_requested' => [
+            'title' => 'Approval karyawan menunggu',
+            'body' => 'Data karyawan menunggu persetujuan.',
+        ],
+    ],
+    'emergency_contacts' => [
+        'archived' => 'Kontak darurat karyawan diarsipkan.',
+        'created' => 'Kontak darurat karyawan dibuat.',
+        'list' => 'Daftar kontak darurat karyawan.',
+        'updated' => 'Kontak darurat karyawan diperbarui.',
     ],
     'offboarding' => [
         'active_exists' => 'Karyawan sudah memiliki proses offboarding aktif.',
@@ -70,5 +87,7 @@ return [
     'photo_invalid_mime' => 'Format foto tidak didukung.',
     'photo_processor_unavailable' => 'Pemroses foto tidak tersedia.',
     'rejected' => 'Data karyawan ditolak.',
+    'rejection_reason_required' => 'Catatan penolakan wajib diisi.',
+    'submitted' => 'Data karyawan diajukan untuk approval.',
     'updated' => 'Data karyawan diperbarui.',
 ];

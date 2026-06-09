@@ -2,6 +2,7 @@
 
 namespace App\Services\Employee;
 
+use App\Models\Employee;
 use App\Models\EmployeeContract;
 use App\Repositories\Contracts\EmployeeContractRepositoryInterface;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
@@ -41,6 +42,15 @@ class EmployeeContractService
     public function store(int $employeeId, array $data): EmployeeContract
     {
         $employee = $this->employees->show($employeeId);
+
+        return $this->storeForEmployee($employee, $data);
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public function storeForEmployee(Employee $employee, array $data): EmployeeContract
+    {
         $payload = $this->contractPayload($data);
 
         $payload['status'] = EmployeeContract::STATUS_DRAFT;
@@ -74,28 +84,19 @@ class EmployeeContractService
             $employee = $this->employees->show($employeeId);
             $contract = $this->contracts->findForEmployee($employee, $contractId);
 
-            $this->validateContractDates($contract->only(['contract_type', 'end_date']));
-
-            foreach ($this->contracts->activeForEmployee($employee, (int) $contract->getKey()) as $activeContract) {
-                $superseded = $this->contracts->update($activeContract, [
-                    'status' => EmployeeContract::STATUS_SUPERSEDED,
-                    'updated_by' => Auth::id(),
-                ]);
-                $this->contracts->archive($superseded);
-                $this->notes->storeSystemForEmployee($employee, 'Kontrak '.$this->contractLabel($superseded).' digantikan');
-            }
-
-            $approved = $this->contracts->update($contract, [
-                'status' => EmployeeContract::STATUS_ACTIVE,
-                'approved_by' => Auth::id(),
-                'approved_at' => now(),
-                'updated_by' => Auth::id(),
-            ]);
-
-            $this->notes->storeSystemForEmployee($employee, 'Kontrak '.$this->contractLabel($approved).' diaktifkan');
-
-            return $approved;
+            return $this->activateForEmployee($employee, $contract);
         });
+    }
+
+    public function activateLatestDraftForEmployee(Employee $employee): ?EmployeeContract
+    {
+        $contract = $this->contracts->latestDraftForEmployee($employee);
+
+        if (! $contract instanceof EmployeeContract) {
+            return null;
+        }
+
+        return $this->activateForEmployee($employee, $contract);
     }
 
     public function archive(int $employeeId, int $contractId): void
@@ -133,6 +134,31 @@ class EmployeeContractService
         if (! array_key_exists('end_date', $data) || $data['end_date'] === null || $data['end_date'] === '') {
             throw new InvalidArgumentException('employee.contracts.pkwt_end_date_required');
         }
+    }
+
+    private function activateForEmployee(Employee $employee, EmployeeContract $contract): EmployeeContract
+    {
+        $this->validateContractDates($contract->only(['contract_type', 'end_date']));
+
+        foreach ($this->contracts->activeForEmployee($employee, (int) $contract->getKey()) as $activeContract) {
+            $superseded = $this->contracts->update($activeContract, [
+                'status' => EmployeeContract::STATUS_SUPERSEDED,
+                'updated_by' => Auth::id(),
+            ]);
+            $this->contracts->archive($superseded);
+            $this->notes->storeSystemForEmployee($employee, 'Kontrak '.$this->contractLabel($superseded).' digantikan');
+        }
+
+        $approved = $this->contracts->update($contract, [
+            'status' => EmployeeContract::STATUS_ACTIVE,
+            'approved_by' => Auth::id(),
+            'approved_at' => now(),
+            'updated_by' => Auth::id(),
+        ]);
+
+        $this->notes->storeSystemForEmployee($employee, 'Kontrak '.$this->contractLabel($approved).' diaktifkan');
+
+        return $approved;
     }
 
     private function contractLabel(EmployeeContract $contract): string

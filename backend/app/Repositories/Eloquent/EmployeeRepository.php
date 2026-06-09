@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\Employee;
 use App\Models\EmployeeDocument;
 use App\Models\EmployeePhoto;
+use App\Models\EmploymentType;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
 use App\Services\ArchiveService;
 use Illuminate\Database\Eloquent\Builder;
@@ -88,6 +89,39 @@ class EmployeeRepository implements EmployeeRepositoryInterface
     public function archive(Employee $employee): void
     {
         $this->archiveService->archive($employee);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function employeeNumbersForCompanyIncludingArchived(int $companyId): array
+    {
+        return $this->model->newQuery()
+            ->withoutGlobalScope('not_archived')
+            ->withoutGlobalScope('company')
+            ->where('company_id', $companyId)
+            ->pluck('employee_number')
+            ->filter(fn (mixed $number): bool => is_string($number) && $number !== '')
+            ->values()
+            ->all();
+    }
+
+    public function employmentTypeIdForContractType(int $companyId, string $contractType): ?int
+    {
+        $type = EmploymentType::query()
+            ->withoutGlobalScope('company')
+            ->where('company_id', $companyId)
+            ->orderBy('id')
+            ->get()
+            ->first(function (EmploymentType $type) use ($contractType): bool {
+                $needle = strtolower($contractType);
+
+                return collect([$type->getAttribute('code'), $type->getAttribute('name')])
+                    ->filter(fn (mixed $value): bool => is_string($value))
+                    ->contains(fn (string $value): bool => str_contains(strtolower($value), $needle));
+            });
+
+        return $type instanceof EmploymentType ? (int) $type->getKey() : null;
     }
 
     /**

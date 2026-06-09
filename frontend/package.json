@@ -8,7 +8,8 @@
     "build": "next build",
     "build:verify": "node scripts/build-verify.mjs",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.11",

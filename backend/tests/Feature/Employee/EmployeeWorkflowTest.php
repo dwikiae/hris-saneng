@@ -3,6 +3,8 @@
 use App\Models\Company;
 use App\Models\Department;
 use App\Models\Employee;
+use App\Models\EmployeeContract;
+use App\Models\EmployeeEmergencyContact;
 use App\Models\EmploymentType;
 use App\Models\Permission;
 use App\Models\Position;
@@ -52,6 +54,8 @@ beforeEach(function () {
         'employee.update',
         'employee.archive',
         'employee.approve',
+        'employee.override_number',
+        'employee.view_sensitive',
         'employee.view_salary',
     ])->mapWithKeys(fn (string $code): array => [$code => employeeWorkflowPermission($this->company, $code)]);
 });
@@ -68,36 +72,39 @@ it('runs employee approval workflow end to end', function () {
 
     $employeeId = $createResponse->json('data.id');
 
-    $this->putJson("/api/v1/employees/{$employeeId}", [
-        'salary' => '11000000',
-    ])->assertOk()
-        ->assertJsonPath('message', 'employee.updated')
+    expect($createResponse->json('data.employee_number'))->toBe('EMP-001');
+    expect(EmployeeContract::where('employee_id', $employeeId)->where('status', EmployeeContract::STATUS_DRAFT)->exists())->toBeTrue();
+    expect(EmployeeEmergencyContact::where('employee_id', $employeeId)->where('name', 'Emergency Contact')->exists())->toBeTrue();
+
+    $this->postJson("/api/v1/employees/{$employeeId}/submit")
+        ->assertOk()
+        ->assertJsonPath('message', 'employee.submitted')
         ->assertJsonPath('data.status', Employee::PENDING);
 
     $this->postJson("/api/v1/employees/{$employeeId}/approve")
         ->assertOk()
         ->assertJsonPath('message', 'employee.approved')
-        ->assertJsonPath('data.status', Employee::APPROVED)
+        ->assertJsonPath('data.status', Employee::ACTIVE)
         ->assertJsonPath('data.approved_by', $actor->id);
 
+    expect(EmployeeContract::where('employee_id', $employeeId)->where('status', EmployeeContract::STATUS_ACTIVE)->exists())->toBeTrue();
+
     $rejectResponse = $this->postJson('/api/v1/employees', employeeWorkflowPayload($this, [
-        'employee_number' => 'EMP-WF-002',
         'email' => 'workflow.reject@saneng.co.id',
         'nik' => '3374010101010002',
     ]))->assertCreated();
 
     $rejectEmployeeId = $rejectResponse->json('data.id');
 
-    $this->putJson("/api/v1/employees/{$rejectEmployeeId}", [
-        'department_id' => $this->otherDepartment->id,
-    ])->assertOk()
+    $this->postJson("/api/v1/employees/{$rejectEmployeeId}/submit")
+        ->assertOk()
         ->assertJsonPath('data.status', Employee::PENDING);
 
     $this->postJson("/api/v1/employees/{$rejectEmployeeId}/reject", [
         'reason' => 'Need supporting document.',
     ])->assertOk()
         ->assertJsonPath('message', 'employee.rejected')
-        ->assertJsonPath('data.status', Employee::REJECTED)
+        ->assertJsonPath('data.status', Employee::DRAFT)
         ->assertJsonPath('data.rejection_reason', 'Need supporting document.');
 });
 
@@ -111,16 +118,59 @@ it('rejects invalid approval transition from draft', function () {
         ->assertJsonPath('message', 'employee.invalid_status_transition');
 });
 
-it('requires consent when creating employee', function () {
+it('auto fills consent when creating employee', function () {
     $actor = employeeWorkflowUser($this->company, 'hr_manager_consent', $this->permissions->values()->all());
     $payload = employeeWorkflowPayload($this);
     unset($payload['consent_at']);
 
     $this->actingAs($actor)
         ->postJson('/api/v1/employees', $payload)
-        ->assertUnprocessable();
+        ->assertCreated()
+        ->assertJsonPath('data.consent_by', $actor->id);
 
-    expect(Employee::where('employee_number', $payload['employee_number'])->exists())->toBeFalse();
+    expect(Employee::firstOrFail()->consent_at)->not->toBeNull();
+});
+
+it('uses highest existing employee number including archived rows for the next sequence', function () {
+    $actor = employeeWorkflowUser($this->company, 'hr_manager_sequence', $this->permissions->values()->all());
+    $archived = employeeWorkflowEmployee($this, [
+        'employee_number' => 'EMP-009',
+        'archived_at' => now(),
+        'archived_by' => $actor->id,
+    ]);
+
+    $this->actingAs($actor)
+        ->postJson('/api/v1/employees', employeeWorkflowPayload($this, [
+            'nik' => '3374010101010010',
+            'email' => 'sequence.employee@saneng.co.id',
+        ]))
+        ->assertCreated()
+        ->assertJsonPath('data.employee_number', 'EMP-010');
+
+    expect(Employee::withArchived()->findOrFail($archived->id)->employee_number)->toBe('EMP-009');
+});
+
+it('locks generated employee number unless actor has override permission', function () {
+    $withoutOverride = employeeWorkflowUser($this->company, 'hr_without_override', [
+        $this->permissions->get('employee.view'),
+        $this->permissions->get('employee.update'),
+    ]);
+    $withOverride = employeeWorkflowUser($this->company, 'hr_with_override', [
+        $this->permissions->get('employee.view'),
+        $this->permissions->get('employee.update'),
+        $this->permissions->get('employee.override_number'),
+    ]);
+    $employee = employeeWorkflowEmployee($this, ['employee_number' => 'EMP-020']);
+
+    $this->actingAs($withoutOverride)
+        ->putJson("/api/v1/employees/{$employee->id}", ['employee_number' => 'EMP-021'])
+        ->assertUnprocessable()
+        ->assertJsonPath('message', 'employee.employee_number_locked');
+
+    $this->actingAs($withOverride)
+        ->putJson("/api/v1/employees/{$employee->id}", ['employee_number' => 'EMP-021'])
+        ->assertOk()
+        ->assertJsonPath('data.employee_number', 'EMP-021');
 });
 
 it('archives employee and removes it from index', function () {
@@ -228,10 +278,21 @@ function employeeWorkflowPayload(object $test, array $overrides = []): array
         'npwp' => '09.123.456.7-891.000',
         'bank_name' => 'BCA',
         'bank_account_number' => '1234567890',
+        'bank_account_holder_name' => 'Workflow Employee',
         'salary' => '10000000',
         'allowances' => '1500000',
         'deductions' => '250000',
         'consent_at' => now()->toDateTimeString(),
+        'contract' => [
+            'contract_type' => EmployeeContract::TYPE_PKWTT,
+            'contract_number' => 'CTR-WF-001',
+            'start_date' => '2024-01-01',
+        ],
+        'emergency_contact' => [
+            'name' => 'Emergency Contact',
+            'relationship' => 'Sibling',
+            'phone' => '081299991111',
+        ],
     ], $overrides);
 }
 

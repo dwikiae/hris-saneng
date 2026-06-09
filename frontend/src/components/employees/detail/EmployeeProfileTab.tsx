@@ -102,7 +102,7 @@ export function EmployeeProfileTab({ employee, employeeId, t }: EmployeeProfileT
         <FieldGrid>
           <SensitiveField label={t("employeesDetail.fields.bankName")} value={employee.bank_name} />
           <SensitiveField label={t("employeesDetail.fields.bankAccount")} value={employee.bank_account_number} />
-          <SensitiveField label={t("employeesDetail.fields.bankAccountOwner")} value={employee.name} />
+          <SensitiveField label={t("employeesDetail.fields.bankAccountOwner")} value={employee.bank_account_holder_name} />
           <SensitiveField label={t("employeesDetail.fields.salary")} value={employee.salary} />
           <SensitiveField label={t("employeesDetail.fields.allowances")} value={employee.allowances} />
           <SensitiveField label={t("employeesDetail.fields.deductions")} value={employee.deductions} />

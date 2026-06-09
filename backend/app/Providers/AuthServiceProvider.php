@@ -18,14 +18,6 @@ class AuthServiceProvider extends ServiceProvider
                 return null;
             }
 
-            if ($user->isInstanceAdmin()) {
-                return true;
-            }
-
-            if ($user->hasRoleCode('system_admin')) {
-                return true;
-            }
-
             return $user->hasPermission($ability) ? true : null;
         });
     }

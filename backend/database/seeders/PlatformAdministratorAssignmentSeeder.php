@@ -14,15 +14,14 @@ class PlatformAdministratorAssignmentSeeder extends Seeder
         $admin = User::withoutCompanyScope()
             ->where('email', 'admin@saneng.co.id')
             ->first();
-        $company = Company::query()
-            ->where('name', 'PT Saneng')
-            ->first();
 
-        if (! $admin instanceof User || ! $company instanceof Company) {
+        if (! $admin instanceof User) {
             return;
         }
 
-        app(PlatformAdministratorAssignmentService::class)
-            ->assignUserToCompany($admin, $company);
+        Company::query()
+            ->orderBy('id')
+            ->each(fn (Company $company): void => app(PlatformAdministratorAssignmentService::class)
+                ->assignUserToCompany($admin, $company));
     }
 }

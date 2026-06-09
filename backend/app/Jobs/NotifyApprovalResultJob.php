@@ -17,6 +17,14 @@ class NotifyApprovalResultJob implements ShouldQueue
         private readonly string $status
     ) {}
 
+    /**
+     * @return array<int, int>
+     */
+    public function backoff(): array
+    {
+        return [30, 60, 120];
+    }
+
     public function handle(): void
     {
         Log::info('employee.approval_result', [
